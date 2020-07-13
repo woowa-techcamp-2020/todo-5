@@ -1,19 +1,19 @@
 {
-  "name": "client",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/woowa-techcamp-2020/todo-5.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/woowa-techcamp-2020/todo-5/issues"
-  },
-  "homepage": "https://github.com/woowa-techcamp-2020/todo-5#readme"
+	"name": "client",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/woowa-techcamp-2020/todo-5.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/woowa-techcamp-2020/todo-5/issues"
+	},
+	"homepage": "https://github.com/woowa-techcamp-2020/todo-5#readme"
 }
