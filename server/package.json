@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "src/server.ts",
 	"scripts": {
-		"test": "jest"
+		"test": "jest",
+		"start": "ts-node ./src/main.ts"
 	},
 	"repository": {
 		"type": "git",
