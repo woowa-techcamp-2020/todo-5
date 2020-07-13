@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/woowa-techcamp-2020/todo-5.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/woowa-techcamp-2020/todo-5/issues"
+  },
+  "homepage": "https://github.com/woowa-techcamp-2020/todo-5#readme"
+}
