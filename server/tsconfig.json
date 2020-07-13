@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES6",
+    "lib": ["ES2015", "DOM"],
+    "module": "CommonJS"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
