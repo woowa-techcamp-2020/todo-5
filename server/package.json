@@ -5,7 +5,8 @@
 	"main": "src/server.ts",
 	"scripts": {
 		"test": "jest",
-		"start": "ts-node ./src/main.ts"
+		"start": "nodemon --exec ts-node ./src/main.ts --config nodemon.json",
+		"start:ops": "ts-node ./src/main.ts"
 	},
 	"repository": {
 		"type": "git",
