@@ -1,4 +1,5 @@
 import express from 'express';
+import ejs from 'ejs';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import morgan from 'morgan';
@@ -22,7 +23,8 @@ app.use(helmet());
 app.use(compression());
 app.use(express.static(path.join(__dirname, '../public')));
 app.set('views', path.join(__dirname, '../views'));
-app.set('view engine', 'pug');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 app.use('/', routes);
 //app.use('/api/users', userRoute);
 app.use(notFoundException);
