@@ -8,6 +8,9 @@ module.exports = {
         filename: "[name].js",
     },
     devtool: 'cheap-eval-source-map',
+    resolve: {
+      extensions: ['.ts', '.js', '.json']
+    },
     module: {
         rules: [
             {
