@@ -21,7 +21,7 @@ class Header extends HTMLElement{
   }
 
   render() {
-    this.innerHTML = `<header>Test</header>`;
+    this.innerHTML = `<header>Header</header>`;
   }
 }
 

@@ -36,7 +36,7 @@ class TodoList extends HTMLElement{
   }
 
   render() {
-    this.innerHTML = `<div class="todo-list">todoList111</div>`;
+    this.innerHTML = ``;
   }
 }
 

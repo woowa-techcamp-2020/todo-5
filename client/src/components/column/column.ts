@@ -1,14 +1,19 @@
+import Card from '../card';
+
 class Column extends HTMLElement{
   private state : {} = {};
+  private card!: HTMLElement;
 
   constructor() {
     super();
+    this.card = new Card();
   }
 
 
   connectedCallback() {
     // DOM에 추가되었다. 렌더링 등의 처리를 하자.
     this.render();
+    this.appendChild(this.card);
   }
 
   disconnectedCallback() {
@@ -20,8 +25,8 @@ class Column extends HTMLElement{
     this.render(); 
   }
 
-  render(): string {
-    return ``;
+  render() {
+    this.innerHTML = `<div class="column"></div>`;
   }
 }
 
