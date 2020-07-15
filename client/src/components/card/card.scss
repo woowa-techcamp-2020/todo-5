@@ -1,0 +1,49 @@
+.card {
+  width: 300px;
+  min-height: 60px;
+  background: white;
+  box-sizing: border-box;
+  border-radius: 20px;
+  padding: 16px 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  .type-icon {
+    background: blue;
+    width: 70px;
+  }
+  .card-contents {
+    height: 100%;
+    // width: calc(100% - 94px);
+    width: calc(100% - 36px);
+    padding: 0 8px;
+    .content {
+      padding: 3px 0;
+      color: #333;
+    }
+    .title {
+      font-size: 17px;
+    }
+    .card-content {
+      font-size: 14px;
+      max-height: 120px;
+      overflow: hidden;
+    } 
+    .card-user {
+      font-size: 14px;
+      span {
+        font-weight: 600;
+        color: #1a7cff;
+      }
+    }
+  }
+  .icon-content {
+    .icon {
+      color: #777;
+      transition: color 0.1s;
+      &:hover {
+        color: #1a7cff !important;
+      }
+    }
+  }
+}
