@@ -21,7 +21,7 @@ class Card extends HTMLElement{
   }
 
   render() {
-    this.innerHTML = ``;
+    this.innerHTML = `<div>Card</div>`;
   }
 }
 
