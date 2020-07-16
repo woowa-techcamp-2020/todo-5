@@ -1,4 +1,5 @@
-import { Card, CardInterface } from '../card';
+import Card from '../card';
+import { CardInterface } from '../card';
 import ColumnInterface from './column_interface';
 
 class Column extends HTMLElement {
