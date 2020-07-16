@@ -1,4 +1,4 @@
-import { Coloumn } from '../column';
+import Coloumn from '../column';
 const url = 'http://localhost:3000';
 
 class Content extends HTMLElement {
