@@ -9,7 +9,7 @@ import cors from 'cors';
 import path from 'path';
 import LoggerStream from './logger-stream';
 import { logs } from './vars';
-import { routes, userRouter } from '../routes';
+import { routes, userRouter, cardRouter } from '../routes';
 import notFoundException from '../middlewares/exception/not-found-exception';
 import errorHandler from '../middlewares/exception/error-handler';
 
@@ -27,6 +27,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use('/', routes);
 app.use('/api/users', userRouter);
+app.use('/api/card', cardRouter);
 app.use(notFoundException);
 app.use(errorHandler);
 
