@@ -14,12 +14,21 @@ class Modal extends HTMLElement{
     reject: '취소'
   };
 
-  private callback = () => {};
+  private callback:Function = () => {};
 
-  constructor(callback: () => {}, option: modalType) {
+  constructor() {
     super();
+  }
+
+  open(option: modalType, callback: Function) {
     this.state = option;
     this.callback = callback;
+    this.render();
+    this.querySelector('.modal-area')?.classList.remove('modal-close');
+  }
+
+  close() {
+    this.querySelector('.modal-area')?.classList.add('modal-close');
   }
 
   listener() {
@@ -27,21 +36,20 @@ class Modal extends HTMLElement{
     const resolve = this.querySelector('.resolve-btn');
     reject?.addEventListener('click', (e) => {
       e.stopPropagation();
-      this.remove();
+      this.close();
     })
     resolve?.addEventListener('click', async (e) => {
       e.stopPropagation();
       resolve.setAttribute('disabled', 'true');
       await this.callback();
       resolve.removeAttribute('disabled');
-      this.remove();
+      this.close();
     })
   }
 
   connectedCallback() {
     // DOM에 추가되었다. 렌더링 등의 처리를 하자.
     this.render();
-    this.listener();
   }
 
   disconnectedCallback() {
@@ -66,23 +74,14 @@ class Modal extends HTMLElement{
       </div>
     </div>
     `;
+    this.listener();
   }
 }
 
 window.customElements.define("modal-element", Modal);
 
-const modalElement = new (customElements.get('modal-element'));
-
-const modal = {
-  modalElement,
-  open() {
-
-  },
-  close() {
-    
-  }
-}
-export default customElements.get('modal-element');
+const $modal = new (customElements.get('modal-element'));
+export default $modal;
 
 
 //uicomponent는 따로 모아둬서 app.ts에 가져다 놓고 써야겠다.

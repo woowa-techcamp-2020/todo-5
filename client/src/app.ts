@@ -1,5 +1,6 @@
 import './styles/common.scss';
 import TodoList from './pages/todoList';
+import $modal from './components/modal';
 
 // test
 type pageType = 'todoList' | 'login';
@@ -10,7 +11,7 @@ class App {
 
   constructor(container: HTMLElement) {
     this.container = container;
-
+    this.container.appendChild($modal);
     if (page === 'todoList') {
       const todoList = new TodoList();
       console.log(todoList);

@@ -25,7 +25,7 @@ class Column extends HTMLElement {
 	connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
-		const columnTag = this.querySelector('.column') as HTMLElement;
+		const columnTag = this.querySelector('.column-content') as HTMLElement;
 		this.cards.map((card) => {
 			columnTag.appendChild(card);
 		});
@@ -41,7 +41,19 @@ class Column extends HTMLElement {
 	}
 
 	render() {
-		this.innerHTML = `<div class="column"></div>`;
+    this.innerHTML = `<div class="column">
+      <div class="column-header">
+        <div class="column-header-child">
+          <div class="card-count">3</div>
+          <h3>Title</h3>
+        </div>
+        <div class="column-header-child">
+          <i class="material-icons">add</i>
+          <i class="material-icons close">close</i>
+        </div>
+      </div>
+      <div class="column-content"></div>
+    </div>`;
 	}
 
 	private async getCards() {
@@ -75,6 +87,30 @@ class Column extends HTMLElement {
 				{
 					card_id: 3,
 					order_weight: 3,
+					title: '333333',
+					content: 'contentcontent',
+					last_update: '12312312',
+					create_date: '123123123',
+        },
+        {
+					card_id: 4,
+					order_weight: 3,
+					title: '333333',
+					content: 'contentcontent',
+					last_update: '12312312',
+					create_date: '123123123',
+        },
+        {
+					card_id: 5,
+					order_weight: 3,
+					title: '333333',
+					content: 'contentcontent',
+					last_update: '12312312',
+					create_date: '123123123',
+        },
+        {
+					card_id: 6,
+					order_weight: 6,
 					title: '333333',
 					content: 'contentcontent',
 					last_update: '12312312',
