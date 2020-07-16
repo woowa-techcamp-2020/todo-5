@@ -2,7 +2,7 @@ import http from 'http';
 import { env, port } from './config/vars';
 import logger from './config/logger';
 import app from './config/express';
-import pool from './modules/database/database';
+import { mysql } from './modules/database/mysql';
 
 const stopServer = async (server: http.Server, signal?: string) => {
 	logger.info(`Stopping server with signal: ${signal}`);
@@ -15,10 +15,8 @@ const runServer = async () => {
 		logger.info(`server started on port ${port} (${env})`);
 	});
 	try {
-		const connection = await (await pool()).getConnection();
-		const ping = await connection.ping();
+		await mysql.ping();
 		logger.info('db connected');
-		connection.release();
 	} catch (e) {
 		logger.error(e);
 		stopServer(server, 'db is failed to start');
