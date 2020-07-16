@@ -26,7 +26,7 @@ class Column extends HTMLElement{
   }
 
   render() {
-    this.innerHTML = `<div class="column"></div>`;
+    this.innerHTML = ``;
   }
 }
 
