@@ -5,3 +5,4 @@
 *.log
 *.out
 .vscode
+package-lock.json
