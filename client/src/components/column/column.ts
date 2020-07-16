@@ -41,7 +41,7 @@ class Column extends HTMLElement {
 	}
 
 	render() {
-    this.innerHTML = `<div class="column">
+		this.innerHTML = `<div class="column">
       <div class="column-header">
         <div class="column-header-child">
           <div class="card-count">3</div>
@@ -91,24 +91,24 @@ class Column extends HTMLElement {
 					content: 'contentcontent',
 					last_update: '12312312',
 					create_date: '123123123',
-        },
-        {
+				},
+				{
 					card_id: 4,
 					order_weight: 3,
 					title: '333333',
 					content: 'contentcontent',
 					last_update: '12312312',
 					create_date: '123123123',
-        },
-        {
+				},
+				{
 					card_id: 5,
 					order_weight: 3,
 					title: '333333',
 					content: 'contentcontent',
 					last_update: '12312312',
 					create_date: '123123123',
-        },
-        {
+				},
+				{
 					card_id: 6,
 					order_weight: 6,
 					title: '333333',
