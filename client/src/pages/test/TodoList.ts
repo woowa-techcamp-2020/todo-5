@@ -1,7 +1,7 @@
 // type 지정; 스키마라고 해야하나
 import '../styles/common.scss';
 
-class TodoList extends HTMLElement{
+class TodoList {
 
   private container!: HTMLElement;
   private state : {
@@ -11,7 +11,6 @@ class TodoList extends HTMLElement{
   };
 
   constructor(container: HTMLElement) {
-    super();
     this.container = container;
     this.render();
     this.click();
