@@ -1,0 +1,52 @@
+
+
+.modal-area {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  .modal-container {
+    z-index: inherit;
+    width: 400px;
+    // height: 200px;
+    // padding: 32px;
+    border-radius: 4px;
+    background: white;
+    .title {
+      padding: 16px 24px 10px;
+      font-size: 22px;
+      font-weight: 500;
+    }
+    .content {
+      padding: 8px 24px;
+      max-height: 100px;
+      overflow-y: auto;
+    }
+    .button-zone {
+      display: flex;
+      justify-content: flex-end;
+      padding: 8px 16px 16px;
+      .button {
+        pointer-events: visible;
+        max-width: 64px;
+        margin-left: 12px;
+        padding: 10px 24px;
+        cursor: pointer;
+        color: #1e88e5 !important;
+        border-radius: 4px;
+        transition: background 0.15s;
+        &:hover {
+          background: rgba(30, 136, 229, 0.1);
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
