@@ -1,4 +1,5 @@
 import './modal.scss';
 import Modal from './modal';
+import ModalInterface from './modal_interface';
 
-export default Modal;
+export { Modal, ModalInterface };
