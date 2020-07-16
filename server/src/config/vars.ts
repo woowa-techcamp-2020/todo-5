@@ -1,5 +1,6 @@
 const env = process.env.NODE_ENV || 'development';
 const logs = env === 'production' ? 'combined' : 'dev';
 const port = process.env.PORT || '3000';
+const url = 'http://localhost:3000';
 
-export { env, logs, port };
+export { env, logs, port, url };

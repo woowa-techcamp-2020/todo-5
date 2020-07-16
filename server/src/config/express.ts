@@ -9,7 +9,7 @@ import cors from 'cors';
 import path from 'path';
 import LoggerStream from './logger-stream';
 import { logs } from './vars';
-import { routes, userRoute } from '../routes';
+import { routes, userRouter } from '../routes';
 import notFoundException from '../middlewares/exception/not-found-exception';
 import errorHandler from '../middlewares/exception/error-handler';
 
@@ -26,7 +26,7 @@ app.set('views', path.join(__dirname, '../views'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use('/', routes);
-//app.use('/api/users', userRoute);
+app.use('/api/users', userRouter);
 app.use(notFoundException);
 app.use(errorHandler);
 
