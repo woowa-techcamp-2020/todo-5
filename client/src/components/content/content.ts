@@ -1,4 +1,4 @@
-import Coloumn from '../column';
+import { Coloumn } from '../column';
 const url = 'http://localhost:3000';
 
 class Content extends HTMLElement {
@@ -45,9 +45,9 @@ class Content extends HTMLElement {
 			// const json = await response.json();
 
 			const dump = [
-				{ id: 1, order_weight: 1, title: 'todo' },
-				{ id: 2, order_weight: 2, title: 'doing' },
-				{ id: 3, order_weight: 3, title: 'done' },
+				{ column_id: 1, order_weight: 1, title: 'todo' },
+				{ column_id: 2, order_weight: 2, title: 'doing' },
+				{ column_id: 3, order_weight: 3, title: 'done' },
 			];
 			await dump.forEach((col) => {
 				this.columns.push(new Coloumn(col));
