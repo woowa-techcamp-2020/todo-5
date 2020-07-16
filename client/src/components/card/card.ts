@@ -15,10 +15,17 @@ class Card extends HTMLElement{
 
   constructor() {
     super();
-    this.modal = new Modal();
-    this.state.title='title입니다';
-    this.state.content='content입니다';
-    this.state.user='user';
+    this.modal = new Modal(() => {
+      console.log('bye');
+    }, {
+      title: 'title1',
+      content: 'content1',
+      resolve: 'OK',
+      reject: 'cancel'
+    });
+    this.state.title='Card title';
+    this.state.content='Greyhound divisively hello coldly wonderfully marginally far upon excluding.';
+    this.state.user='my Name';
   }
 
 
@@ -45,11 +52,12 @@ class Card extends HTMLElement{
       console.log('delete');
       if (confirm('선택하신 카드를 삭제하시겠습니까?')) {
         this.remove();
-      } 
+      }
     });
-    this.addEventListener('dblclick', (e) => {
+    this.querySelector('.card')?.addEventListener('dblclick', (e) => {
       e.stopPropagation();
-      console.log('edit');
+      this.appendChild(this.modal);
+      // this.$modal.open();
       // this.modal.open(() => {
       //  수정하는 창 열기
       //  얘의 정보를 가져다 줘야 하나? 그렇다
@@ -60,15 +68,12 @@ class Card extends HTMLElement{
   render() {
     this.innerHTML = 
     `<div class="card">
-      <!-- <div class="type-icon"></div> -->
-      <div class="card-contents">
-        <div class="title content text-ellipsis" >${this.state.title}</div>
-        <div class="card-content content">${this.state.content}</div>
-        <div class="card-user content text-ellipsis">by <span>${this.state.user}<span></div>
+      <div class="card-title">
+        <span>${this.state.title}</span>
+        <i class="material-icons icon delete">close</i>
       </div>
-      <div class="icon-content">
-        <i class="material-icons icon delete">delete_outline</i>
-      </div>
+      <div class="card-user">by <span>${this.state.user}</span></div>
+      <div class="card-content">${this.state.content}</div>
     </div>`;
   }
 }
