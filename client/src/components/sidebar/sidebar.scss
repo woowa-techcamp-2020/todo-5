@@ -1,0 +1,32 @@
+.slide-menu {
+	background-color: #f9f9f9;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	transform: translate3d(400px, 0, 0);
+	position: absolute;
+	width: 400px;
+	right: 0px;
+	height: 100%;
+	transition: all 0.6s;
+	z-index: 100;
+	label {
+		display: flex;
+		padding-left: 10px;
+	}
+	li {
+		font-size: 15px;
+		font-weight: 500;
+		padding-left: 10px;
+	}
+	.etext {
+		color: #1e88e5 !important;
+	}
+	&.open-slide {
+		transform: translate3d(0, 0, 0);
+	}
+	.time-label {
+		padding-left: 10px;
+		font-size: 6px;
+		position: relative;
+		top: -8px;
+	}
+}
