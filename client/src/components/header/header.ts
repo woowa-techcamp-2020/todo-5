@@ -9,6 +9,7 @@ class Header extends HTMLElement {
 	connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
+		this.listener();
 	}
 
 	disconnectedCallback() {
@@ -22,12 +23,25 @@ class Header extends HTMLElement {
 
 	render() {
 		this.innerHTML = `<header>
-      <div class="service-title">${this.state.title}</div>
-      <div class="service-menu">menu</div>
+        <label class="service-title">${this.state.title}</label>
+        <input id="toggle" type="checkbox">
+        <label class="service-menu" for="toggle">
+        <i class="material-icons">reorder</i>menu</label>
     </header>`;
 	}
-}
 
+	listener() {
+		const toggle = this.querySelector('#toggle') as HTMLInputElement;
+		const sidebar = document.querySelector('.slide-menu') as HTMLElement;
+		toggle.addEventListener('change', (e: Event) => {
+			if (toggle.checked === true) {
+				sidebar.classList.add('open-slide');
+			} else {
+				sidebar.classList.remove('open-slide');
+			}
+		});
+	}
+}
 window.customElements.define('header-element', Header);
 
 export default customElements.get('header-element');
