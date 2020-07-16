@@ -1,4 +1,4 @@
-import Modal from '../modal';
+import $modal from '../modal';
 
 class Card extends HTMLElement{
   private state : {
@@ -15,14 +15,15 @@ class Card extends HTMLElement{
 
   constructor() {
     super();
-    this.modal = new Modal(() => {
-      console.log('bye');
-    }, {
-      title: 'title1',
-      content: 'content1',
-      resolve: 'OK',
-      reject: 'cancel'
-    });
+
+    // this.modal = new Modal(() => {
+    //   console.log('bye');
+    // }, {
+    //   title: 'title1',
+    //   content: 'content1',
+    //   resolve: 'OK',
+    //   reject: 'cancel'
+    // });
     this.state.title='Card title';
     this.state.content='Greyhound divisively hello coldly wonderfully marginally far upon excluding.';
     this.state.user='my Name';
@@ -56,7 +57,15 @@ class Card extends HTMLElement{
     });
     this.querySelector('.card')?.addEventListener('dblclick', (e) => {
       e.stopPropagation();
-      this.appendChild(this.modal);
+      $modal.open({
+        title: 'title',
+        content: 'content',
+        resolve: 'OK',
+        reject: 'cancel'
+      }, () => {
+        console.log('cccc');
+      });
+      // this.appendChild(this.modal);
       // this.$modal.open();
       // this.modal.open(() => {
       //  수정하는 창 열기
