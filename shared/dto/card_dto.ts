@@ -5,7 +5,7 @@ interface CREATE{
   content: string;
   create_date: string;
   last_update: string;
-  column_id: number;
+  topic_id: number;
   card_title: string;
 }
 
