@@ -3,8 +3,6 @@ interface CREATE{
   user_id: number;
   user_name: string;
   content: string;
-  create_date: number;
-  last_update: number;
   topic_id: number;
   card_title: string;
 }
@@ -24,13 +22,12 @@ interface CARD {
 
 interface UPDATE {
   card_id: number;
-  order_weight: number;
+  order_weight: number; //
   user_id: number;
-  content: string;
+  content: string; //
   create_date: number;
-  last_update: number;
-  topic_id: number;
-  card_title: string;
+  topic_id: number; //
+  card_title: string; //
   removed: number;
   user_name: string;
 }
