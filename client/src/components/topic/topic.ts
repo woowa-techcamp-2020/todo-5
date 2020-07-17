@@ -1,12 +1,12 @@
 import Card from '../card';
 import { CardInterface } from '../card';
-import ColumnInterface from './column_interface';
+import TopicInterface from './topic_interface';
 
-class Column extends HTMLElement {
-	private state: ColumnInterface;
+class Topic extends HTMLElement {
+	private state: TopicInterface;
 	private cards!: Array<HTMLElement>;
 
-	constructor(data: ColumnInterface) {
+	constructor(data: TopicInterface) {
 		super();
 		this.state = data;
 		this.cards = [];
@@ -17,12 +17,12 @@ class Column extends HTMLElement {
 	connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
-		const columnContent = this.querySelector('.column-content');
-		const columnHeader = this.querySelector('.column-header');
+		const topicContent = this.querySelector('.topic-content');
+		const topicHeader = this.querySelector('.topic-header');
 		this.cards.map((card) => {
-			columnContent?.appendChild(card);
+			topicContent?.appendChild(card);
 		});
-		columnHeader?.querySelector('.add')?.addEventListener('click', (e) => {
+		topicHeader?.querySelector('.add')?.addEventListener('click', (e) => {
 			e.stopPropagation();
 			// input card 표시
 		});
@@ -43,18 +43,18 @@ class Column extends HTMLElement {
 	 */
 
 	render() {
-		this.innerHTML = `<div class="column">
-      <div class="column-header">
-        <div class="column-header-child">
+		this.innerHTML = `<div class="topic">
+      <div class="topic-header">
+        <div class="topic-header-child">
           <div class="card-count">${this.state.count}</div>
           <h3>${this.state.title}</h3>
         </div>
-        <div class="column-header-child">
+        <div class="topic-header-child">
           <i class="material-icons add">add</i>
           <i class="material-icons close">close</i>
         </div>
       </div>
-      <div class="column-content"></div>
+      <div class="topic-content"></div>
     </div>`;
 	}
 
@@ -78,7 +78,7 @@ class Column extends HTMLElement {
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
-					column_id: this.state.column_id,
+					topic_id: this.state.topic_id,
 				},
 				{
 					card_id: 2,
@@ -88,7 +88,7 @@ class Column extends HTMLElement {
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
-					column_id: this.state.column_id,
+					topic_id: this.state.topic_id,
 				},
 				{
 					card_id: 3,
@@ -98,6 +98,7 @@ class Column extends HTMLElement {
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
+					topic_id: this.state.topic_id,
 				},
 				{
 					card_id: 4,
@@ -107,6 +108,7 @@ class Column extends HTMLElement {
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
+					topic_id: this.state.topic_id,
 				},
 				{
 					card_id: 5,
@@ -116,6 +118,7 @@ class Column extends HTMLElement {
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
+					topic_id: this.state.topic_id,
 				},
 				{
 					card_id: 6,
@@ -125,7 +128,7 @@ class Column extends HTMLElement {
 					user_name: 'loloara',
 					last_update: '12312312',
 					create_date: '123123123',
-					column_id: this.state.column_id,
+					topic_id: this.state.topic_id,
 				},
 			];
 			await dump.forEach((card) => this.cards.push(new Card(card)));
@@ -135,6 +138,6 @@ class Column extends HTMLElement {
 	}
 }
 
-window.customElements.define('column-element', Column);
+window.customElements.define('topic-element', Topic);
 
-export default customElements.get('column-element');
+export default customElements.get('topic-element');

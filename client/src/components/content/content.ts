@@ -1,22 +1,22 @@
-import Coloumn from '../column';
+import Topic from '../topic';
 const url = 'http://localhost:3000';
 
 class Content extends HTMLElement {
 	private state: {} = {};
-	private columns!: Array<HTMLElement>;
+	private topics!: Array<HTMLElement>;
 
 	constructor() {
 		super();
-		this.columns = [];
-		this.getColumns();
+		this.topics = [];
+		this.getTopics();
 	}
 
 	connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
 		const contentTag = this.querySelector('.content') as HTMLElement;
-		this.columns.map((column: HTMLElement) => {
-			contentTag.appendChild(column);
+		this.topics.map((topic: HTMLElement) => {
+			contentTag.appendChild(topic);
 		});
 	}
 
@@ -33,7 +33,7 @@ class Content extends HTMLElement {
 		this.innerHTML = `<div class="content"></div>`;
 	}
 
-	private async getColumns() {
+	private async getTopics() {
 		const options = {
 			method: 'GET',
 			headers: {
@@ -41,16 +41,16 @@ class Content extends HTMLElement {
 			},
 		};
 		try {
-			// const response = await fetch(`${url}/api/columns`, options);
+			// const response = await fetch(`${url}/api/topics`, options);
 			// const json = await response.json();
 
 			const dump = [
-				{ column_id: 1, order_weight: 1, title: 'todo' },
-				{ column_id: 2, order_weight: 2, title: 'doing' },
-				{ column_id: 3, order_weight: 3, title: 'done' },
+				{ topic_id: 1, order_weight: 1, title: 'todo' },
+				{ topic_id: 2, order_weight: 2, title: 'doing' },
+				{ topic_id: 3, order_weight: 3, title: 'done' },
 			];
-			await dump.forEach((col) => {
-				this.columns.push(new Coloumn(col));
+			await dump.forEach((topic) => {
+				this.topics.push(new Topic(topic));
 			});
 		} catch (err) {
 			console.log('Error getting documents', err);

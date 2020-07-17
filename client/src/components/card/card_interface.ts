@@ -7,5 +7,5 @@ export default interface CardInterface {
 	last_update: Date;
 	create_date: Date;
 	user_id: number;
-	column_id: number;
+	topic_id: number;
 }
