@@ -25,7 +25,7 @@ class ActivityController {
     try {
       response = await Activity.getActivitiesByServiceId(serviceId);
       if (response.result === null) {
-        new Error('no topic exists');
+        new Error('no activity exists');
       }
       res.status(httpStatus.OK)
       .json(JsonResponse(httpStatus.OK, 'activities get well', response));
