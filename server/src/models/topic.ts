@@ -37,11 +37,10 @@ class Topic {
   }
 
   static async getTopicsByServiceId(serviceId: string) {
-    // 필요하지 remove false, column_id보고 데려오면 되는건가?
     let topicData;
 		try {
 			topicData = await mysql.connect((con: any) =>
-				con.query(`SELECT * FROM topic WHERE service_id = '${serviceId}'`)
+				con.query(`SELECT * FROM topic WHERE service_id = '${serviceId}' AND removed = '${0}'`)
       );
       return [...topicData][0];
 		} catch (err) {
