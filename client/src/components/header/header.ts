@@ -26,7 +26,7 @@ class Header extends HTMLElement {
         <label class="service-title">${this.state.title}</label>
         <input id="toggle" type="checkbox">
         <label class="service-menu" for="toggle">
-        <i class="material-icons">reorder</i>menu</label>
+        <i class="material-icons">reorder</i></label>
     </header>`;
 	}
 
