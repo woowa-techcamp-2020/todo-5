@@ -1,33 +1,30 @@
 import Card from '../card';
-
-interface ColumnInterface {
-	column_id: number;
-	order_weight: number;
-	title: string;
-}
+import { CardInterface } from '../card';
+import ColumnInterface from './column_interface';
 
 class Column extends HTMLElement {
-	private state: {} = {};
-	private column_id!: number;
-	private order_weight!: number;
-	private column_title!: string;
+	private state: ColumnInterface;
 	private cards!: Array<HTMLElement>;
 
 	constructor(data: ColumnInterface) {
 		super();
-		this.column_id = data.column_id;
-		this.order_weight = data.order_weight;
-		this.column_title = data.title;
+		this.state = data;
 		this.cards = [];
 		this.getCards();
+		this.state.count = this.cards.length;
 	}
 
 	connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
-		const columnTag = this.querySelector('.column-content') as HTMLElement;
+		const columnContent = this.querySelector('.column-content');
+		const columnHeader = this.querySelector('.column-header');
 		this.cards.map((card) => {
-			columnTag.appendChild(card);
+			columnContent?.appendChild(card);
+		});
+		columnHeader?.querySelector('.add')?.addEventListener('click', (e) => {
+			e.stopPropagation();
+			// input card 표시
 		});
 	}
 
@@ -40,15 +37,20 @@ class Column extends HTMLElement {
 		this.render();
 	}
 
+	/**
+	 * ToDo
+	 * card 숫자 두자리, 세자리 처리 고민
+	 */
+
 	render() {
 		this.innerHTML = `<div class="column">
       <div class="column-header">
         <div class="column-header-child">
-          <div class="card-count">3</div>
-          <h3>Title</h3>
+          <div class="card-count">${this.state.count}</div>
+          <h3>${this.state.title}</h3>
         </div>
         <div class="column-header-child">
-          <i class="material-icons">add</i>
+          <i class="material-icons add">add</i>
           <i class="material-icons close">close</i>
         </div>
       </div>
@@ -71,50 +73,59 @@ class Column extends HTMLElement {
 				{
 					card_id: 1,
 					order_weight: 1,
-					title: '01010101',
-					content: 'contentcontent',
+					title: `Card title 01 of ${this.state.title}`,
+					user_name: 'loloara',
+					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
+					column_id: this.state.column_id,
 				},
 				{
 					card_id: 2,
 					order_weight: 2,
-					title: '2222222',
-					content: 'contentcontent',
+					title: `Card title 02 of ${this.state.title}`,
+					user_name: 'loloara',
+					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
+					column_id: this.state.column_id,
 				},
 				{
 					card_id: 3,
 					order_weight: 3,
-					title: '333333',
-					content: 'contentcontent',
+					title: `Card title 03 of ${this.state.title}`,
+					user_name: 'loloara',
+					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
 				},
 				{
 					card_id: 4,
 					order_weight: 3,
-					title: '333333',
-					content: 'contentcontent',
+					title: `Card title 04 of ${this.state.title}`,
+					user_name: 'loloara',
+					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
 				},
 				{
 					card_id: 5,
 					order_weight: 3,
-					title: '333333',
-					content: 'contentcontent',
+					title: `Card title 05 of ${this.state.title}`,
+					user_name: 'loloara',
+					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
 				},
 				{
 					card_id: 6,
 					order_weight: 6,
-					title: '333333',
-					content: 'contentcontent',
+					title: `Card title 06 of ${this.state.title}`,
+					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
+					user_name: 'loloara',
 					last_update: '12312312',
 					create_date: '123123123',
+					column_id: this.state.column_id,
 				},
 			];
 			await dump.forEach((card) => this.cards.push(new Card(card)));
