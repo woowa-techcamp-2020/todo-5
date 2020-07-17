@@ -32,12 +32,15 @@ class Header extends HTMLElement {
 
 	listener() {
 		const toggle = this.querySelector('#toggle') as HTMLInputElement;
+		const label = this.querySelector('.service-menu') as HTMLElement;
 		const sidebar = document.querySelector('.slide-menu') as HTMLElement;
 		toggle.addEventListener('change', (e: Event) => {
 			if (toggle.checked === true) {
 				sidebar.classList.add('open-slide');
+				label.classList.add('open-slide');
 			} else {
 				sidebar.classList.remove('open-slide');
+				label.classList.remove('open-slide');
 			}
 		});
 	}

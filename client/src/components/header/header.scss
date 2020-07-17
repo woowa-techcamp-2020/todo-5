@@ -28,7 +28,7 @@ header {
 			padding-right: 5px;
 		}
 	}
-	input[type='checkbox']:checked ~ label {
+	label.service-menu.open-slide {
 		transform: translate3d(-400px, 0, 0);
 	}
 }
