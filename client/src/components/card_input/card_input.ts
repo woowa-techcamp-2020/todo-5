@@ -1,9 +1,13 @@
 class CardInput extends HTMLElement {
 	private state: {};
+	private resolve!: Function;
+	private reject!: Function;
 
-	constructor() {
+	constructor(resolve: Function, reject: Function) {
 		super();
 		this.state = {};
+		this.resolve = resolve;
+		this.reject = reject;
 	}
 
 	connectedCallback() {
@@ -39,21 +43,17 @@ class CardInput extends HTMLElement {
 		// 	inputBox.value === '' ? (inputBox.disabled = true) : (inputBox.disabled = false);
 		// });
 		btnGroup[0].addEventListener('click', (e) => {
+			this.resolve();
 			//card api call 추가
 		});
 		btnGroup[1].addEventListener('click', (e) => {
-			this.close();
+			//close
+			this.reject();
 		});
 	}
-
-	public open() {
+	openCardInput() {
 		const cardInput = this.querySelector('.card-input');
 		cardInput?.classList.add('open');
-	}
-
-	public close() {
-		const cardInput = this.querySelector('.card-input');
-		cardInput?.classList.remove('open');
 	}
 }
 

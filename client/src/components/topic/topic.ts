@@ -11,7 +11,7 @@ class Topic extends HTMLElement {
 	constructor(data: TopicInterface) {
 		super();
 		this.state = data;
-		this.cardInput = new CardInput();
+		this.cardInput = new CardInput(this.addCardInput, this.cancelCardInput.bind(this));
 		this.cards = [];
 		this.getCards();
 		this.state.count = this.cards.length;
@@ -30,7 +30,7 @@ class Topic extends HTMLElement {
 		addButton?.addEventListener('click', (e) => {
 			e.stopPropagation();
 			//inputArea?.appendChild(new CardInput());
-			this.cardInput.open();
+			this.cardInput.openCardInput();
 			addButton.classList.add('disabled');
 		});
 	}
@@ -150,6 +150,17 @@ class Topic extends HTMLElement {
 		} catch (err) {
 			console.log('Error getting documents', err);
 		}
+	}
+
+	addCardInput() {}
+
+	cancelCardInput() {
+		const addBtn = this.querySelector('.add');
+		console.log('this', this);
+		const cardInput = this.querySelector('.card-input');
+		console.log('addbtn', addBtn);
+		addBtn?.classList.remove('disabled');
+		cardInput?.classList.remove('open');
 	}
 }
 
