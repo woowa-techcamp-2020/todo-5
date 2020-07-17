@@ -1,5 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import userRouter from './user_router';
+import cardRouter from './card_router';
+import serviceRouter from './service_router';
+import topicRouter from './topic_router';
 
 const router = Router();
 router.route('/').get((req: Request, res: Response, next: NextFunction) => {
@@ -8,4 +11,4 @@ router.route('/').get((req: Request, res: Response, next: NextFunction) => {
 });
 
 const routes = router;
-export { routes, userRouter };
+export { routes, userRouter, cardRouter, serviceRouter, topicRouter };
