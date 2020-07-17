@@ -29,6 +29,9 @@ topic-element {
 				cursor: pointer;
 				margin-left: 4px;
 				transition: color 0.15s;
+				&.add.disabled {
+					pointer-events: none;
+				}
 				&.close {
 					font-size: 22px;
 					line-height: 26px;

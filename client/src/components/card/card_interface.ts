@@ -4,8 +4,8 @@ export default interface CardInterface {
 	title: string;
 	user_name: string;
 	content: string;
-	last_update: Date;
-	create_date: Date;
+	last_update: number;
+	create_date: number;
 	user_id: number;
 	topic_id: number;
 }

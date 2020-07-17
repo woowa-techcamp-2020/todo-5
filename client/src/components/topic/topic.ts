@@ -1,14 +1,17 @@
 import Card from '../card';
+import CardInput from '../card_input';
 import { CardInterface } from '../card';
 import TopicInterface from './topic_interface';
 
 class Topic extends HTMLElement {
 	private state: TopicInterface;
+	private cardInput: typeof CardInput;
 	private cards!: Array<HTMLElement>;
 
 	constructor(data: TopicInterface) {
 		super();
 		this.state = data;
+		this.cardInput = new CardInput();
 		this.cards = [];
 		this.getCards();
 		this.state.count = this.cards.length;
@@ -18,13 +21,17 @@ class Topic extends HTMLElement {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
 		const topicContent = this.querySelector('.topic-content');
-		const topicHeader = this.querySelector('.topic-header');
+		const inputArea = topicContent?.querySelector('.input-area');
+		const addButton = this.querySelector('.add');
+		topicContent?.appendChild(this.cardInput);
 		this.cards.map((card) => {
 			topicContent?.appendChild(card);
 		});
-		topicHeader?.querySelector('.add')?.addEventListener('click', (e) => {
+		addButton?.addEventListener('click', (e) => {
 			e.stopPropagation();
-			// input card 표시
+			//inputArea?.appendChild(new CardInput());
+			this.cardInput.open();
+			addButton.classList.add('disabled');
 		});
 	}
 
@@ -53,8 +60,10 @@ class Topic extends HTMLElement {
           <i class="material-icons add">add</i>
           <i class="material-icons close">close</i>
         </div>
-      </div>
-      <div class="topic-content"></div>
+	  </div>	  
+	  <div class="topic-content">
+	  <div class="input-area"></div>
+	  </div>
     </div>`;
 	}
 
@@ -76,9 +85,10 @@ class Topic extends HTMLElement {
 					title: `Card title 01 of ${this.state.title}`,
 					user_name: 'loloara',
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					last_update: '12312312',
-					create_date: '123123123',
+					last_update: 12312312,
+					create_date: 123123123,
 					topic_id: this.state.topic_id,
+					user_id: 1,
 				},
 				{
 					card_id: 2,
@@ -86,9 +96,10 @@ class Topic extends HTMLElement {
 					title: `Card title 02 of ${this.state.title}`,
 					user_name: 'loloara',
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					last_update: '12312312',
-					create_date: '123123123',
+					last_update: 12312312,
+					create_date: 123123123,
 					topic_id: this.state.topic_id,
+					user_id: 1,
 				},
 				{
 					card_id: 3,
@@ -96,9 +107,10 @@ class Topic extends HTMLElement {
 					title: `Card title 03 of ${this.state.title}`,
 					user_name: 'loloara',
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					last_update: '12312312',
-					create_date: '123123123',
+					last_update: 12312312,
+					create_date: 123123123,
 					topic_id: this.state.topic_id,
+					user_id: 1,
 				},
 				{
 					card_id: 4,
@@ -106,9 +118,10 @@ class Topic extends HTMLElement {
 					title: `Card title 04 of ${this.state.title}`,
 					user_name: 'loloara',
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					last_update: '12312312',
-					create_date: '123123123',
+					last_update: 12312312,
+					create_date: 123123123,
 					topic_id: this.state.topic_id,
+					user_id: 1,
 				},
 				{
 					card_id: 5,
@@ -116,9 +129,10 @@ class Topic extends HTMLElement {
 					title: `Card title 05 of ${this.state.title}`,
 					user_name: 'loloara',
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					last_update: '12312312',
-					create_date: '123123123',
+					last_update: 12312312,
+					create_date: 123123123,
 					topic_id: this.state.topic_id,
+					user_id: 1,
 				},
 				{
 					card_id: 6,
@@ -126,12 +140,13 @@ class Topic extends HTMLElement {
 					title: `Card title 06 of ${this.state.title}`,
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					user_name: 'loloara',
-					last_update: '12312312',
-					create_date: '123123123',
+					last_update: 12312312,
+					create_date: 123123123,
 					topic_id: this.state.topic_id,
+					user_id: 1,
 				},
 			];
-			await dump.forEach((card) => this.cards.push(new Card(card)));
+			await dump.forEach((card: CardInterface) => this.cards.push(new Card(card)));
 		} catch (err) {
 			console.log('Error getting documents', err);
 		}
