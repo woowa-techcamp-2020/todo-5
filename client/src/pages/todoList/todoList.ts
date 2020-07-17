@@ -1,27 +1,26 @@
 import Header from '../../components/header';
+import Sidebar from '../../components/sidebar';
 import Content from '../../components/content';
-import Menu from '../../components/menu';
 
 class TodoList extends HTMLElement {
 	private state: {} = {};
+	private sidebar!: HTMLElement;
 	private header!: HTMLElement;
-	private menu!: HTMLElement;
 	private content!: HTMLElement;
 
 	constructor() {
 		super();
+		this.sidebar = new Sidebar(1);
 		this.header = new Header();
-		this.menu = new Menu();
 		this.content = new Content();
-		// this.render();
 	}
 
 	connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
 		console.log('render');
+		this.appendChild(this.sidebar);
 		this.appendChild(this.header);
-		this.appendChild(this.menu);
 		this.appendChild(this.content);
 	}
 

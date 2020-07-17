@@ -98,7 +98,6 @@ class Column extends HTMLElement {
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
-					column_id: this.state.column_id,
 				},
 				{
 					card_id: 4,
@@ -108,7 +107,6 @@ class Column extends HTMLElement {
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
-					column_id: this.state.column_id,
 				},
 				{
 					card_id: 5,
@@ -118,7 +116,6 @@ class Column extends HTMLElement {
 					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
 					last_update: '12312312',
 					create_date: '123123123',
-					column_id: this.state.column_id,
 				},
 				{
 					card_id: 6,
