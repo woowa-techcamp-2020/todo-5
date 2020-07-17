@@ -7,14 +7,14 @@ interface ACTIVITY {
   service_id: number;
   uid: string;
   from_topic: number;
-  up_topic: number;
+  to_topic: number;
 }
 
 enum Action {
-   ADD, // to
-   REMOVE,  // from
-   UPDATE,  // x
-   MOVE // to, from
+   ADD=0, // to
+   REMOVE=1,  // from
+   UPDATE=2,  // x
+   MOVE=3 // to, from
 };
 
 interface ADD {
