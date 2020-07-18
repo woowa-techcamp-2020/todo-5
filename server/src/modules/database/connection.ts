@@ -1,5 +1,7 @@
+import { env } from '../../config/vars';
+
 const database = {
-	database: 'kitty05',
+	database: env === 'production' ? 'todo05' : 'kitty05',
 	user: 'todo05',
 	password: '1234',
 	host: '13.209.83.0',
