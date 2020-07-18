@@ -1,4 +1,9 @@
-import ModalInterface from './modal_interface';
+export interface ModalInterface {
+	title: string;
+	content: string;
+	resolve?: string;
+	reject?: string;
+}
 
 class Modal extends HTMLElement {
 	private state: ModalInterface = {

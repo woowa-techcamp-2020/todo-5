@@ -1,7 +1,5 @@
 import './topic.scss';
-import Topic from './topic';
-import TopicInterface from './topic_interface';
+import Topic, { TopicInterface } from './topic';
 
 export { TopicInterface };
-
 export default Topic;

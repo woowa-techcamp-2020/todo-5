@@ -1,7 +1,12 @@
-import Card from '../card';
-import CardInput from '../card_input';
-import { CardInterface } from '../card';
-import TopicInterface from './topic_interface';
+import Card, { CardInterface } from '../card';
+import CardInput from '../card-input';
+
+export interface TopicInterface {
+	topic_id: number;
+	order_weight: number;
+	title: string;
+	count: number;
+}
 
 class Topic extends HTMLElement {
 	private state: TopicInterface;
