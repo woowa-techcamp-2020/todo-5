@@ -1,6 +1,5 @@
 import './sidebar.scss';
-import Sidebar from './sidebar';
-import ActivityInterface from './activity_interface';
+import Sidebar, { ActivityInterface } from './sidebar';
 
 export { ActivityInterface };
 export default Sidebar;
