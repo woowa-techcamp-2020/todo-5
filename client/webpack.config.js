@@ -1,5 +1,5 @@
 const env = process.env.NODE_ENV || 'development';
 const webpack =
-	env === 'production' ? require('./webpack-pod.config') : require('./webpack-pod.config');
+	env === 'production' ? require('./webpack-prod.config') : require('./webpack-dev.config');
 
 module.exports = webpack;
