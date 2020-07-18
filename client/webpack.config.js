@@ -1,5 +1,4 @@
-const path = require('path');
-const { env } = require('../server/src/config/vars');
+const env = process.env.NODE_ENV || 'development';
 const webpack =
 	env === 'production' ? require('./webpack-pod.config') : require('./webpack-pod.config');
 
