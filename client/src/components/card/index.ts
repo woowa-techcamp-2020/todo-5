@@ -1,6 +1,5 @@
 import './card.scss';
-import Card from './card';
-import CardInterface from './card_interface';
+import Card, { CardInterface } from './card';
 
 export { CardInterface };
 export default Card;

@@ -1,5 +1,17 @@
-import ActivityInterface from './activity_interface';
 const url = 'http://13.209.83.0';
+
+export interface ActivityInterface {
+	activity_id: number;
+	service_id: number;
+	card_id: number;
+	user_id: number;
+	uid: string;
+	action: string;
+	card_title: string;
+	from: string;
+	to: string;
+	create_date: number;
+}
 
 class Sidebar extends HTMLElement {
 	private state: { service_id: number };
