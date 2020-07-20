@@ -1,5 +1,6 @@
 import Card, { CardInterface } from '../card';
 import CardInput from '../card-input';
+import { $topicModal } from '../modal';
 
 export interface TopicInterface {
 	topic_id: number;
@@ -25,19 +26,28 @@ class Topic extends HTMLElement {
 	connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
-		const topicContent = this.querySelector('.topic-content');
-		const inputArea = topicContent?.querySelector('.input-area');
-		const addButton = this.querySelector('.add');
-		topicContent?.appendChild(this.cardInput);
+		const topicTitle = this.querySelector('.topic-title') as HTMLElement;
+		const topicContent = this.querySelector('.topic-content') as HTMLElement;
+		const inputArea = topicContent?.querySelector('.input-area') as HTMLElement;
+		const addButton = this.querySelector('.add') as HTMLElement;
+		topicContent.appendChild(this.cardInput);
 		this.cards.map((card) => {
-			topicContent?.appendChild(card);
+			topicContent.appendChild(card);
 		});
-		addButton?.addEventListener('click', (e) => {
+		addButton.addEventListener('click', (e) => {
 			e.stopPropagation();
 			//inputArea?.appendChild(new CardInput());
 			this.cardInput.openCardInput();
 			addButton.classList.add('disabled');
 		});
+		topicTitle.addEventListener('click', (e) => {
+			$topicModal.open({
+				title: 'Column Edit',
+				content: this.state.title,
+				resolve: 'Save',
+				reject: 'Cancel'
+			}, () => {});
+		})
 	}
 
 	disconnectedCallback() {
@@ -57,7 +67,7 @@ class Topic extends HTMLElement {
 	render() {
 		this.innerHTML = `<div class="topic">
       <div class="topic-header">
-        <div class="topic-header-child">
+        <div class="topic-header-child topic-title">
           <div class="card-count">${this.state.count}</div>
           <h3>${this.state.title}</h3>
         </div>
