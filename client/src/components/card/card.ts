@@ -1,4 +1,5 @@
-import {$cardModal} from '../modal';
+import { $cardModal } from '../modal';
+import { Options, url } from '../../utils';
 
 export interface CardInterface {
 	card_id: number;
@@ -42,7 +43,7 @@ class Card extends HTMLElement {
 			e.stopPropagation();
 			if (confirm('선택하신 카드를 삭제하시겠습니까?')) {
 				this.remove();
-				//soft delete api call
+				fetch(`${url}/api/card/delete/${this.state.card_id}`, Options.PATCH({}));
 			}
 		});
 		this.querySelector('.card')?.addEventListener('dblclick', (e) => {

@@ -1,11 +1,7 @@
 import Card, { CardInterface } from '../card';
 import CardInput from '../card-input';
 import { CREATE } from '../../../../shared/dto/card-dto';
-import Options from '../../utils';
-const url = 'http://localhost:3000';
-const ORDER_WEIGHT = 100000;
-const TITLE_LIMIT = 20;
-import { $topicModal } from '../modal';
+import { Options, url, ORDER_WEIGHT } from '../../utils';
 
 export interface TopicInterface {
 	topic_id: number;

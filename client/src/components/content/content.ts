@@ -1,6 +1,5 @@
 import Topic from '../topic';
-import Options from '../../utils';
-const url = 'http://localhost:3000';
+import { Options, url } from '../../utils';
 
 export interface ContentInterface {
 	service_id: string;
