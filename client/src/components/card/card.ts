@@ -55,11 +55,37 @@ class Card extends HTMLElement {
 					resolve: 'Save',
 					reject: 'Cancel',
 				},
-				() => {
-					console.log('cccc');
-				}
+				(c: string) => this.editContentOfCard(c)
 			);
 		});
+	}
+
+	private async editContentOfCard(card_content: string) {
+		const body = {
+			card_id: this.state.card_id,
+			content: card_content,
+		};
+		const response = await fetch(`${url}/api/card/update`, Options.PATCH(body));
+		const json = await response.json();
+		const { title, content } = this.splitTitleContent(card_content);
+		this.state.card_title = title;
+		this.state.content = content;
+		this.render();
+	}
+
+	private splitTitleContent(raw: string) {
+		let title, content, tmp;
+		tmp = raw.split('\n');
+		if (tmp.length <= 1) {
+			title = tmp[0];
+			content = '';
+		} else {
+			title = tmp[0];
+			tmp.shift();
+			content = tmp.reduce((prev, now) => (prev += now), '');
+		}
+
+		return { title, content };
 	}
 
 	render() {

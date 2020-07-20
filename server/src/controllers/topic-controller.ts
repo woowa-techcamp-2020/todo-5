@@ -36,9 +36,9 @@ class TopicController {
 
 	static async delete(req: Request, res: Response, next: NextFunction) {
 		let response;
-		let { body } = req;
+		const topic_id = parseInt(req.params.topic_id);
 		try {
-			response = await Topic.delete(body);
+			response = await Topic.delete(topic_id);
 			res
 				.status(httpStatus.CREATED)
 				.json(JsonResponse(httpStatus.CREATED, 'topic deleted well', response));

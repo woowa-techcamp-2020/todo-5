@@ -1,6 +1,6 @@
 import $modal, { ModalInterface, Modal } from './modal';
 
-class CardEditModal {
+class TopicAddModal {
 	private $modal!: Modal;
 	private option!: ModalInterface;
 	private callback!: Function;
@@ -12,11 +12,11 @@ class CardEditModal {
 	open(option: ModalInterface, callback: Function) {
 		this.option = option;
 		this.callback = callback;
-		this.$modal.setChildElement(`<textarea class="text-input"></textarea>`);
+		this.$modal.setChildElement('<input class="text-input" />');
 		this.$modal.open(this.option, this.callback);
 	}
 }
 
-const $cardModal = new CardEditModal();
+const $topicAddModal = new TopicAddModal();
 
-export default $cardModal;
+export default $topicAddModal;
