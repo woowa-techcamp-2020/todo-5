@@ -9,23 +9,38 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  pointer-events: none;
+  // pointer-events: none;
   .modal-container {
     z-index: inherit;
-    width: 400px;
+    width: 460px;
     // height: 200px;
     // padding: 32px;
     border-radius: 4px;
     background: white;
     .title {
-      padding: 16px 24px 10px;
+    padding: 20px 24px 10px;
       font-size: 22px;
       font-weight: 500;
+      color: #333;
     }
     .content {
       padding: 8px 24px;
-      max-height: 100px;
       overflow-y: auto;
+      textarea {
+        min-height: 120px;
+        resize: vertical;
+        max-height: 320px;
+      }
+      .text-input {
+        padding: 8px;
+        border-radius: 4px;
+        box-sizing: border-box;
+        width: 100%;
+        border: 2px solid #1e88e5;
+        font-size: 15px;
+        line-height: 1.2rem;
+        color: #333;
+      }
     }
     .button-zone {
       display: flex;
@@ -37,12 +52,11 @@
         margin-left: 12px;
         padding: 10px 24px;
         cursor: pointer;
-        color: #1e88e5 !important;
+        color: #1e88e5 ;
         border-radius: 4px;
         transition: background 0.15s;
         &:hover {
           background: rgba(30, 136, 229, 0.1);
-          font-weight: 500;
         }
       }
     }
@@ -51,4 +65,9 @@
 
 .modal-close {
   display:none;
+}
+
+.disabled {
+  pointer-events: none !important;
+  color: #ccc !important;
 }
