@@ -9,7 +9,14 @@ import cors from 'cors';
 import path from 'path';
 import LoggerStream from './logger-stream';
 import { logs } from './vars';
-import { routes, userRouter, cardRouter, serviceRouter, topicRouter, ActivityRouter } from '../routes';
+import {
+	routes,
+	userRouter,
+	cardRouter,
+	serviceRouter,
+	topicRouter,
+	ActivityRouter,
+} from '../routes';
 import notFoundException from '../middlewares/exception/not-found-exception';
 import errorHandler from '../middlewares/exception/error-handler';
 

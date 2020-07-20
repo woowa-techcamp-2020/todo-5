@@ -1,9 +1,9 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import userRouter from './user_router';
-import cardRouter from './card_router';
-import serviceRouter from './service_router';
-import topicRouter from './topic_router';
-import ActivityRouter from './activity_router';
+import userRouter from './user-router';
+import cardRouter from './card-router';
+import serviceRouter from './service-router';
+import topicRouter from './topic-router';
+import ActivityRouter from './activity-router';
 
 const router = Router();
 router.route('/').get((req: Request, res: Response, next: NextFunction) => {
