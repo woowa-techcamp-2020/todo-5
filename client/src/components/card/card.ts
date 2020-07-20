@@ -1,4 +1,4 @@
-import $modal from '../modal';
+import {$cardModal} from '../modal';
 
 export interface CardInterface {
 	card_id: number;
@@ -14,7 +14,6 @@ export interface CardInterface {
 
 class Card extends HTMLElement {
 	private state: CardInterface;
-	private modal!: HTMLElement;
 
 	constructor(data: CardInterface) {
 		super();
@@ -48,12 +47,12 @@ class Card extends HTMLElement {
 		});
 		this.querySelector('.card')?.addEventListener('dblclick', (e) => {
 			e.stopPropagation();
-			$modal.open(
+			$cardModal.open(
 				{
-					title: this.state.card_title,
-					content: this.state.content,
-					resolve: 'OK',
-					reject: 'cancel',
+					title: 'Edit',
+					content: this.state.card_title + this.state.content,
+					resolve: 'Save',
+					reject: 'Cancel',
 				},
 				() => {
 					console.log('cccc');

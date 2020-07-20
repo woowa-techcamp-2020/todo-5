@@ -5,6 +5,7 @@ import Options from '../../utils';
 const url = 'http://localhost:3000';
 const ORDER_WEIGHT = 100000;
 const TITLE_LIMIT = 20;
+import { $topicModal } from '../modal';
 
 export interface TopicInterface {
 	topic_id: number;
@@ -64,7 +65,7 @@ class Topic extends HTMLElement {
 	render() {
 		this.innerHTML = `<div class="topic">
       <div class="topic-header">
-        <div class="topic-header-child">
+        <div class="topic-header-child topic-title">
           <div class="card-count">${this.state.count}</div>
           <h3>${this.state.topic_title}</h3>
         </div>
