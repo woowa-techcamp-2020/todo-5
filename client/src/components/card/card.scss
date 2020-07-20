@@ -1,9 +1,15 @@
+
+.selected {
+  background: #ddd;
+  .card {
+    visibility: hidden;
+  }
+}
+
 card-element {
   display: inline-block;
-}
-.card {
   margin: 6px 0;
-  width: 100%;
+  width: 328px;
   min-height: 60px;
   background: white;
   box-sizing: border-box;
@@ -17,12 +23,13 @@ card-element {
     display: flex;
     justify-content: space-between;
     span {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 500;
-      line-height: 2rem;
+      line-height: 1.8rem;
     }
     .icon {
-      font-size: 24px;
+      font-size: 20px;
+      line-height: 24px;
       &:hover {
         color: #1e88e5 !important;
       }
@@ -31,7 +38,7 @@ card-element {
   .card-user {
     color: #777;
     font-size: 14px;
-    margin-bottom: 16px;
+    margin-top: 8px;
     span {
       font-weight: 700;
     }
