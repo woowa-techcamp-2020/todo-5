@@ -3,7 +3,7 @@ import {$cardModal} from '../modal';
 export interface CardInterface {
 	card_id: number;
 	order_weight: number;
-	title: string;
+	card_title: string;
 	user_name: string;
 	content: string;
 	last_update: number;
@@ -40,7 +40,6 @@ class Card extends HTMLElement {
 		const del = this.querySelector('.delete') as HTMLElement;
 		del.addEventListener('click', (e) => {
 			e.stopPropagation();
-			console.log('delete');
 			if (confirm('선택하신 카드를 삭제하시겠습니까?')) {
 				this.remove();
 				//soft delete api call
@@ -51,7 +50,7 @@ class Card extends HTMLElement {
 			$cardModal.open(
 				{
 					title: 'Edit',
-					content: this.state.content,
+					content: this.state.card_title + this.state.content,
 					resolve: 'Save',
 					reject: 'Cancel',
 				},
@@ -65,12 +64,16 @@ class Card extends HTMLElement {
 	render() {
 		this.innerHTML = `<div class="card">
       <div class="card-title">
-        <span>${this.state.title}</span>
+        <span>${this.state.card_title}</span>
         <i class="material-icons icon delete">close</i>
       </div>
       <div class="card-user">by <span>${this.state.user_name}</span></div>
       <div class="card-content">${this.state.content}</div>
     </div>`;
+	}
+
+	getOrderWeight() {
+		return this.state.order_weight;
 	}
 }
 

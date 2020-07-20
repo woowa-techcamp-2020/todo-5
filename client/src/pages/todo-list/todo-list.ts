@@ -12,13 +12,12 @@ class TodoList extends HTMLElement {
 		super();
 		this.sidebar = new Sidebar(1);
 		this.header = new Header();
-		this.content = new Content();
+		this.content = new Content({ service_id: 1 });
 	}
 
 	connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
-		console.log('render');
 		this.appendChild(this.sidebar);
 		this.appendChild(this.header);
 		this.appendChild(this.content);

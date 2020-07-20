@@ -1,23 +1,27 @@
 import Topic from '../topic';
+import Options from '../../utils';
 const url = 'http://localhost:3000';
 
+export interface ContentInterface {
+	service_id: string;
+}
+
 class Content extends HTMLElement {
-	private state: {} = {};
+	private state: ContentInterface;
 	private topics!: Array<HTMLElement>;
 
-	constructor() {
+	constructor(data: ContentInterface) {
 		super();
+		this.state = data;
 		this.topics = [];
-		this.getTopics();
 	}
 
-	connectedCallback() {
+	async connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
+		await this.getTopics();
 		this.render();
 		const contentTag = this.querySelector('.content') as HTMLElement;
-		this.topics.map((topic: HTMLElement) => {
-			contentTag.appendChild(topic);
-		});
+		this.topics.forEach((topic: HTMLElement) => contentTag.appendChild(topic));
 	}
 
 	disconnectedCallback() {
@@ -41,19 +45,14 @@ class Content extends HTMLElement {
 			},
 		};
 		try {
-			// const response = await fetch(`${url}/api/topics`, options);
-			// const json = await response.json();
-
-			const dump = [
-				{ topic_id: 1, order_weight: 1, title: 'todo' },
-				{ topic_id: 2, order_weight: 2, title: 'doing' },
-				{ topic_id: 3, order_weight: 3, title: 'done' },
-			];
-			await dump.forEach((topic) => {
-				this.topics.push(new Topic(topic));
-			});
+			const response = await fetch(`${url}/api/topic/${this.state.service_id}`, Options.GET());
+			const json = await response.json();
+			const sortedTopics = [...json.result];
+			sortedTopics.sort((a: typeof Topic, b: typeof Topic) => a.order_weight - b.order_weight);
+			console.log(sortedTopics);
+			await sortedTopics.forEach((topic) => this.topics.push(new Topic(topic)));
 		} catch (err) {
-			console.log('Error getting documents', err);
+			console.error('Error getting documents', err);
 		}
 	}
 }

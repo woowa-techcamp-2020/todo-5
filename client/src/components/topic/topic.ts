@@ -1,57 +1,40 @@
 import Card, { CardInterface } from '../card';
 import CardInput from '../card-input';
+import { CREATE } from '../../../../shared/dto/card-dto';
+import Options from '../../utils';
+const url = 'http://localhost:3000';
+const ORDER_WEIGHT = 100000;
+const TITLE_LIMIT = 20;
 import { $topicModal } from '../modal';
 
 export interface TopicInterface {
 	topic_id: number;
 	order_weight: number;
-	title: string;
+	topic_title: string;
 	count: number;
 }
 
 class Topic extends HTMLElement {
 	private state: TopicInterface;
 	private cardInput: typeof CardInput;
-	private cards!: Array<HTMLElement>;
+	private cards!: Array<typeof Card>;
 
 	constructor(data: TopicInterface) {
 		super();
 		this.state = data;
-		this.cardInput = new CardInput(this.addCardInput, this.cancelCardInput.bind(this));
+		this.cardInput = new CardInput(this.addCardInput.bind(this), this.cancelCardInput.bind(this));
 		this.cards = [];
-		this.getCards();
 		this.state.count = this.cards.length;
 	}
 
-	connectedCallback() {
-		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
+	async connectedCallback() {
+		await this.getCards();
 		this.render();
-		const topicTitle = this.querySelector('.topic-title') as HTMLElement;
-		const topicContent = this.querySelector('.topic-content') as HTMLElement;
-		const inputArea = topicContent?.querySelector('.input-area') as HTMLElement;
-		const addButton = this.querySelector('.add') as HTMLElement;
-		topicContent.appendChild(this.cardInput);
-		this.cards.map((card) => {
-			topicContent.appendChild(card);
-		});
-		addButton.addEventListener('click', (e) => {
-			e.stopPropagation();
-			//inputArea?.appendChild(new CardInput());
-			this.cardInput.openCardInput();
-			addButton.classList.add('disabled');
-		});
-		topicTitle.addEventListener('click', (e) => {
-			$topicModal.open({
-				title: 'Column Edit',
-				content: this.state.title,
-				resolve: 'Save',
-				reject: 'Cancel'
-			}, () => {});
-		})
+		this.init();
+		this.listeners();
 	}
 
 	disconnectedCallback() {
-		// DOM에서 제거되었다. 엘리먼트를 정리하는 일을 하자.
 		this.remove();
 	}
 
@@ -64,12 +47,28 @@ class Topic extends HTMLElement {
 	 * card 숫자 두자리, 세자리 처리 고민
 	 */
 
+	private init() {
+		const topicContent = this.querySelector('.topic-content');
+		topicContent?.appendChild(this.cardInput);
+		this.cards.forEach((card) => topicContent?.appendChild(card));
+	}
+
+	listeners() {
+		const addButton = this.querySelector('.add') as HTMLButtonElement;
+		addButton?.addEventListener('click', (e) => {
+			e.stopPropagation();
+			this.cardInput.openCardInput();
+			(e.target as HTMLButtonElement).classList.add('disabled');
+		});
+	}
+
 	render() {
+		console.log('render');
 		this.innerHTML = `<div class="topic">
       <div class="topic-header">
         <div class="topic-header-child topic-title">
           <div class="card-count">${this.state.count}</div>
-          <h3>${this.state.title}</h3>
+          <h3>${this.state.topic_title}</h3>
         </div>
         <div class="topic-header-child">
           <i class="material-icons add">add</i>
@@ -83,99 +82,64 @@ class Topic extends HTMLElement {
 	}
 
 	private async getCards() {
-		const options = {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		};
 		try {
-			// const response = await fetch(`${url}/api/cards`, options);
-			// const json = await response.json();
-
-			const dump = [
-				{
-					card_id: 1,
-					order_weight: 1,
-					title: `Card title 01 of ${this.state.title}`,
-					user_name: 'loloara',
-					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					last_update: 12312312,
-					create_date: 123123123,
-					topic_id: this.state.topic_id,
-					user_id: 1,
-				},
-				{
-					card_id: 2,
-					order_weight: 2,
-					title: `Card title 02 of ${this.state.title}`,
-					user_name: 'loloara',
-					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					last_update: 12312312,
-					create_date: 123123123,
-					topic_id: this.state.topic_id,
-					user_id: 1,
-				},
-				{
-					card_id: 3,
-					order_weight: 3,
-					title: `Card title 03 of ${this.state.title}`,
-					user_name: 'loloara',
-					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					last_update: 12312312,
-					create_date: 123123123,
-					topic_id: this.state.topic_id,
-					user_id: 1,
-				},
-				{
-					card_id: 4,
-					order_weight: 3,
-					title: `Card title 04 of ${this.state.title}`,
-					user_name: 'loloara',
-					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					last_update: 12312312,
-					create_date: 123123123,
-					topic_id: this.state.topic_id,
-					user_id: 1,
-				},
-				{
-					card_id: 5,
-					order_weight: 3,
-					title: `Card title 05 of ${this.state.title}`,
-					user_name: 'loloara',
-					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					last_update: 12312312,
-					create_date: 123123123,
-					topic_id: this.state.topic_id,
-					user_id: 1,
-				},
-				{
-					card_id: 6,
-					order_weight: 6,
-					title: `Card title 06 of ${this.state.title}`,
-					content: 'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-					user_name: 'loloara',
-					last_update: 12312312,
-					create_date: 123123123,
-					topic_id: this.state.topic_id,
-					user_id: 1,
-				},
-			];
-			await dump.forEach((card: CardInterface) => this.cards.push(new Card(card)));
+			const response = await fetch(`${url}/api/card/${this.state.topic_id}`, Options.GET());
+			const json = await response.json();
+			const sortedCards = [...json.result];
+			if (sortedCards.length === 0) return;
+			sortedCards.sort((a: typeof Card, b: typeof Card) => b.order_weight - a.order_weight);
+			console.log(`cards:${this.state.topic_title}`, sortedCards);
+			await sortedCards.forEach((card: CardInterface) => this.cards.push(new Card(card)));
+			this.state.count = this.cards.length;
 		} catch (err) {
-			console.log('Error getting documents', err);
+			console.error('Error getting documents', err);
 		}
 	}
 
-	addCardInput() {}
+	private async addCardInput(card: CREATE) {
+		const cardContents = this.splitTitleContent(card.content);
+		card.card_title = cardContents.title;
+		card.content = cardContents.content;
+		card.topic_id = this.state.topic_id;
+		card.order_weight = this.nextOrderWeight();
+		console.log('card before api', card);
 
-	cancelCardInput() {
+		try {
+			const response = await fetch(`${url}/api/card`, Options.POST(card));
+			const json = await response.json();
+			this.cards.unshift(new Card(json.result));
+			const topicContent = this.querySelector('.topic-content');
+			topicContent?.insertBefore(this.cards[0], this.cards[1]);
+			this.state.count++;
+		} catch (err) {
+			console.error('Error adding card', err);
+		}
+	}
+
+	private cancelCardInput() {
 		const addBtn = this.querySelector('.add');
-		console.log('this', this);
 		const cardInput = this.querySelector('.card-input');
-		console.log('addbtn', addBtn);
 		addBtn?.classList.remove('disabled');
 		cardInput?.classList.remove('open');
+	}
+
+	private splitTitleContent(raw: string) {
+		let title, content, tmp;
+		tmp = raw.split('\n');
+		if (tmp.length <= 1) {
+			title = tmp[0];
+			content = '';
+		} else {
+			title = tmp[0];
+			tmp.shift();
+			content = tmp.reduce((prev, now) => (prev += now), '');
+		}
+
+		return { title, content };
+	}
+
+	private nextOrderWeight() {
+		return this.state.count ? this.cards[0].getOrderWeight() + ORDER_WEIGHT : ORDER_WEIGHT;
 	}
 }
 
