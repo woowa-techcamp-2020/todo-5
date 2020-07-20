@@ -27,28 +27,39 @@ class CardInput extends HTMLElement {
 
 	render() {
 		this.innerHTML = `<div class="card-input">
-            <input type="textarea">
+            <textarea placeholder="Enter a card"></textarea>
             <div class="btn-group">
-                <button>Add</button>
-                <button>Cancel</button>
+                <button class="card-add">Add</button>
+                <button class="card-close">Cancel</button>
             </div>
         </div>`;
 	}
 
 	listener() {
-		const inputBox = this.querySelector('input');
+		const inputBox = this.querySelector('textarea') as HTMLTextAreaElement;
 		const btnGroup = this.querySelectorAll('button');
-		// inputBox?.addEventListener('change', (e) => {
-		// 	console.log('change', inputBox.value);
-		// 	inputBox.value === '' ? (inputBox.disabled = true) : (inputBox.disabled = false);
-		// });
+		inputBox.addEventListener('input', (e) => {
+			if (inputBox.value === '') {
+				btnGroup[0].classList.remove('enable-btn');
+			} else {
+				btnGroup[0].classList.add('enable-btn');
+			}
+		});
 		btnGroup[0].addEventListener('click', (e) => {
-			this.resolve();
-			//card api call 추가
+			this.resolve({
+				user_id: 1,
+				user_name: 'loloara',
+				content: inputBox?.value,
+				topic_id: 1,
+				card_title: 'title',
+				order_weight: 1,
+			});
+			this.reject();
+			inputBox.value = '';
 		});
 		btnGroup[1].addEventListener('click', (e) => {
-			//close
 			this.reject();
+			inputBox.value = '';
 		});
 	}
 	openCardInput() {

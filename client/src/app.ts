@@ -14,7 +14,6 @@ class App {
 		this.container.appendChild($modal);
 		if (page === 'todoList') {
 			const todoList = new TodoList();
-			console.log(todoList);
 			this.container.appendChild(todoList);
 		}
 	}
