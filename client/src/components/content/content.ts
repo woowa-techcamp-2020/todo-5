@@ -49,7 +49,6 @@ class Content extends HTMLElement {
 			const json = await response.json();
 			const sortedTopics = [...json.result];
 			sortedTopics.sort((a: typeof Topic, b: typeof Topic) => a.order_weight - b.order_weight);
-			console.log(sortedTopics);
 			await sortedTopics.forEach((topic) => this.topics.push(new Topic(topic)));
 		} catch (err) {
 			console.error('Error getting documents', err);
