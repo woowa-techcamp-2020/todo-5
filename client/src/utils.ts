@@ -37,5 +37,5 @@ export class Options {
 	}
 }
 
-export const url = 'http://localhost:3000';
+export const url = `${process.env.URL || 'http://localhost'}:${process.env.PORT || '3000'}`;
 export const ORDER_WEIGHT = 100000;
