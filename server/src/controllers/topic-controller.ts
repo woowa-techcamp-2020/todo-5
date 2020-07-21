@@ -22,7 +22,7 @@ class TopicController {
 
 	static async update(req: Request, res: Response, next: NextFunction) {
 		let response;
-		let { body } = req;
+		const { body } = req;
 		try {
 			response = await Topic.update(body);
 			res

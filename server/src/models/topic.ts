@@ -20,12 +20,12 @@ class Topic {
 
 	static async update(topic: TopicDTO.UPDATE) {
 		try {
-			const topicData = await mysql.connect((con: any) => {
-				return con.query(
-					`UPDATE topic SET order_weight = '${topic.order_weight}', topic_title = '${topic.topic_title}' WHERE topic_id = '${topic.topic_id}'`
-				);
-			});
-			return topic;
+			const topicData = await mysql.connect((con: any) =>
+				con.query(
+					`UPDATE topic SET topic_title = '${topic.topic_title}' WHERE topic_id = '${topic.topic_id}'`
+				)
+			);
+			return { topic_id: topic.topic_id };
 		} catch (err) {
 			throw err;
 		}
