@@ -11,12 +11,11 @@ class App {
 
 	constructor(container: HTMLElement) {
 		this.container = container;
-		this.container.appendChild($modal);
 		if (page === 'todoList') {
 			const todoList = new TodoList();
-			console.log(todoList);
 			this.container.appendChild(todoList);
 		}
+		this.container.appendChild($modal);
 	}
 }
 

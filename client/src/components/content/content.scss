@@ -1,0 +1,25 @@
+content-element {
+	display: flex;
+	padding-top: 5px;
+	.new-topic {
+		button {
+			width: 345px;
+			border-color: lightgrey;
+			display: inline-block;
+			font-weight: 600;
+			font-size: 14px;
+			padding: 40px 0;
+			color: grey;
+			background-color: white;
+			border: 1px;
+			border-style: dashed;
+			border-radius: 6px;
+			cursor: pointer;
+			box-sizing: border-box;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+}
