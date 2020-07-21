@@ -1,7 +1,7 @@
-import * as UserDTO from './user_dto';
-import * as CardDTO from './card_dto';
-import * as ServiceDTO from './service_dto';
-import * as TopicDTO from './topic_dto';
-import * as ActivityDTO from './activity_dto';
+import * as UserDTO from './user-dto';
+import * as CardDTO from './card-dto';
+import * as ServiceDTO from './service-dto';
+import * as TopicDTO from './topic-dto';
+import * as ActivityDTO from './activity-dto';
 
 export { UserDTO, CardDTO, ServiceDTO, TopicDTO, ActivityDTO };

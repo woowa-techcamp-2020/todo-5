@@ -1,10 +1,10 @@
-import $modal from '../modal';
-import cardInput from '../card-input/card-input';
+import { $cardModal } from '../modal';
+import { Options, url } from '../../utils';
 
 export interface CardInterface {
 	card_id: number;
 	order_weight: number;
-	title: string;
+	card_title: string;
 	user_name: string;
 	content: string;
 	last_update: number;
@@ -15,7 +15,6 @@ export interface CardInterface {
 
 class Card extends HTMLElement {
 	private state: CardInterface;
-	private modal!: HTMLElement;
 
 	constructor(data: CardInterface) {
 		super();
@@ -48,39 +47,68 @@ class Card extends HTMLElement {
 		const del = this.querySelector('.delete') as HTMLElement;
 		del.addEventListener('click', (e) => {
 			e.stopPropagation();
-			console.log('delete');
 			if (confirm('선택하신 카드를 삭제하시겠습니까?')) {
 				this.remove();
-				//soft delete api call
+				fetch(`${url}/api/card/delete/${this.state.card_id}`, Options.PATCH({}));
 			}
 		});
 		this.querySelector('.card')?.addEventListener('dblclick', (e) => {
 			e.stopPropagation();
-			$modal.open(
+			$cardModal.open(
 				{
-					title: this.state.title,
-					content: this.state.content,
-					resolve: 'OK',
-					reject: 'cancel',
+					title: 'Edit',
+					content: this.state.card_title + this.state.content,
+					resolve: 'Save',
+					reject: 'Cancel',
 				},
-				() => {
-					console.log('cccc');
-				}
+				(c: string) => this.editContentOfCard(c)
 			);
 		});
+	}
+
+	private async editContentOfCard(card_content: string) {
+		const body = {
+			card_id: this.state.card_id,
+			content: card_content,
+		};
+		const response = await fetch(`${url}/api/card/update`, Options.PATCH(body));
+		const json = await response.json();
+		const { title, content } = this.splitTitleContent(card_content);
+		this.state.card_title = title;
+		this.state.content = content;
+		this.render();
+	}
+
+	private splitTitleContent(raw: string) {
+		let title, content, tmp;
+		tmp = raw.split('\n');
+		if (tmp.length <= 1) {
+			title = tmp[0];
+			content = '';
+		} else {
+			title = tmp[0];
+			tmp.shift();
+			content = tmp.reduce((prev, now) => (prev += now), '');
+		}
+
+		return { title, content };
 	}
 
 	render() {
 		this.innerHTML = `<div class="card">
 		<div class="content-wrapper">
       <div class="card-title">
-        <p>${this.state.title}</p>
+        <p>${this.state.card_title}</p>
         <i class="material-icons icon delete">close</i>
       </div>
 			<div class="card-content">${this.state.content}</div>
 			<div class="card-user">by <span>${this.state.user_name}</span></div>
 		</div>
     </div>`;
+	}
+
+	getOrderWeight() {
+		return this.state.order_weight;
 	}
 }
 

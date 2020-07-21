@@ -12,7 +12,7 @@ class TodoList extends HTMLElement {
 		super();
 		this.sidebar = new Sidebar(1);
 		this.header = new Header();
-		this.content = new Content();
+		this.content = new Content({ service_id: 1 });
 	}
 
 	connectedCallback() {
