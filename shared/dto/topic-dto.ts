@@ -13,8 +13,6 @@ interface TOPIC {
 
 interface UPDATE {
 	topic_id: number;
-	order_weight: number;
-	service_id: number;
 	topic_title: string;
 }
 
