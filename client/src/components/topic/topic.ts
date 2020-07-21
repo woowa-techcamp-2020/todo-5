@@ -63,7 +63,6 @@ class Topic extends HTMLElement {
 	}
 
 	render() {
-		console.log('render');
 		this.innerHTML = `<div class="topic">
       <div class="topic-header">
         <div class="topic-header-child topic-title">
@@ -88,7 +87,6 @@ class Topic extends HTMLElement {
 			const sortedCards = [...json.result];
 			if (sortedCards.length === 0) return;
 			sortedCards.sort((a: typeof Card, b: typeof Card) => b.order_weight - a.order_weight);
-			console.log(`cards:${this.state.topic_title}`, sortedCards);
 			await sortedCards.forEach((card: CardInterface) => this.cards.push(new Card(card)));
 			this.state.count = this.cards.length;
 		} catch (err) {
@@ -102,7 +100,6 @@ class Topic extends HTMLElement {
 		card.content = cardContents.content;
 		card.topic_id = this.state.topic_id;
 		card.order_weight = this.nextOrderWeight();
-		console.log('card before api', card);
 
 		try {
 			const response = await fetch(`${url}/api/card`, Options.POST(card));

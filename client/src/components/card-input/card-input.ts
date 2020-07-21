@@ -39,7 +39,13 @@ class CardInput extends HTMLElement {
 		const inputBox = this.querySelector('textarea') as HTMLTextAreaElement;
 		const btnGroup = this.querySelectorAll('button');
 		inputBox.addEventListener('input', (e) => {
+			if (inputBox.textLength > 200) {
+				//글자 수 제한
+				inputBox.value = inputBox.value.substring(0, 200);
+			}
+
 			if (inputBox.value === '') {
+				//add 버튼 활성화
 				btnGroup[0].classList.remove('enable-btn');
 			} else {
 				btnGroup[0].classList.add('enable-btn');
