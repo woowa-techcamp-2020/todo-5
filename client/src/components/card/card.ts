@@ -37,6 +37,12 @@ class Card extends HTMLElement {
 		this.listener();
 	}
 
+	clone(): HTMLElement {
+		const c = new (customElements.get('card-element'))();
+		c.state = this.state;
+		return c;
+	}
+
 	listener() {
 		const del = this.querySelector('.delete') as HTMLElement;
 		del.addEventListener('click', (e) => {
@@ -90,12 +96,14 @@ class Card extends HTMLElement {
 
 	render() {
 		this.innerHTML = `<div class="card">
+		<div class="content-wrapper">
       <div class="card-title">
-        <span>${this.state.card_title}</span>
+        <p>${this.state.card_title}</p>
         <i class="material-icons icon delete">close</i>
       </div>
-      <div class="card-user">by <span>${this.state.user_name}</span></div>
-      <div class="card-content">${this.state.content}</div>
+			<div class="card-content">${this.state.content}</div>
+			<div class="card-user">by <span>${this.state.user_name}</span></div>
+		</div>
     </div>`;
 	}
 

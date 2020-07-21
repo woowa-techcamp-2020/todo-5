@@ -16,12 +16,13 @@ topic-element {
 		.topic-header-child {
 			display: flex;
 			.card-count {
+				margin-top: 1px;
+				padding: 0 6px;
 				margin-right: 8px;
-				width: 18px;
 				height: 18px;
 				line-height: 22px;
 				background: gray;
-				border-radius: 50%;
+				border-radius: 2em;
 				text-align: center;
 				color: white;
 			}
