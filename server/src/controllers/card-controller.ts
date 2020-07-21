@@ -49,9 +49,9 @@ class CardController {
 
 	static async delete(req: Request, res: Response, next: NextFunction) {
 		let response;
-		let { body } = req;
+		const card_id = parseInt(req.params.card_id);
 		try {
-			response = await Card.delete(body);
+			response = await Card.delete(card_id);
 			res.status(httpStatus.OK).json(JsonResponse(httpStatus.OK, 'card deleted well', response));
 		} catch (err) {
 			logger.error('card deleted fail', err);

@@ -26,7 +26,7 @@ class Modal extends HTMLElement {
 	open(option: ModalInterface, callback: Function) {
 		this.state = option;
 		this.callback = callback;
-		
+
 		this.render();
 		this.querySelector('.modal-area')?.classList.remove('modal-close');
 		this.checkInputContent();
@@ -48,20 +48,21 @@ class Modal extends HTMLElement {
 		textarea.addEventListener('keyup', () => this.checkInputContent());
 	}
 
-	checkReject(e:MouseEvent) {
+	checkReject(e: MouseEvent) {
 		e.stopPropagation();
 		this.close();
 	}
 
 	async checkResolve(e: MouseEvent, resolve: HTMLElement) {
 		e.stopPropagation();
+		const textValue = this.querySelector('.text-input') as HTMLTextAreaElement;
 		resolve.classList.add('disabled');
-		await this.callback();
+		await this.callback(textValue.value);
 		resolve.classList.remove('disabled');
 		this.close();
 	}
 
-	checkInputContent () {
+	checkInputContent() {
 		const resolve = this.querySelector('.resolve-btn') as HTMLElement;
 		const textarea = this.querySelector('.text-input') as HTMLTextAreaElement;
 		if (textarea.value.length === 0) {
@@ -100,7 +101,7 @@ class Modal extends HTMLElement {
       </div>
     </div>
     `;
-			this.listener();
+		this.listener();
 	}
 }
 

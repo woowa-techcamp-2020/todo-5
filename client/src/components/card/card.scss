@@ -1,43 +1,45 @@
 card-element {
-  display: inline-block;
+	display: inline-block;
 }
 .card {
-  margin: 6px 0;
-  width: 100%;
-  min-height: 60px;
-  background: white;
-  box-sizing: border-box;
-  border-radius: 4px;
-  padding: 16px;
-  cursor: pointer;
-  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+	margin: 6px 0;
+	width: 100%;
+	min-height: 60px;
+	background: white;
+	box-sizing: border-box;
+	border-radius: 4px;
+	padding: 16px;
+	cursor: pointer;
+	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+		0 1px 5px 0 rgba(0, 0, 0, 0.12);
+	word-break: break-all;
 
-  .card-title {
-    margin-bottom: 4px;
-    display: flex;
-    justify-content: space-between;
-    span {
-      font-size: 20px;
-      font-weight: 500;
-      line-height: 2rem;
-    }
-    .icon {
-      font-size: 24px;
-      &:hover {
-        color: #1e88e5 !important;
-      }
-    }
-  }
-  .card-user {
-    color: #777;
-    font-size: 14px;
-    margin-bottom: 16px;
-    span {
-      font-weight: 700;
-    }
-  }
-  .card-content {
-    color: #777;
-    font-size: 14px;
-  }
+	.card-title {
+		margin-bottom: 4px;
+		display: flex;
+		justify-content: space-between;
+		span {
+			font-size: 20px;
+			font-weight: 500;
+			line-height: 2rem;
+		}
+		.icon {
+			font-size: 24px;
+			&:hover {
+				color: #1e88e5 !important;
+			}
+		}
+	}
+	.card-user {
+		color: #777;
+		font-size: 14px;
+		margin-bottom: 16px;
+		span {
+			font-weight: 700;
+		}
+	}
+	.card-content {
+		color: #777;
+		font-size: 14px;
+	}
 }

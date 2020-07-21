@@ -1,4 +1,4 @@
-class Options {
+export class Options {
 	constructor() {}
 	static GET() {
 		return {
@@ -17,6 +17,25 @@ class Options {
 			body: JSON.stringify(body),
 		};
 	}
+	static PATCH(body: JSON | any) {
+		return {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(body),
+		};
+	}
+	static PUT(body: JSON | any) {
+		return {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(body),
+		};
+	}
 }
 
-export default Options;
+export const url = 'http://localhost:3000';
+export const ORDER_WEIGHT = 100000;

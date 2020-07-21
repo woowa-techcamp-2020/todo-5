@@ -1,11 +1,7 @@
 import Card, { CardInterface } from '../card';
 import CardInput from '../card-input';
 import { CREATE } from '../../../../shared/dto/card-dto';
-import Options from '../../utils';
-const url = 'http://localhost:3000';
-const ORDER_WEIGHT = 100000;
-const TITLE_LIMIT = 20;
-import { $topicModal } from '../modal';
+import { Options, url, ORDER_WEIGHT } from '../../utils';
 
 export interface TopicInterface {
 	topic_id: number;
@@ -54,11 +50,19 @@ class Topic extends HTMLElement {
 	}
 
 	listeners() {
-		const addButton = this.querySelector('.add') as HTMLButtonElement;
-		addButton?.addEventListener('click', (e) => {
+		const addButton = this.querySelector('.add') as HTMLElement;
+		const closeButton = this.querySelector('.close') as HTMLElement;
+		addButton.addEventListener('click', (e) => {
 			e.stopPropagation();
 			this.cardInput.openCardInput();
-			(e.target as HTMLButtonElement).classList.add('disabled');
+			addButton.classList.add('disabled');
+		});
+		closeButton.addEventListener('click', (e) => {
+			e.stopPropagation();
+			if (confirm('선택하신 토픽을 삭제하시겠습니까?')) {
+				fetch(`${url}/api/topic/delete/${this.state.topic_id}`, Options.PATCH({}));
+				this.remove();
+			}
 		});
 	}
 
@@ -87,7 +91,12 @@ class Topic extends HTMLElement {
 			const sortedCards = [...json.result];
 			if (sortedCards.length === 0) return;
 			sortedCards.sort((a: typeof Card, b: typeof Card) => b.order_weight - a.order_weight);
-			await sortedCards.forEach((card: CardInterface) => this.cards.push(new Card(card)));
+			await sortedCards.forEach((card: CardInterface) => {
+				const { title, content } = this.splitTitleContent(card.content);
+				card.card_title = title;
+				card.content = content;
+				this.cards.push(new Card(card));
+			});
 			this.state.count = this.cards.length;
 		} catch (err) {
 			console.error('Error getting documents', err);
@@ -95,15 +104,15 @@ class Topic extends HTMLElement {
 	}
 
 	private async addCardInput(card: CREATE) {
-		const cardContents = this.splitTitleContent(card.content);
-		card.card_title = cardContents.title;
-		card.content = cardContents.content;
+		const { title, content } = this.splitTitleContent(card.content);
 		card.topic_id = this.state.topic_id;
 		card.order_weight = this.nextOrderWeight();
 
 		try {
 			const response = await fetch(`${url}/api/card`, Options.POST(card));
 			const json = await response.json();
+			json.result.content = content;
+			json.result.card_title = title;
 			this.cards.unshift(new Card(json.result));
 			const topicContent = this.querySelector('.topic-content');
 			topicContent?.insertBefore(this.cards[0], this.cards[1]);
@@ -137,6 +146,10 @@ class Topic extends HTMLElement {
 
 	private nextOrderWeight() {
 		return this.state.count ? this.cards[0].getOrderWeight() + ORDER_WEIGHT : ORDER_WEIGHT;
+	}
+
+	public getOrderWeight() {
+		return this.state.order_weight;
 	}
 }
 
