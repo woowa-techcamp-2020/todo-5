@@ -1,35 +1,5 @@
-const path = require('path');
+const env = process.env.NODE_ENV || 'development';
+const webpack =
+	env === 'production' ? require('./webpack-prod.config') : require('./webpack-dev.config');
 
-module.exports = {
-	mode: 'development',
-	entry: './src/app.ts',
-	output: {
-		path: path.resolve(__dirname, '../server/src/public/dist'),
-		filename: '[name].js',
-	},
-	devtool: 'cheap-eval-source-map',
-	resolve: {
-		extensions: ['.ts', '.js', '.json'],
-	},
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				use: 'babel-loader',
-				exclude: /node_modules/,
-			},
-			{
-				test: /\.(png|jpg)$/,
-				use: ['file-loader'],
-			},
-			{
-				test: /\.ts$/,
-				use: ['ts-loader'],
-			},
-			{
-				test: /\.(scss)$/,
-				use: ['style-loader', 'css-loader', 'sass-loader'],
-			},
-		],
-	},
-};
+module.exports = webpack;
