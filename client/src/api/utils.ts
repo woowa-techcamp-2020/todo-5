@@ -37,20 +37,6 @@ export class Options {
 	}
 }
 
-export const success = function (result: {}) {
-	return {
-		success: true,
-		result,
-	};
-};
-
-export const fail = function (err: {}) {
-	return {
-		success: false,
-		err,
-	};
-};
-
 // TODO
 // @ts-ignore
 export const url = `${process.env.URL || 'http://localhost'}:${process.env.PORT || '3000'}`;

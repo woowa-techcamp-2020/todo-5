@@ -1,5 +1,5 @@
 import { $textAreaModal } from '../modal';
-import { Options, url } from '../../utils';
+import { CardApi } from '../../api';
 
 export interface CardInterface {
 	card_id: number;
@@ -48,8 +48,13 @@ class Card extends HTMLElement {
 		del.addEventListener('click', (e) => {
 			e.stopPropagation();
 			if (confirm('선택하신 카드를 삭제하시겠습니까?')) {
-				this.remove();
-				fetch(`${url}/api/card/delete/${this.state.card_id}`, Options.PATCH({}));
+				CardApi.delete(this.state.card_id)
+					.then((res) => {
+						this.remove();
+					})
+					.catch((err) => {
+						alert('카드 삭제에 실패하였습니다');
+					});
 			}
 		});
 		this.querySelector('.card')?.addEventListener('dblclick', (e) => {
@@ -80,6 +85,16 @@ class Card extends HTMLElement {
 		this.state.content = content;
 		this.render();
 		this.listener();
+		CardApi.update(body)
+			.then(async (response) => {
+				const json = await response.json();
+				const { title, content } = this.splitTitleContent(card_content);
+				this.state.card_title = title;
+				this.state.content = content;
+				this.render();
+        this.listener();
+			})
+			.catch(() => {});
 	}
 
 	private splitTitleContent(raw: string) {

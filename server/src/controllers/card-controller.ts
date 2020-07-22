@@ -58,6 +58,20 @@ class CardController {
 			next(err);
 		}
 	}
+
+	static async deleteAllByTopicId(req: Request, res: Response, next: NextFunction) {
+		let response;
+		const topic_id = parseInt(req.params.topic_id);
+		try {
+			response = await Card.deleteAllByTopicId(topic_id);
+			res
+				.status(httpStatus.OK)
+				.json(JsonResponse(httpStatus.OK, 'card deleted all well', response));
+		} catch (err) {
+			logger.error('card deleted all fail', err);
+			next(err);
+		}
+	}
 }
 
 export default CardController;
