@@ -49,11 +49,8 @@ class TodoList extends HTMLElement {
 			event.stopPropagation();
 			sidebar.classList.remove('open-slide');
 			label.classList.remove('open-slide');
+			content.classList.remove('open-slide');
 		});
-
-		//
-		// this.sidebar.appendListener();
-		// this.header.appendListener();
 	}
 
 	disconnectedCallback() {
