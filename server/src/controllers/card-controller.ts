@@ -26,7 +26,7 @@ class CardController {
 		try {
 			response = await Card.getCardsBytopicId(topicId);
 			if (response.result === null) {
-				new Error('no topic exists');
+				new Error('no card exists');
 			}
 			res.status(httpStatus.OK).json(JsonResponse(httpStatus.OK, 'cards get well', response));
 		} catch (err) {

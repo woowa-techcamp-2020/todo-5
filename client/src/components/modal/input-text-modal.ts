@@ -1,6 +1,6 @@
-import $modal, { ModalInterface, Modal } from './modal';
+import $modal, { ModalInterface, Modal } from './base-modal/modal';
 
-class TopicAddModal {
+class InputTextModal {
 	private $modal!: Modal;
 	private option!: ModalInterface;
 	private callback!: Function;
@@ -12,11 +12,11 @@ class TopicAddModal {
 	open(option: ModalInterface, callback: Function) {
 		this.option = option;
 		this.callback = callback;
-		this.$modal.setChildElement('<input class="text-input" />');
+		this.$modal.setChildElement('<input class="text-input">');
 		this.$modal.open(this.option, this.callback);
 	}
 }
 
-const $topicAddModal = new TopicAddModal();
+const $inputTextModal = new InputTextModal();
 
-export default $topicAddModal;
+export default $inputTextModal;

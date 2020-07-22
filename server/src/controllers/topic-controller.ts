@@ -22,9 +22,9 @@ class TopicController {
 
 	static async update(req: Request, res: Response, next: NextFunction) {
 		let response;
-		let { body } = req;
+		const { body } = req;
 		try {
-			response = await Topic.update(body);
+			response = await Topic.updateTitle(body);
 			res
 				.status(httpStatus.CREATED)
 				.json(JsonResponse(httpStatus.CREATED, 'topic updated well', response));
@@ -50,9 +50,9 @@ class TopicController {
 
 	static async getTopicsByServiceId(req: Request, res: Response, next: NextFunction) {
 		let response;
-		const serviceId = req.params.service_id;
+		const service_id = parseInt(req.params.service_id);
 		try {
-			response = await Topic.getTopicsByServiceId(serviceId);
+			response = await Topic.getTopicsByServiceId({ service_id });
 			if (response.result === null) {
 				new Error('no topic exists');
 			}

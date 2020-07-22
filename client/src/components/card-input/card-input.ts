@@ -49,8 +49,8 @@ class CardInput extends HTMLElement {
 		btnGroup[0].addEventListener('click', (e) => {
 			this.resolve({
 				user_id: 1,
-				user_name: 'loloara',
-				content: inputBox.value,
+				uid: 'loloara',
+				content: inputBox?.value,
 				topic_id: 1,
 				card_title: 'title',
 				order_weight: 1,

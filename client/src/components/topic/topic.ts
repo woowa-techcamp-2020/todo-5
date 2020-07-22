@@ -2,6 +2,7 @@ import Card, { CardInterface } from '../card';
 import CardInput from '../card-input';
 import { CREATE } from '../../../../shared/dto/card-dto';
 import { Options, url, ORDER_WEIGHT } from '../../utils';
+import { $inputTextModal } from '../modal';
 
 export interface TopicInterface {
 	topic_id: number;
@@ -38,20 +39,16 @@ class Topic extends HTMLElement {
 		this.render();
 	}
 
-	/**
-	 * ToDo
-	 * card 숫자 두자리, 세자리 처리 고민
-	 */
-
 	private init() {
 		const topicContent = this.querySelector('.topic-content');
 		topicContent?.appendChild(this.cardInput);
 		this.cards.forEach((card) => topicContent?.appendChild(card));
 	}
 
-	listeners() {
+	private listeners() {
 		const addButton = this.querySelector('.add') as HTMLElement;
 		const closeButton = this.querySelector('.close') as HTMLElement;
+		const topicTitle = this.querySelector('.topic-title') as HTMLElement;
 		addButton.addEventListener('click', (e) => {
 			e.stopPropagation();
 			this.cardInput.openCardInput();
@@ -64,6 +61,31 @@ class Topic extends HTMLElement {
 				this.remove();
 			}
 		});
+		topicTitle.addEventListener('dblclick', (e) => {
+			e.stopPropagation();
+			$inputTextModal.open(
+				{
+					title: 'Edit',
+					content: this.state.topic_title,
+					resolve: 'Save',
+					reject: 'Cancel',
+				},
+				(c: string) => this.editTopicTitle(c)
+			);
+		});
+	}
+
+	private async editTopicTitle(title: string) {
+		const body = {
+			topic_id: this.state.topic_id,
+			topic_title: title,
+		};
+		const response = await fetch(`${url}/api/topic/update`, Options.PATCH(body));
+		const json = await response.json();
+		this.state.topic_title = title;
+		this.render();
+		this.init();
+		this.listeners();
 	}
 
 	render() {
@@ -84,7 +106,7 @@ class Topic extends HTMLElement {
 	  <div class="topic-content">
 	  <div class="input-area"></div>
 	  </div>
-    </div>`;
+	</div>`;
 	}
 
 	private async getCards() {

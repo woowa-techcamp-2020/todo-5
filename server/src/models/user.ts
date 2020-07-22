@@ -44,7 +44,9 @@ class User {
 			userData = await mysql.connect((con: any) => {
 				return con.query(`INSERT INTO user (uid, name) VALUES('${user.uid}', '${user.name}')`);
 			});
-			return user;
+			const user_id = userData[0].insertId;
+			const result: UserDTO.RESPONSE = { ...user, user_id };
+			return result;
 		} catch (err) {
 			throw err;
 		}

@@ -1,6 +1,6 @@
-import $modal, { ModalInterface, Modal } from './modal';
+import $modal, { ModalInterface, Modal } from './base-modal/modal';
 
-class CardEditModal {
+class TextAreaModal {
 	private $modal!: Modal;
 	private option!: ModalInterface;
 	private callback!: Function;
@@ -17,6 +17,6 @@ class CardEditModal {
 	}
 }
 
-const $cardModal = new CardEditModal();
+const $textAreaModal = new TextAreaModal();
 
-export default $cardModal;
+export default $textAreaModal;

@@ -1,4 +1,5 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
 	mode: 'development',
@@ -11,6 +12,12 @@ module.exports = {
 	resolve: {
 		extensions: ['.ts', '.js', '.json'],
 	},
+	plugins: [
+		new Dotenv({
+			path: path.join(__dirname, '../shared/config.env'),
+			systemvars: true,
+		}),
+	],
 	module: {
 		rules: [
 			{
@@ -33,13 +40,13 @@ module.exports = {
 					{
 						loader: require.resolve('css-loader'),
 						options: {
-							sourceMap: true,
+							sourceMap: process.env.NODE_ENV === 'production' ? false : true,
 						},
 					},
 					{
 						loader: require.resolve('sass-loader'),
 						options: {
-							sourceMap: true,
+							sourceMap: process.env.NODE_ENV === 'production' ? false : true,
 						},
 					},
 				],

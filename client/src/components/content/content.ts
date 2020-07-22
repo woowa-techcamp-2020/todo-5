@@ -1,6 +1,6 @@
 import Topic from '../topic';
 import { Options, url, ORDER_WEIGHT } from '../../utils';
-import { $topicAddModal } from '../modal';
+import { $inputTextModal } from '../modal';
 
 interface ContentInterface {
 	service_id: string;
@@ -49,7 +49,7 @@ class Content extends HTMLElement {
 	listener() {
 		const newTopicButton = this.querySelector('.new-topic-button') as HTMLElement;
 		newTopicButton.addEventListener('click', (e) => {
-			$topicAddModal.open(
+			$inputTextModal.open(
 				{
 					title: 'Edit',
 					content: '',

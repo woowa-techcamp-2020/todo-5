@@ -5,12 +5,15 @@ class Card {
 	constructor() {}
 	static async create(card: CardDTO.CREATE) {
 		try {
-			const cardData = await mysql.connect((con: any) => {
-				const date = Math.floor(Date.now() / 1000);
-				return con.query(`INSERT INTO card (order_weight, user_id, user_name, create_date, last_update, topic_id ,content) 
-        VALUES('${card.order_weight}', '${card.user_id}', '${card.user_name}', '${date}', '${date}', '${card.topic_id}', '${card.content}')`);
-			});
-			return card;
+			const create_date = Math.floor(Date.now() / 1000);
+			const last_update = create_date;
+			const cardData = await mysql.connect((con: any) =>
+				con.query(`INSERT INTO card (order_weight, user_id, create_date, last_update, topic_id ,content) 
+        VALUES('${card.order_weight}', '${card.user_id}', '${create_date}', '${last_update}', '${card.topic_id}', '${card.content}')`)
+			);
+			const card_id = cardData[0].insertId;
+			const result: CardDTO.RESPONSE = { ...card, card_id, create_date, last_update };
+			return result;
 		} catch (err) {
 			throw err;
 		}
@@ -20,7 +23,9 @@ class Card {
 		let cardData;
 		try {
 			cardData = await mysql.connect((con: any) =>
-				con.query(`SELECT * FROM card WHERE topic_id = '${topicId}' AND removed = '${0}'`)
+				con.query(
+					`SELECT card_id, order_weight, c.user_id, content, create_date, last_update, topic_id, uid FROM card c INNER JOIN user u ON u.user_id = c.user_id WHERE topic_id = '${topicId}' AND removed = '${0}'`
+				)
 			);
 			return [...cardData][0];
 		} catch (err) {

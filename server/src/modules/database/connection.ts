@@ -1,10 +1,10 @@
 import { env } from '../../config/vars';
 
 const database = {
-	database: env === 'production' ? 'todo05' : 'kitty05',
-	user: 'todo05',
-	password: '',
-	host: '13.209.83.0',
+	database: env === 'production' ? process.env.PORD_DB : process.env.DEV_DB,
+	user: process.env.DB_USER,
+	password: process.env.DB_PW,
+	host: process.env.DB_HOST,
 	waitForConnections: true,
 	connectionLimit: 10,
 	queueLimit: 0,

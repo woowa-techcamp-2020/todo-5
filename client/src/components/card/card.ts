@@ -1,11 +1,11 @@
-import { $cardModal } from '../modal';
+import { $textAreaModal } from '../modal';
 import { Options, url } from '../../utils';
 
 export interface CardInterface {
 	card_id: number;
 	order_weight: number;
 	card_title: string;
-	user_name: string;
+	uid: string;
 	content: string;
 	last_update: number;
 	create_date: number;
@@ -54,7 +54,7 @@ class Card extends HTMLElement {
 		});
 		this.querySelector('.card')?.addEventListener('dblclick', (e) => {
 			e.stopPropagation();
-			$cardModal.open(
+			$textAreaModal.open(
 				{
 					title: 'Edit',
 					content: this.state.card_title + this.state.content,
@@ -102,7 +102,7 @@ class Card extends HTMLElement {
         <i class="material-icons icon delete">close</i>
       </div>
 			<div class="card-content">${this.state.content}</div>
-			<div class="card-user">by <span>${this.state.user_name}</span></div>
+			<div class="card-user">by <span>${this.state.uid}</span></div>
 		</div>
     </div>`;
 	}

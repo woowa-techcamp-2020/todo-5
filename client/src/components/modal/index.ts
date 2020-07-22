@@ -1,8 +1,6 @@
-import './modal.scss';
-import Modal, { ModalInterface } from './modal';
-import $cardModal from './card-edit-modal';
-import $topicModal from './topic-edit-modal';
-import $topicAddModal from './topic-add-modal';
+import Modal, { ModalInterface } from './base-modal';
+import $textAreaModal from './textarea-modal';
+import $inputTextModal from './input-text-modal';
 
-export { ModalInterface, $cardModal, $topicModal, $topicAddModal };
+export { ModalInterface, $textAreaModal, $inputTextModal };
 export default Modal;
