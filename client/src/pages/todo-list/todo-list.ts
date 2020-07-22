@@ -115,8 +115,13 @@ class TodoList extends HTMLElement {
 				const rect = card.getBoundingClientRect().top;
 				const top = parseInt(this.card.moving.style.top.split('px')[0]);
 				if (top > rect) {
-					if ((card.nextSibling as HTMLElement).classList.contains('cloned')) return;
-					card.parentNode?.insertBefore(this.card.cloned, card.nextSibling);
+					if (!card.nextSibling) {
+						card.parentNode?.appendChild(this.card.cloned);
+					} else if ((card.nextSibling as HTMLElement).classList.contains('cloned')) {
+						return;
+					} else {
+						card.parentNode?.insertBefore(this.card.cloned, card.nextSibling);
+					}
 				} else {
 					if (this.card.cloned.nextSibling === card) return;
 					card.parentNode?.insertBefore(this.card.cloned, card);
@@ -131,10 +136,8 @@ class TodoList extends HTMLElement {
 		if (this.card.moving.hasChildNodes()) {
 			this.card.moving.removeChild(this.card.moving.firstChild as ChildNode);
 		}
-		//
 		this.card.cloned.classList.remove('cloned');
 		this.card.selected.remove();
-		//
 	}
 
 	mouseLeave(event: MouseEvent) {
