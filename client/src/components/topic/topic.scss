@@ -6,7 +6,7 @@ topic-element {
 	width: 345px;
 	padding: 16px 0;
 	border-radius: 4px;
-	// margin-right: 16px;
+	height: 100%;
 	margin: 8px 4px;
 	.topic-header {
 		display: flex;
@@ -39,10 +39,6 @@ topic-element {
 			.card-count {
 				padding: 8px 0;
 				font-weight: 600;
-				// height: 18px;
-				// line-height: 22px;
-				// background: gray;
-				// border-radius: 2em;
 				text-align: center;
 				color: #777;
 			}
@@ -53,8 +49,11 @@ topic-element {
 				font-size: 22px;
 				line-height: 30px;
 				color: #555;
+				transition: transform 0.4s;
 				&.add.disabled {
 					pointer-events: none;
+					color: #ccc;
+					transform: rotate(90deg);
 				}
 				&.close {
 					font-size: 20px;
@@ -68,11 +67,10 @@ topic-element {
 	}
 	.topic-content {
 		margin-right: -4px;
-		// border-radius: 8px;
-		border-right: 1px solid #ddd;
+		height: calc(100% - 60px);
+		border-right: 1.5px solid #eee;
 		padding: 0 16px;
 		overflow-y: scroll;
-		height: 800px;
 		scroll-padding: 0px 0px 0px 0px;
 	}
 }
