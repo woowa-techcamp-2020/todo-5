@@ -74,28 +74,20 @@ class Content extends HTMLElement {
 			order_weight: nextOrderWeight,
 		};
 
-		TopicApi.create(body)
-			.then(async (response) => {
-				const json = await response.json();
-				const newTopic = new Topic(json.result);
-				contentTag.appendChild(newTopic);
-				this.topics.push(newTopic);
-			})
-			.catch(() => {});
+		try {
+			const res = await TopicApi.create(body);
+			const newTopic = new Topic(res.result);
+			contentTag.appendChild(newTopic);
+			this.topics.push(newTopic);
+		} catch (e) {
+			alert('카드 추가에 실패하였습니다.');
+		}
 	}
 
 	private async getTopics() {
-		const options = {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		};
-
 		try {
 			const response = await TopicApi.getAll(this.state.service_id);
-			const json = await response.json();
-			const sortedTopics = [...json.result];
+			const sortedTopics = [...response.result];
 			sortedTopics.sort((a: typeof Topic, b: typeof Topic) => a.order_weight - b.order_weight);
 			await sortedTopics.forEach((topic) => this.topics.push(new Topic(topic)));
 		} catch (err) {

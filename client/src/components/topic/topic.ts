@@ -55,15 +55,16 @@ class Topic extends HTMLElement {
 			this.cardInput.openCardInput();
 			addButton.classList.add('disabled');
 		});
-		closeButton.addEventListener('click', (e) => {
+		closeButton.addEventListener('click', async (e) => {
 			e.stopPropagation();
 			if (confirm('선택하신 토픽을 삭제하시겠습니까?')) {
-				TopicApi.delete(this.state.topic_id)
-					.then(async (response) => {
-						await CardApi.deleteAll(this.state.topic_id);
-						this.remove();
-					})
-					.catch((error) => {});
+				try {
+					await TopicApi.delete(this.state.topic_id);
+					await CardApi.deleteAll(this.state.topic_id);
+					this.remove();
+				} catch (err) {
+					throw err;
+				}
 			}
 		});
 		topicTitle.addEventListener('dblclick', (e) => {
@@ -85,15 +86,13 @@ class Topic extends HTMLElement {
 			topic_id: this.state.topic_id,
 			topic_title: title,
 		};
-		TopicApi.update(body)
-			.then(async (response) => {
-				const json = await response.json();
-				this.state.topic_title = title;
-				this.render();
-				this.init();
-				this.listeners();
-			})
-			.catch(() => {});
+		try {
+			const result = await TopicApi.update(body);
+			this.state.topic_title = title;
+			this.render();
+			this.init();
+			this.listeners();
+		} catch (err) {}
 	}
 
 	render() {
@@ -119,8 +118,7 @@ class Topic extends HTMLElement {
 
 	private async getCards() {
 		const response = await CardApi.getAll(this.state.topic_id);
-		const json = await response.json();
-		const sortedCards = [...json.result];
+		const sortedCards = [...response.result];
 		if (sortedCards.length === 0) return;
 		sortedCards.sort((a: typeof Card, b: typeof Card) => b.order_weight - a.order_weight);
 		await sortedCards.forEach((card: CardInterface) => {
@@ -139,19 +137,17 @@ class Topic extends HTMLElement {
 		console.log('title: ', title, 'content: ', content);
 		card.topic_id = this.state.topic_id;
 		card.order_weight = this.nextOrderWeight();
-		CardApi.create(card)
-			.then(async (response) => {
-				const json = await response.json();
-				json.result.content = content;
-				json.result.card_title = title;
-				this.cards.unshift(new Card(json.result));
-				const topicContent = this.querySelector('.topic-content');
-				topicContent?.insertBefore(this.cards[0], this.cards[1]);
-				this.state.count++;
-			})
-			.catch((error) => {
-				alert('카드 생성에 실패하였습니다.');
-			});
+		try {
+			const result = await CardApi.create(card);
+			result.result.content = content;
+			result.result.card_title = title;
+			this.cards.unshift(new Card(result.result));
+			const topicContent = this.querySelector('.topic-content');
+			topicContent?.insertBefore(this.cards[0], this.cards[1]);
+			this.state.count++;
+		} catch (err) {
+			alert('카드 생성에 실패하였습니다.');
+		}
 	}
 
 	private cancelCardInput() {
