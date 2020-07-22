@@ -76,12 +76,14 @@ class Card extends HTMLElement {
 			card_id: this.state.card_id,
 			content: card_content,
 		};
+
 		try {
 			const result = await CardApi.update(body);
 			const { title, content } = this.splitTitleContent(card_content);
 			this.state.card_title = title;
 			this.state.content = content;
 			this.render();
+       this.listener();
 		} catch (err) {}
 	}
 
@@ -94,7 +96,9 @@ class Card extends HTMLElement {
 		} else {
 			title = tmp[0];
 			tmp.shift();
-			content = tmp.reduce((prev, now) => (prev += '<br/>' + now), '');
+			content = tmp.reduce((prev, now) => (prev += now + '<br/>'), '');
+			content = content.substring(0, content.length - 5);
+			console.log(content);
 		}
 
 		return { title, content };
