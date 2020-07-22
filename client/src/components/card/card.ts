@@ -57,7 +57,7 @@ class Card extends HTMLElement {
 			$textAreaModal.open(
 				{
 					title: 'Edit',
-					content: this.state.card_title + this.state.content,
+					content: this.state.card_title + '\n' + this.state.content.replace(/<br\/>/g, '\n'),
 					resolve: 'Save',
 					reject: 'Cancel',
 				},
@@ -67,6 +67,7 @@ class Card extends HTMLElement {
 	}
 
 	private async editContentOfCard(card_content: string) {
+		card_content = card_content.replace(/\n/g, '<br/>');
 		const body = {
 			card_id: this.state.card_id,
 			content: card_content,
@@ -81,14 +82,14 @@ class Card extends HTMLElement {
 
 	private splitTitleContent(raw: string) {
 		let title, content, tmp;
-		tmp = raw.split('\n');
+		tmp = raw.split('<br/>');
 		if (tmp.length <= 1) {
 			title = tmp[0];
 			content = '';
 		} else {
 			title = tmp[0];
 			tmp.shift();
-			content = tmp.reduce((prev, now) => (prev += now), '');
+			content = tmp.reduce((prev, now) => (prev += '<br/>' + now), '');
 		}
 
 		return { title, content };
