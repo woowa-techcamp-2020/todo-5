@@ -1,6 +1,7 @@
 import Topic from '../topic';
-import { Options, url, ORDER_WEIGHT } from '../../utils';
+import { Options, url, ORDER_WEIGHT } from '../../api/utils';
 import { $inputTextModal } from '../modal';
+import { TopicApi } from '../../api';
 
 interface ContentInterface {
 	service_id: string;
@@ -67,18 +68,20 @@ class Content extends HTMLElement {
 		const nextOrderWeight = this.topics.length
 			? lastItem.getOrderWeight() + ORDER_WEIGHT
 			: ORDER_WEIGHT;
-		const response = await fetch(
-			`${url}/api/topic`,
-			Options.POST({
-				service_id: this.state.service_id,
-				topic_title: topic_title,
-				order_weight: nextOrderWeight,
+		const body = {
+			service_id: this.state.service_id,
+			topic_title: topic_title,
+			order_weight: nextOrderWeight,
+		};
+
+		TopicApi.create(body)
+			.then(async (response) => {
+				const json = await response.json();
+				const newTopic = new Topic(json.result);
+				contentTag.appendChild(newTopic);
+				this.topics.push(newTopic);
 			})
-		);
-		const json = await response.json();
-		const newTopic = new Topic(json.result);
-		contentTag.appendChild(newTopic);
-		this.topics.push(newTopic);
+			.catch(() => {});
 	}
 
 	private async getTopics() {
@@ -88,8 +91,9 @@ class Content extends HTMLElement {
 				'Content-Type': 'application/json',
 			},
 		};
+
 		try {
-			const response = await fetch(`${url}/api/topic/${this.state.service_id}`, Options.GET());
+			const response = await TopicApi.getAll(this.state.service_id);
 			const json = await response.json();
 			const sortedTopics = [...json.result];
 			sortedTopics.sort((a: typeof Topic, b: typeof Topic) => a.order_weight - b.order_weight);

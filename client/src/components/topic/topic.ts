@@ -1,7 +1,8 @@
 import Card, { CardInterface } from '../card';
 import CardInput from '../card-input';
 import { CREATE } from '../../../../shared/dto/card-dto';
-import { Options, url, ORDER_WEIGHT } from '../../utils';
+import { Options, url, ORDER_WEIGHT } from '../../api/utils';
+import { CardApi, TopicApi } from '../../api';
 import { $inputTextModal } from '../modal';
 
 export interface TopicInterface {
@@ -57,8 +58,12 @@ class Topic extends HTMLElement {
 		closeButton.addEventListener('click', (e) => {
 			e.stopPropagation();
 			if (confirm('선택하신 토픽을 삭제하시겠습니까?')) {
-				fetch(`${url}/api/topic/delete/${this.state.topic_id}`, Options.PATCH({}));
-				this.remove();
+				TopicApi.delete(this.state.topic_id)
+					.then(async (response) => {
+						await CardApi.deleteAll(this.state.topic_id);
+						this.remove();
+					})
+					.catch((error) => {});
 			}
 		});
 		topicTitle.addEventListener('dblclick', (e) => {
@@ -80,12 +85,15 @@ class Topic extends HTMLElement {
 			topic_id: this.state.topic_id,
 			topic_title: title,
 		};
-		const response = await fetch(`${url}/api/topic/update`, Options.PATCH(body));
-		const json = await response.json();
-		this.state.topic_title = title;
-		this.render();
-		this.init();
-		this.listeners();
+		TopicApi.update(body)
+			.then(async (response) => {
+				const json = await response.json();
+				this.state.topic_title = title;
+				this.render();
+				this.init();
+				this.listeners();
+			})
+			.catch(() => {});
 	}
 
 	render() {
@@ -110,41 +118,37 @@ class Topic extends HTMLElement {
 	}
 
 	private async getCards() {
-		try {
-			const response = await fetch(`${url}/api/card/${this.state.topic_id}`, Options.GET());
-			const json = await response.json();
-			const sortedCards = [...json.result];
-			if (sortedCards.length === 0) return;
-			sortedCards.sort((a: typeof Card, b: typeof Card) => b.order_weight - a.order_weight);
-			await sortedCards.forEach((card: CardInterface) => {
-				const { title, content } = this.splitTitleContent(card.content);
-				card.card_title = title;
-				card.content = content;
-				this.cards.push(new Card(card));
-			});
-			this.state.count = this.cards.length;
-		} catch (err) {
-			console.error('Error getting documents', err);
-		}
+		const response = await CardApi.getAll(this.state.topic_id);
+		const json = await response.json();
+		const sortedCards = [...json.result];
+		if (sortedCards.length === 0) return;
+		sortedCards.sort((a: typeof Card, b: typeof Card) => b.order_weight - a.order_weight);
+		await sortedCards.forEach((card: CardInterface) => {
+			const { title, content } = this.splitTitleContent(card.content);
+			card.card_title = title;
+			card.content = content;
+			this.cards.push(new Card(card));
+		});
+		this.state.count = this.cards.length;
 	}
 
 	private async addCardInput(card: CREATE) {
 		const { title, content } = this.splitTitleContent(card.content);
 		card.topic_id = this.state.topic_id;
 		card.order_weight = this.nextOrderWeight();
-
-		try {
-			const response = await fetch(`${url}/api/card`, Options.POST(card));
-			const json = await response.json();
-			json.result.content = content;
-			json.result.card_title = title;
-			this.cards.unshift(new Card(json.result));
-			const topicContent = this.querySelector('.topic-content');
-			topicContent?.insertBefore(this.cards[0], this.cards[1]);
-			this.state.count++;
-		} catch (err) {
-			console.error('Error adding card', err);
-		}
+		CardApi.create(card)
+			.then(async (response) => {
+				const json = await response.json();
+				json.result.content = content;
+				json.result.card_title = title;
+				this.cards.unshift(new Card(json.result));
+				const topicContent = this.querySelector('.topic-content');
+				topicContent?.insertBefore(this.cards[0], this.cards[1]);
+				this.state.count++;
+			})
+			.catch((error) => {
+				alert('카드 생성에 실패하였습니다.');
+			});
 	}
 
 	private cancelCardInput() {
