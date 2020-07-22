@@ -1,5 +1,3 @@
-const url = 'http://13.209.83.0';
-
 interface ActivityInterface {
 	activity_id: number;
 	service_id: number;
@@ -41,12 +39,12 @@ class Sidebar extends HTMLElement {
 
 	appendListener() {
 		const close = this.querySelector('.close-icon') as HTMLElement;
-		const label = document.querySelector('.service-menu') as HTMLElement;
-		const sidebar = document.querySelector('.slide-menu') as HTMLElement;
+		const toggle = document.querySelector('#toggle') as HTMLInputElement;
+
 		close.addEventListener('click', (event) => {
 			event.stopPropagation();
-			sidebar.classList.remove('open-slide');
-			label.classList.remove('open-slide');
+			toggle.checked = false;
+			toggle.dispatchEvent(new Event('change'));
 		});
 	}
 

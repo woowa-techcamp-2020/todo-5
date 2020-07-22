@@ -129,7 +129,10 @@ class Topic extends HTMLElement {
 	}
 
 	private async addCardInput(card: CREATE) {
+		card.content = card.content.replace(/\n/g, '<br/>');
+		console.log(card.content);
 		const { title, content } = this.splitTitleContent(card.content);
+		console.log('title: ', title, 'content: ', content);
 		card.topic_id = this.state.topic_id;
 		card.order_weight = this.nextOrderWeight();
 
@@ -156,14 +159,14 @@ class Topic extends HTMLElement {
 
 	private splitTitleContent(raw: string) {
 		let title, content, tmp;
-		tmp = raw.split('\n');
+		tmp = raw.split('<br/>');
 		if (tmp.length <= 1) {
 			title = tmp[0];
 			content = '';
 		} else {
 			title = tmp[0];
 			tmp.shift();
-			content = tmp.reduce((prev, now) => (prev += now), '');
+			content = tmp.reduce((prev, now) => (prev += '<br/>' + now), '');
 		}
 
 		return { title, content };
