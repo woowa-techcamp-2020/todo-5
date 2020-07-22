@@ -70,8 +70,11 @@ class Topic extends HTMLElement {
 		this.innerHTML = `<div class="topic">
       <div class="topic-header">
         <div class="topic-header-child topic-title">
-          <div class="card-count">${this.state.count}</div>
-          <h3>${this.state.topic_title}</h3>
+					<div class="topic-title">
+					<div class="bar"></div>
+					<span>${this.state.topic_title}</span>
+					</div>
+					<div class="card-count">${this.state.count}</div>
         </div>
         <div class="topic-header-child">
           <i class="material-icons add">add</i>
