@@ -1,27 +1,56 @@
-import Header from '../../components/header';
-import Sidebar from '../../components/sidebar';
-import Content from '../../components/content';
+import HeaderElement from '../../components/header';
+import SideBarElement from '../../components/sidebar';
+import ContentElement from '../../components/content';
+import { Sidebar } from '../../components/sidebar/sidebar';
+import { Header } from '../../components/header/header';
+import { Content } from '../../components/content/content';
 
 class TodoList extends HTMLElement {
 	private state: {} = {};
-	private sidebar!: HTMLElement;
-	private header!: HTMLElement;
-	private content!: HTMLElement;
+	private sidebar!: Sidebar;
+	private header!: Header;
+	private content!: Content;
 
 	constructor() {
 		super();
-		this.sidebar = new Sidebar(1);
-		this.header = new Header();
-		this.content = new Content({ service_id: 1 });
+		this.sidebar = new SideBarElement(1);
+		this.header = new HeaderElement();
+		this.content = new ContentElement({ service_id: 1 });
 	}
 
 	connectedCallback() {
-		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
 		this.appendChild(this.sidebar);
 		this.appendChild(this.header);
 		this.appendChild(this.content);
+		this.appendListener();
 		this.mouseEvent();
+	}
+
+	appendListener() {
+		const toggle = this.querySelector('#toggle') as HTMLInputElement;
+		const label = this.querySelector('.service-menu') as HTMLElement;
+		const sidebar = this.querySelector('.slide-menu') as HTMLElement;
+		const content = document.querySelector('content-element') as HTMLElement;
+		const close = this.querySelector('.close-icon') as HTMLElement;
+
+		toggle.addEventListener('change', (e: Event) => {
+			if (toggle.checked === true) {
+				sidebar.classList.add('open-slide');
+				label.classList.add('open-slide');
+				content.classList.add('open-slide');
+			} else {
+				sidebar.classList.remove('open-slide');
+				label.classList.remove('open-slide');
+				content.classList.remove('open-slide');
+			}
+		});
+		close.addEventListener('click', (event) => {
+			event.stopPropagation();
+			sidebar.classList.remove('open-slide');
+			label.classList.remove('open-slide');
+			content.classList.remove('open-slide');
+		});
 	}
 
 	disconnectedCallback() {
@@ -42,7 +71,6 @@ class TodoList extends HTMLElement {
 		moving: document.createElement('div'),
 		cloned: document.createElement('div'),
 	};
-	// private mose
 
 	mouseEvent() {
 		document.addEventListener('mousedown', (event: MouseEvent) => this.mouseDown(event));

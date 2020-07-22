@@ -9,7 +9,7 @@ class Header extends HTMLElement {
 	connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
-		this.listener();
+		// this.listener();
 	}
 
 	disconnectedCallback() {
@@ -30,17 +30,21 @@ class Header extends HTMLElement {
     </header>`;
 	}
 
-	listener() {
+	appendListener() {
 		const toggle = this.querySelector('#toggle') as HTMLInputElement;
 		const label = this.querySelector('.service-menu') as HTMLElement;
 		const sidebar = document.querySelector('.slide-menu') as HTMLElement;
+		const content = document.querySelector('.content') as HTMLElement;
+
 		toggle.addEventListener('change', (e: Event) => {
 			if (toggle.checked === true) {
 				sidebar.classList.add('open-slide');
 				label.classList.add('open-slide');
+				content.classList.add('open-slide');
 			} else {
 				sidebar.classList.remove('open-slide');
 				label.classList.remove('open-slide');
+				content.classList.remove('open-slide');
 			}
 		});
 	}
@@ -48,3 +52,5 @@ class Header extends HTMLElement {
 window.customElements.define('header-element', Header);
 
 export default customElements.get('header-element');
+
+export { Header };

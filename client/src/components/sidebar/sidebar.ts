@@ -1,6 +1,6 @@
 const url = 'http://13.209.83.0';
 
-export interface ActivityInterface {
+interface ActivityInterface {
 	activity_id: number;
 	service_id: number;
 	card_id: number;
@@ -39,14 +39,31 @@ class Sidebar extends HTMLElement {
 		this.render();
 	}
 
+	appendListener() {
+		const close = this.querySelector('.close-icon') as HTMLElement;
+		const label = document.querySelector('.service-menu') as HTMLElement;
+		const sidebar = document.querySelector('.slide-menu') as HTMLElement;
+		close.addEventListener('click', (event) => {
+			event.stopPropagation();
+			sidebar.classList.remove('open-slide');
+			label.classList.remove('open-slide');
+		});
+	}
+
 	render() {
 		this.innerHTML = `
         <aside class="slide-menu">
           <section>
-            <div><i class="material-icons">notifications</i>Activity</div>
+						<div class="menu-title">
+							<div class="title-wrapper">
+								<i class="material-icons">notifications</i>
+								<div>ACTIVITY</div>
+							</div>
+							<i class="material-icons close-icon">close</i>
+						</div>
             <ul class=activity-list></ul>
           </section>
-      </aside>`;
+			</aside>`;
 	}
 
 	private async getActivities() {
@@ -90,13 +107,13 @@ class Sidebar extends HTMLElement {
 		const ulTag = this.querySelector('ul') as HTMLElement;
 		ulTag.innerHTML = this.activities.reduce(
 			(result: string, item: ActivityInterface) =>
-				(result += `<li><span class="etext">@${item.uid}</span> ${
+				(result += `<div class="activity-content"> <li><span class="etext">@${item.uid}</span> ${
 					item.action
 				} <span class="etext">${item.card_title}</span> ${
 					item.action === 'moved' || item.action === 'archived' ? ' from ' + item.from : ''
 				}${
 					item.action === 'moved' || item.action === 'added' ? ' to ' + item.to : ''
-				}</li><span class="time-label">${this.calDifTime(item.create_date)} 전 작성</span>`),
+				}</li><span class="time-label">${this.calDifTime(item.create_date)} 전 작성</span></div>`),
 			''
 		);
 	}
@@ -129,3 +146,5 @@ class Sidebar extends HTMLElement {
 window.customElements.define('sidebar-element', Sidebar);
 
 export default customElements.get('sidebar-element');
+
+export { ActivityInterface, Sidebar };

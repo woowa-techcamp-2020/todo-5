@@ -2,7 +2,7 @@ import Topic from '../topic';
 import { Options, url, ORDER_WEIGHT } from '../../utils';
 import { $inputTextModal } from '../modal';
 
-export interface ContentInterface {
+interface ContentInterface {
 	service_id: string;
 }
 
@@ -18,11 +18,12 @@ class Content extends HTMLElement {
 
 	async connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
+		// this.render();
 		await this.getTopics();
 		this.render();
 		const contentTag = this.querySelector('.content') as HTMLElement;
 		this.topics.forEach((topic: typeof Topic) => contentTag.appendChild(topic));
-		this.listeners();
+		// this.listeners();
 	}
 
 	disconnectedCallback() {
@@ -37,14 +38,16 @@ class Content extends HTMLElement {
 	render() {
 		this.innerHTML = `<div class="content"></div>
 		<div class="new-topic">
-			<button class="new-topic-button">
-				<i class="material-icons add">add</i>Add topic
-			</button>
+			<div class="new-topic-button">
+				<i class="material-icons">add</i>
+				<div class="add">Add</div>
+			</div>
 		</div>`;
+		this.listener();
 	}
 
-	private listeners() {
-		const newTopicButton = this.querySelector('.new-topic-button') as HTMLButtonElement;
+	listener() {
+		const newTopicButton = this.querySelector('.new-topic-button') as HTMLElement;
 		newTopicButton.addEventListener('click', (e) => {
 			$inputTextModal.open(
 				{
@@ -100,3 +103,5 @@ class Content extends HTMLElement {
 window.customElements.define('content-element', Content);
 
 export default customElements.get('content-element');
+
+export { ContentInterface, Content };

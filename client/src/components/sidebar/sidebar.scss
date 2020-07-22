@@ -1,32 +1,62 @@
 .slide-menu {
-	background-color: #f9f9f9;
+	background-color: #272d32;
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	transform: translate3d(400px, 0, 0);
+	transform: translate3d(360px, 0, 0);
 	position: absolute;
-	width: 400px;
+	width: 360px;
 	right: 0px;
 	height: 100%;
-	transition: all 0.6s;
+	transition: all 0.4s;
 	z-index: 100;
+	section {
+		.menu-title {
+			padding: 18px 10px 16px 16px;
+			display: flex;
+			color: white;
+			justify-content: space-between;
+			.title-wrapper {
+				display: flex;
+			}
+			i {
+				font-size: 22px;
+				top: 8px;
+				margin-right: 8px;
+				cursor: pointer;
+			}
+			div {
+				line-height: 28px;
+				font-size: 16px;
+			}
+		}
+		.activity-content {
+			padding: 16px 10px;
+			border-bottom: 1px solid #ddd;
+			word-wrap: break-word;
+			font-size: 16px;
+		}
+	}
+	ul {
+		list-style: none;
+	}
 	label {
 		display: flex;
 		padding-left: 10px;
 	}
 	li {
-		font-size: 15px;
-		font-weight: 500;
+		color: #ccc;
 		padding-left: 10px;
 	}
 	.etext {
-		color: #1e88e5 !important;
+		font-weight: 600;
+		color: white !important;
 	}
 	&.open-slide {
 		transform: translate3d(0, 0, 0);
 	}
 	.time-label {
 		padding-left: 10px;
-		font-size: 6px;
+		font-size: 11px;
+		color: #ccc;
 		position: relative;
-		top: -8px;
 	}
 }

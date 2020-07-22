@@ -29,21 +29,16 @@ class CardInput extends HTMLElement {
 		this.innerHTML = `<div class="card-input">
             <textarea placeholder="Enter a card"></textarea>
             <div class="btn-group">
-                <button class="card-add">Add</button>
-                <button class="card-close">Cancel</button>
+                <div class="button card-add">Add</div>
+                <div class="button card-close">Cancel</div>
             </div>
         </div>`;
 	}
 
 	listener() {
 		const inputBox = this.querySelector('textarea') as HTMLTextAreaElement;
-		const btnGroup = this.querySelectorAll('button');
+		const btnGroup = this.querySelectorAll('.button');
 		inputBox.addEventListener('input', (e) => {
-			if (inputBox.textLength > 200) {
-				//글자 수 제한
-				inputBox.value = inputBox.value.substring(0, 200);
-			}
-
 			if (inputBox.value === '') {
 				//add 버튼 활성화
 				btnGroup[0].classList.remove('enable-btn');
@@ -61,12 +56,27 @@ class CardInput extends HTMLElement {
 				order_weight: 1,
 			});
 			this.reject();
-			inputBox.value = '';
+			this.resetInput(inputBox, btnGroup);
+			if (inputBox.textLength > 200) {
+				//글자 수 제한
+				inputBox.value = inputBox.value.substring(0, 200);
+			}
 		});
 		btnGroup[1].addEventListener('click', (e) => {
 			this.reject();
-			inputBox.value = '';
+			this.resetInput(inputBox, btnGroup);
+			if (inputBox.textLength > 200) {
+				//글자 수 제한
+				inputBox.value = inputBox.value.substring(0, 200);
+			}
 		});
+	}
+
+	resetInput(inputBox: HTMLTextAreaElement, btnGroup: NodeListOf<Element>) {
+		inputBox.value = '';
+		if (btnGroup[0].classList.contains('enable-btn')) {
+			btnGroup[0].classList.remove('enable-btn');
+		}
 	}
 	openCardInput() {
 		const cardInput = this.querySelector('.card-input');

@@ -2,11 +2,13 @@ card-element {
 	display: inline-block;
 	padding: 6px 0;
 	margin-bottom: -5px;
-	transition: transform 0.3s;
 }
 
 .cloned {
 	opacity: 0.6;
+	.card {
+		border-color: #3fa9ff;
+	}
 	// position: absolute;
 }
 
@@ -18,8 +20,9 @@ card-element {
 	border-radius: 4px;
 	padding: 16px;
 	cursor: pointer;
-	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-		0 1px 5px 0 rgba(0, 0, 0, 0.12);
+	// box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+	// 	0 1px 5px 0 rgba(0, 0, 0, 0.12);
+	border: 1px solid #ddd;
 
 	.card-title {
 		margin-bottom: 4px;
@@ -38,7 +41,7 @@ card-element {
 			line-height: 19px;
 			color: #333;
 			&:hover {
-				color: #1e88e5 !important;
+				color: #3fa9ff !important;
 			}
 		}
 	}
