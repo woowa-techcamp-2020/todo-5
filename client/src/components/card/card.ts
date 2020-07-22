@@ -1,4 +1,4 @@
-import { $cardModal } from '../modal';
+import { $textAreaModal } from '../modal';
 import { Options, url } from '../../utils';
 
 export interface CardInterface {
@@ -54,7 +54,7 @@ class Card extends HTMLElement {
 		});
 		this.querySelector('.card')?.addEventListener('dblclick', (e) => {
 			e.stopPropagation();
-			$cardModal.open(
+			$textAreaModal.open(
 				{
 					title: 'Edit',
 					content: this.state.card_title + this.state.content,

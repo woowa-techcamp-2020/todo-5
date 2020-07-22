@@ -2,7 +2,7 @@ import Card, { CardInterface } from '../card';
 import CardInput from '../card-input';
 import { CREATE } from '../../../../shared/dto/card-dto';
 import { Options, url, ORDER_WEIGHT } from '../../utils';
-import $topicAddModal from '../modal/topic-add-modal';
+import { $inputTextModal } from '../modal';
 
 export interface TopicInterface {
 	topic_id: number;
@@ -63,7 +63,7 @@ class Topic extends HTMLElement {
 		});
 		topicTitle.addEventListener('dblclick', (e) => {
 			e.stopPropagation();
-			$topicAddModal.open(
+			$inputTextModal.open(
 				{
 					title: 'Edit',
 					content: this.state.topic_title,
@@ -84,6 +84,8 @@ class Topic extends HTMLElement {
 		const json = await response.json();
 		this.state.topic_title = title;
 		this.render();
+		this.init();
+		this.listeners();
 	}
 
 	render() {
@@ -101,7 +103,7 @@ class Topic extends HTMLElement {
 	  <div class="topic-content">
 	  <div class="input-area"></div>
 	  </div>
-    </div>`;
+	</div>`;
 	}
 
 	private async getCards() {
