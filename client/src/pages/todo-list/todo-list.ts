@@ -28,29 +28,8 @@ class TodoList extends HTMLElement {
 	}
 
 	appendListener() {
-		const toggle = this.querySelector('#toggle') as HTMLInputElement;
-		const label = this.querySelector('.service-menu') as HTMLElement;
-		const sidebar = this.querySelector('.slide-menu') as HTMLElement;
-		const content = document.querySelector('content-element') as HTMLElement;
-		const close = this.querySelector('.close-icon') as HTMLElement;
-
-		toggle.addEventListener('change', (e: Event) => {
-			if (toggle.checked === true) {
-				sidebar.classList.add('open-slide');
-				label.classList.add('open-slide');
-				content.classList.add('open-slide');
-			} else {
-				sidebar.classList.remove('open-slide');
-				label.classList.remove('open-slide');
-				content.classList.remove('open-slide');
-			}
-		});
-		close.addEventListener('click', (event) => {
-			event.stopPropagation();
-			sidebar.classList.remove('open-slide');
-			label.classList.remove('open-slide');
-			content.classList.remove('open-slide');
-		});
+		this.header.appendListener();
+		this.sidebar.appendListener();
 	}
 
 	disconnectedCallback() {
