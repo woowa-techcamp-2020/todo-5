@@ -1,64 +1,54 @@
 import { url, Options } from './utils';
 
 class CardApi {
-	static create(body: {}): Promise<any> {
-		return new Promise((resolve, reject) => {
-			fetch(`${url}/api/card`, Options.POST(body))
-				.then((res) => {
-					resolve(res);
-				})
-				.catch((err) => {
-					reject(err);
-				});
-		});
+	static async create(body: {}): Promise<any> {
+		try {
+			const result = await fetch(`${url}/api/card`, Options.POST(body));
+			const json = await result.json();
+			return json;
+		} catch (error) {
+			throw error;
+		}
 	}
 
-	static delete(cardId: number): Promise<any> {
-		return new Promise((resolve, reject) => {
-			fetch(`${url}/api/card/delete/${cardId}`, Options.PATCH({}))
-				.then((res) => {
-					resolve(res);
-				})
-				.catch((err) => {
-					reject(err);
-				});
-		});
+	static async delete(cardId: number): Promise<any> {
+		try {
+			const result = await fetch(`${url}/api/card/delete/${cardId}`, Options.PATCH({}));
+			const json = await result.json();
+			return json;
+		} catch (error) {
+			throw error;
+		}
 	}
 
-	static update(body: {}): Promise<any> {
-		return new Promise((resolve, reject) => {
-			fetch(`${url}/api/card/update`, Options.PATCH(body))
-				.then((res) => {
-					resolve(res);
-				})
-				.catch((err) => {
-					reject(err);
-				});
-		});
+	static async update(body: {}): Promise<any> {
+		try {
+			const result = await fetch(`${url}/api/card/update`, Options.PATCH(body));
+			const json = await result.json();
+			return json;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	static async getAll(topicId: number): Promise<any> {
-		return new Promise((resolve, reject) => {
-			fetch(`${url}/api/card/${topicId}`, Options.GET())
-				.then((res) => {
-					resolve(res);
-				})
-				.catch((err) => {
-					reject(err);
-				});
-		});
+		try {
+			const result = await fetch(`${url}/api/card/${topicId}`, Options.GET());
+			const json = await result.json();
+			return json;
+		} catch (error) {
+			throw error;
+		}
 	}
 
-	static deleteAll(topicId: number): Promise<any> {
-		return new Promise((resolve, reject) => {
-			fetch(`${url}/api/card/delete-all/${topicId}`, Options.PATCH({}))
-				.then((res) => {
-					resolve(res);
-				})
-				.catch((err) => {
-					reject(err);
-				});
-		});
+	static async deleteAll(topicId: number): Promise<any> {
+		try {
+			const result = await fetch(`${url}/api/card/delete-all/${topicId}`, Options.PATCH({}));
+			const json = await result.json();
+			return json;
+		} catch (error) {
+			throw error;
+		}
 	}
 }
 

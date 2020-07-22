@@ -45,16 +45,15 @@ class Card extends HTMLElement {
 
 	listener() {
 		const del = this.querySelector('.delete') as HTMLElement;
-		del.addEventListener('click', (e) => {
+		del.addEventListener('click', async (e) => {
 			e.stopPropagation();
 			if (confirm('선택하신 카드를 삭제하시겠습니까?')) {
-				CardApi.delete(this.state.card_id)
-					.then((res) => {
-						this.remove();
-					})
-					.catch((err) => {
-						alert('카드 삭제에 실패하였습니다');
-					});
+				try {
+					const result = await CardApi.delete(this.state.card_id);
+					this.remove();
+				} catch (err) {
+					alert('카드 삭제에 실패하였습니다');
+				}
 			}
 		});
 		this.querySelector('.card')?.addEventListener('dblclick', (e) => {
@@ -77,24 +76,15 @@ class Card extends HTMLElement {
 			card_id: this.state.card_id,
 			content: card_content,
 		};
-		const response = await fetch(`${url}/api/card/update`, Options.PATCH(body));
-		const json = await response.json();
-		const { title, content } = this.splitTitleContent(card_content);
-		console.log(title, content);
-		this.state.card_title = title;
-		this.state.content = content;
-		this.render();
-		this.listener();
-		CardApi.update(body)
-			.then(async (response) => {
-				const json = await response.json();
-				const { title, content } = this.splitTitleContent(card_content);
-				this.state.card_title = title;
-				this.state.content = content;
-				this.render();
-        this.listener();
-			})
-			.catch(() => {});
+
+		try {
+			const result = await CardApi.update(body);
+			const { title, content } = this.splitTitleContent(card_content);
+			this.state.card_title = title;
+			this.state.content = content;
+			this.render();
+       this.listener();
+		} catch (err) {}
 	}
 
 	private splitTitleContent(raw: string) {
