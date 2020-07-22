@@ -47,7 +47,9 @@ class Topic {
 		try {
 			topicData = await mysql.connect((con: any) =>
 				con.query(
-					`SELECT topic_id, topic_title, order_weight, service_id FROM topic WHERE service_id = '${topic.service_id}' AND removed = '${0}'`
+					`SELECT topic_id, topic_title, order_weight, service_id FROM topic WHERE service_id = '${
+						topic.service_id
+					}' AND removed = '${0}'`
 				)
 			);
 			return [...topicData][0];

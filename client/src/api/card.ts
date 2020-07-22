@@ -48,6 +48,18 @@ class CardApi {
 				});
 		});
 	}
+
+	static deleteAll(topicId: number): Promise<any> {
+		return new Promise((resolve, reject) => {
+			fetch(`${url}/api/card/delete-all/${topicId}`, Options.PATCH({}))
+				.then((res) => {
+					resolve(res);
+				})
+				.catch((err) => {
+					reject(err);
+				});
+		});
+	}
 }
 
 export default CardApi;
