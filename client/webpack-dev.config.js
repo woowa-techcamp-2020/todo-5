@@ -35,25 +35,7 @@ module.exports = {
 			},
 			{
 				test: /\.(scss)$/,
-				use: [
-					require.resolve('style-loader'),
-					{
-						loader: require.resolve('css-loader'),
-						options: {
-							sourceMap: process.env.NODE_ENV === 'production' ? false : true,
-						},
-					},
-					{
-						loader: require.resolve('sass-loader'),
-						options: {
-							sourceMap: process.env.NODE_ENV === 'production' ? false : true,
-						},
-					},
-				],
-			},
-			{
-				test: /\.(css)$/,
-				use: ['style-loader', 'css-loader'],
+				use: ['style-loader', 'css-loader', 'sass-loader'],
 			},
 		],
 	},
