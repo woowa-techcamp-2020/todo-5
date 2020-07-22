@@ -1,6 +1,14 @@
+import { UserDTO } from '.';
+
 interface CREATE {
 	uid: string;
 	name: string;
 }
 
-export { CREATE };
+interface RESPONSE {
+	user_id: number;
+	uid: string;
+	name: string;
+}
+
+export { CREATE, RESPONSE };

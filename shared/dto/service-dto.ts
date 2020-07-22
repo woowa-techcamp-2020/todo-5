@@ -1,5 +1,10 @@
 interface CREATE {
-  service_name: string;
+	service_name: string;
 }
 
-export { CREATE };
+interface RESPONSE {
+	service_id: number;
+	service_name: string;
+}
+
+export { CREATE, RESPONSE };

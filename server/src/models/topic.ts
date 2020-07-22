@@ -11,14 +11,14 @@ class Topic {
 				)
 			);
 			const topic_id = topicData[0].insertId;
-			const result: TopicDTO.default = { ...topic, topic_id };
+			const result: TopicDTO.RESPONSE = { ...topic, topic_id };
 			return result;
 		} catch (err) {
 			throw err;
 		}
 	}
 
-	static async update(topic: TopicDTO.UPDATE) {
+	static async updateTitle(topic: TopicDTO.UPDATE_TITLE) {
 		try {
 			const topicData = await mysql.connect((con: any) =>
 				con.query(
@@ -42,11 +42,13 @@ class Topic {
 		}
 	}
 
-	static async getTopicsByServiceId(serviceId: string) {
+	static async getTopicsByServiceId(topic: TopicDTO.GET) {
 		let topicData;
 		try {
 			topicData = await mysql.connect((con: any) =>
-				con.query(`SELECT * FROM topic WHERE service_id = '${serviceId}' AND removed = '${0}'`)
+				con.query(
+					`SELECT * FROM topic WHERE service_id = '${topic.service_id}' AND removed = '${0}'`
+				)
 			);
 			return [...topicData][0];
 		} catch (err) {
