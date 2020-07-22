@@ -170,7 +170,8 @@ class Topic extends HTMLElement {
 		} else {
 			title = tmp[0];
 			tmp.shift();
-			content = tmp.reduce((prev, now) => (prev += '<br/>' + now), '');
+			content = tmp.reduce((prev, now) => (prev += now + '<br/>'), '');
+			content = content.substring(0, content.length - 5);
 		}
 
 		return { title, content };
