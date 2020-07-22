@@ -1,12 +1,11 @@
 interface CREATE {
 	order_weight: number;
 	user_id: number;
-	user_name: string;
 	content: string;
 	topic_id: number;
 }
 
-interface CARD {
+interface RESPONSE {
 	card_id: number;
 	order_weight: number;
 	user_id: number;
@@ -14,7 +13,6 @@ interface CARD {
 	create_date: number;
 	last_update: number;
 	topic_id: number;
-	user_name: string;
 }
 
 interface UPDATE {
@@ -22,6 +20,4 @@ interface UPDATE {
 	content: string;
 }
 
-export default CARD;
-
-export { CREATE, UPDATE };
+export { CREATE, UPDATE, RESPONSE };
