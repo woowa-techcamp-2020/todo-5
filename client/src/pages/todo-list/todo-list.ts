@@ -28,29 +28,8 @@ class TodoList extends HTMLElement {
 	}
 
 	appendListener() {
-		const toggle = this.querySelector('#toggle') as HTMLInputElement;
-		const label = this.querySelector('.service-menu') as HTMLElement;
-		const sidebar = this.querySelector('.slide-menu') as HTMLElement;
-		const content = document.querySelector('content-element') as HTMLElement;
-		const close = this.querySelector('.close-icon') as HTMLElement;
-
-		toggle.addEventListener('change', (e: Event) => {
-			if (toggle.checked === true) {
-				sidebar.classList.add('open-slide');
-				label.classList.add('open-slide');
-				content.classList.add('open-slide');
-			} else {
-				sidebar.classList.remove('open-slide');
-				label.classList.remove('open-slide');
-				content.classList.remove('open-slide');
-			}
-		});
-		close.addEventListener('click', (event) => {
-			event.stopPropagation();
-			sidebar.classList.remove('open-slide');
-			label.classList.remove('open-slide');
-			content.classList.remove('open-slide');
-		});
+		this.header.appendListener();
+		this.sidebar.appendListener();
 	}
 
 	disconnectedCallback() {
@@ -136,8 +115,13 @@ class TodoList extends HTMLElement {
 				const rect = card.getBoundingClientRect().top;
 				const top = parseInt(this.card.moving.style.top.split('px')[0]);
 				if (top > rect) {
-					if ((card.nextSibling as HTMLElement).classList.contains('cloned')) return;
-					card.parentNode?.insertBefore(this.card.cloned, card.nextSibling);
+					if (!card.nextSibling) {
+						card.parentNode?.appendChild(this.card.cloned);
+					} else if ((card.nextSibling as HTMLElement).classList.contains('cloned')) {
+						return;
+					} else {
+						card.parentNode?.insertBefore(this.card.cloned, card.nextSibling);
+					}
 				} else {
 					if (this.card.cloned.nextSibling === card) return;
 					card.parentNode?.insertBefore(this.card.cloned, card);
@@ -152,10 +136,8 @@ class TodoList extends HTMLElement {
 		if (this.card.moving.hasChildNodes()) {
 			this.card.moving.removeChild(this.card.moving.firstChild as ChildNode);
 		}
-		//
 		this.card.cloned.classList.remove('cloned');
 		this.card.selected.remove();
-		//
 	}
 
 	mouseLeave(event: MouseEvent) {
