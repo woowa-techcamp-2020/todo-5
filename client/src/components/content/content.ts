@@ -2,6 +2,8 @@ import Topic from '../topic';
 import { ORDER_WEIGHT, DUMMY_USER } from '../../api/utils';
 import { $inputTextModal } from '../modal';
 import { TopicApi, ActivityApi } from '../../api';
+import store from '../../store';
+import { ActivityDTO } from '../../../../shared/dto';
 
 interface ContentInterface {
 	service_id: string;
@@ -72,13 +74,20 @@ class Content extends HTMLElement {
 
 		try {
 			const res = await TopicApi.create(body);
-			const activity = {};
-			// const activityResult = ActivityApi.create();
+			const activity: ActivityDTO.TOPICADD = {
+				action: ActivityDTO.Action.TOPICADD,
+				service_id: store.getState('service_id'),
+				user_id: store.getState('user_id'),
+				uid: store.getState('uid'),
+				to_topic: body.topic_title,
+			};
+			const activityResult = await ActivityApi.topicAdd(activity);
+			console.log('success');
 			const newTopic = new Topic(res.result);
 			contentTag.appendChild(newTopic);
 			this.topics.push(newTopic);
 		} catch (e) {
-			alert('카드 추가에 실패하였습니다.');
+			alert('추가에 실패하였습니다.');
 		}
 	}
 
