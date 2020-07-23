@@ -79,23 +79,52 @@ class Sidebar extends HTMLElement {
 			const data = await ActivityApi.getActivitiesByServiceId(store.getState('service_id'));
 			this.activities = data.result;
 		} catch (err) {
-			alert(`데이터를 로드할 수 없습니다.`);
+			// alert(`데이터를 로드할 수 없습니다.`);
+			console.log(err);
 		}
 	}
 
 	private drawActivities() {
 		const ulTag = this.querySelector('ul') as HTMLElement;
 		ulTag.innerHTML = this.activities.reduce(
-			(result: string, item: ActivityInterface) =>
-				(result += `<div class="activity-content"> <li><span class="etext">@${item.uid}</span> ${
-					item.action
-				} <span class="etext">${item.content.split(`<br/>`)[0]}</span> ${
-					item.action === 'moved' || item.action === 'archived' ? ' from ' + item.from_topic : ''
-				}${
-					item.action === 'moved' || item.action === 'added' ? ' to ' + item.to_topic : ''
-				}</li><span class="time-label">${this.calDifTime(item.create_date)} 전 작성</span></div>`),
+			(result: string, item: ActivityInterface) => (result += this.createActivityLog(item)),
 			''
 		);
+	}
+
+	createActivityLog(item: ActivityInterface) {
+		return `<div class="activity-content">
+			<li>
+				<span class="etext">@${item.uid}</span>
+				${item.action}
+				<span class="etext">${item.content ? item.content.split(`<br/>`)[0] : ''}</span>
+				${this.checkFromTopic(item.action, item.from_topic)} ${this.checkToTopic(
+			item.action,
+			item.to_topic
+		)}
+			</li>
+			<span class="time-label">${this.calDifTime(item.create_date)} 전 작성</span>
+		</div>`;
+	}
+
+	checkFromTopic(action: string, from_topic: string) {
+		if (action === ActivityDTO.Action.MOVE || action === ActivityDTO.Action.REMOVE) {
+			return `from <span class="topic-name">${from_topic}</span>`;
+		}
+		if (action === ActivityDTO.Action.TOPICREMOVE || action === ActivityDTO.Action.TOPICREMOVE) {
+			return `<span class="etext">${from_topic}</span>`;
+		}
+		return '';
+	}
+
+	checkToTopic(action: string, to_topic: string) {
+		if (action === ActivityDTO.Action.MOVE || action === ActivityDTO.Action.ADD) {
+			return `to <span class="topic-name">${to_topic}</span>`;
+		}
+		if (action === ActivityDTO.Action.TOPICADD || action === ActivityDTO.Action.TOPICUPDATE) {
+			return `<span class="etext">${to_topic}</span>`;
+		}
+		return '';
 	}
 
 	private calDifTime(time: number) {

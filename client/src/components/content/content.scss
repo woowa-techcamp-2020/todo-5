@@ -1,7 +1,7 @@
 content-element {
 	display: flex;
 	padding: 32px;
-	padding: 64px 32px;
+	padding: 64px 0;
 	height: 100%;
 	overflow-x: auto;
 	box-sizing: border-box;
@@ -10,17 +10,21 @@ content-element {
 	transition: all 0.4s;
 	&.open-slide {
 		width: calc(100% - 360px);
-		// transform: translate3d(-360px, 0, 0);
-		// color: #3fa9ff;
 	}
-
+	.content-container {
+		padding: 0 32px;
+		display: flex;
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
 	.content {
 		display: flex;
 		transition: all 0.4s;
 	}
 	.new-topic {
-		min-width: 345px;
-		max-width: 345px;
+		min-width: 313px;
+		max-width: 313px;
 		padding-right: 32px;
 		padding-left: 16px;
 		margin-top: 30px;

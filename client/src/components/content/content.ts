@@ -2,7 +2,9 @@ import Topic from '../topic';
 import { ORDER_WEIGHT } from '../../utils';
 import { $inputTextModal } from '../modal';
 import { TopicApi, ActivityApi } from '../../api';
+import Loading from '../loadingbar';
 import store from '../../store';
+import { ActivityDTO } from '../../../../shared/dto';
 
 interface ContentInterface {
 	service_id: string;
@@ -12,22 +14,29 @@ class Content extends HTMLElement {
 	private state: ContentInterface;
 	private topics!: Array<typeof Topic>;
 	private topicsMap: Map<number, string>;
+	private loadingBar!: Loading.LoadingBar;
 
 	constructor(data: ContentInterface) {
 		super();
 		this.state = data;
 		this.topics = [];
 		this.topicsMap = new Map();
+		this.loadingBar = new Loading.modal();
 	}
 
 	async connectedCallback() {
-		await this.getTopics();
 		this.render();
+		this.querySelector('.content-container')?.appendChild(this.loadingBar);
+		this.loadingBar.open();
+		await this.getTopics();
 		const contentTag = this.querySelector('.content') as HTMLElement;
 		this.topics.forEach((topic: typeof Topic) => {
 			contentTag.appendChild(topic);
 			this.topicsMap.set(topic.getTopicId(), topic.getTopicTitle());
 		});
+		setTimeout(() => {
+			this.loadingBar.close();
+		}, 1000);
 	}
 
 	disconnectedCallback() {
@@ -39,10 +48,13 @@ class Content extends HTMLElement {
 	}
 
 	render() {
-		this.innerHTML = `<div class="content"></div>
-		<div class="new-topic">
-			<div class="new-topic-button">
-				Add Column
+		this.innerHTML = `
+		<div class="content-container">
+			<div class="content"></div>
+			<div class="new-topic">
+				<div class="new-topic-button">
+					Add Column
+				</div>
 			</div>
 		</div>`;
 		this.listener();
@@ -78,14 +90,21 @@ class Content extends HTMLElement {
 
 		try {
 			const res = await TopicApi.create(body);
-			const activity = {};
-			// const activityResult = ActivityApi.create();
+			const activity: ActivityDTO.TOPICADD = {
+				action: ActivityDTO.Action.TOPICADD,
+				service_id: store.getState('service_id'),
+				user_id: store.getState('user_id'),
+				uid: store.getState('uid'),
+				to_topic: body.topic_title,
+			};
+			const activityResult = await ActivityApi.topicAdd(activity);
+			console.log('success');
 			const newTopic = new Topic(res.result);
 			contentTag.appendChild(newTopic);
 			this.topics.push(newTopic);
 			this.topicsMap.set(newTopic.getTopicId(), newTopic.getTopicTitle());
 		} catch (e) {
-			alert('카드 추가에 실패하였습니다.');
+			alert('추가에 실패하였습니다.');
 		}
 	}
 
