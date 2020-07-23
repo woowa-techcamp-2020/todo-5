@@ -6,7 +6,6 @@ class Activity {
 	static async create(activity: ActivityDTO.ActionType) {
 		try {
 			const create_date = Math.floor(Date.now() / 1000);
-			console.log(activity.action);
 			const activityData = await mysql.connect((con: any) => {
 				switch (activity.action) {
 					case ActivityDTO.Action.ADD:

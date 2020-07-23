@@ -129,7 +129,8 @@ class Topic extends HTMLElement {
 			const { title, content } = this.splitTitleContent(card.content);
 			card.card_title = title;
 			card.content = content;
-			this.cards.push(new Card(Object.assign(card, { topic_title: this.state.topic_title })));
+			card.topic_title = this.state.topic_title;
+			this.cards.push(new Card(card));
 		});
 		this.state.count = this.cards.length;
 	}
@@ -141,6 +142,19 @@ class Topic extends HTMLElement {
 		card.order_weight = this.nextOrderWeight();
 		try {
 			const result = await CardApi.create(card);
+			result.result.content = content;
+			result.result.card_title = title;
+			result.result.topic_title = this.state.topic_title;
+			this.cards.unshift(new Card(result.result));
+			const topicContent = this.querySelector('.topic-content');
+			if (this.state.count === 0) {
+				topicContent?.appendChild(this.cards[0]);
+			} else {
+				topicContent?.insertBefore(this.cards[0], this.cards[1]);
+			}
+			this.state.count++;
+			this.drawCount();
+
 			const body: ActivityDTO.ADD = {
 				action: ActivityDTO.Action.ADD,
 				card_id: result.result.card_id,
@@ -151,16 +165,10 @@ class Topic extends HTMLElement {
 				to_topic: this.state.topic_title,
 			};
 			const activityResult = await ActivityApi.add(body);
-			result.result.content = content;
-			result.result.card_title = title;
-			this.cards.unshift(new Card(result.result));
-			const topicContent = this.querySelector('.topic-content');
-			topicContent?.insertBefore(this.cards[0], this.cards[1]);
-			this.state.count++;
 			store.getState('newActivity')();
 		} catch (err) {
 			alert('카드 생성에 실패하였습니다.');
-			console.log(err);
+			console.error(err);
 		}
 	}
 

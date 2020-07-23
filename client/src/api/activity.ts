@@ -4,12 +4,11 @@ import { ActivityDTO } from '../../../shared/dto';
 class ActivityApi {
 	static async create(body: ActivityDTO.ACTIVE): Promise<any> {
 		try {
-			console.log(body);
 			const result = await fetch(`${url}/api/activity`, Options.POST(body));
 			const json = await result.json();
 			return json;
 		} catch (error) {
-			console.log('err', error);
+			console.error('err', error);
 			throw error;
 		}
 	}

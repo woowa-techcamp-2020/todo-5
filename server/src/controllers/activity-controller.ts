@@ -8,7 +8,6 @@ class ActivityController {
 	constructor() {}
 	static async create(req: Request, res: Response, next: NextFunction) {
 		let response;
-		console.log('res', response);
 		let { body } = req;
 		try {
 			response = await Activity.create(body);
