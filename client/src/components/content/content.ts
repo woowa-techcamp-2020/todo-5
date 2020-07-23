@@ -2,6 +2,7 @@ import Topic from '../topic';
 import { ORDER_WEIGHT, DUMMY_USER } from '../../api/utils';
 import { $inputTextModal } from '../modal';
 import { TopicApi, ActivityApi } from '../../api';
+import Loading from '../loadingbar';
 
 interface ContentInterface {
 	service_id: string;
@@ -10,18 +11,26 @@ interface ContentInterface {
 class Content extends HTMLElement {
 	private state: ContentInterface;
 	private topics!: Array<typeof Topic>;
+	private loadingBar!: Loading.LoadingBar;
 
 	constructor(data: ContentInterface) {
 		super();
 		this.state = data;
 		this.topics = [];
+		// console.log(Loading);
+		this.loadingBar = new Loading.modal();
 	}
 
 	async connectedCallback() {
-		await this.getTopics();
 		this.render();
+		this.querySelector('.content-container')?.appendChild(this.loadingBar);
+		this.loadingBar.open();
+		await this.getTopics();
 		const contentTag = this.querySelector('.content') as HTMLElement;
 		this.topics.forEach((topic: typeof Topic) => contentTag.appendChild(topic));
+		setTimeout(() => {
+			this.loadingBar.close();
+		}, 1000);
 	}
 
 	disconnectedCallback() {
@@ -33,10 +42,13 @@ class Content extends HTMLElement {
 	}
 
 	render() {
-		this.innerHTML = `<div class="content"></div>
-		<div class="new-topic">
-			<div class="new-topic-button">
-				Add Column
+		this.innerHTML = `
+		<div class="content-container">
+			<div class="content"></div>
+			<div class="new-topic">
+				<div class="new-topic-button">
+					Add Column
+				</div>
 			</div>
 		</div>`;
 		this.listener();
