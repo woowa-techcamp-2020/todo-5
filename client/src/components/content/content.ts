@@ -65,7 +65,7 @@ class Content extends HTMLElement {
 		newTopicButton.addEventListener('click', (e) => {
 			$inputTextModal.open(
 				{
-					title: 'Edit',
+					title: 'Add Column',
 					content: '',
 					resolve: 'Add',
 					reject: 'Cancel',

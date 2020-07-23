@@ -1,9 +1,8 @@
 import winston from 'winston';
 import { env } from './vars';
-import { info } from 'console';
+const { combine, timestamp, printf } = winston.format;
 const winstonDaily = require('winston-daily-rotate-file');
-
-const timeStampFormant = () => Date().toLocaleLowerCase();
+const myFormat = printf(({ level, message, timestamp }) => `${timestamp} [${level}] ${message}`);
 
 const logger = winston.createLogger({
 	transports: [
@@ -12,17 +11,17 @@ const logger = winston.createLogger({
 			filename: 'logs/error',
 			level: 'error',
 			datePattern: 'yyyy-MM-dd.log',
-			timestamp: timeStampFormant(),
 			json: false,
 			prepend: true,
+			format: combine(timestamp(), myFormat),
 		}),
 		new winstonDaily({
 			name: 'combined-file',
 			filename: 'logs/combined',
 			datePattern: 'yyyy-MM-dd.log',
-			timestamp: timeStampFormant(),
 			json: false,
 			prepend: true,
+			format: combine(timestamp(), myFormat),
 		}),
 	],
 });
@@ -30,8 +29,9 @@ const logger = winston.createLogger({
 if (env !== 'production') {
 	logger.add(
 		new winston.transports.Console({
-			level: 'info',
-			format: winston.format.simple(),
+			level: 'debug',
+			handleExceptions: true,
+			format: combine(timestamp(), myFormat),
 		})
 	);
 }
