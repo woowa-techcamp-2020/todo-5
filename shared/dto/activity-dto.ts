@@ -14,6 +14,7 @@ interface RESPONSE_TOPIC_MOVE {
 	create_date: number;
 	action: Action;
 	service_id: number;
+	from_topic: string;
 	// uid: string;
 }
 
@@ -34,6 +35,7 @@ interface RESPONSE_TOPIC_UPDATE {
 	action: Action;
 	service_id: number;
 	// uid: string;
+	to_topic: string;
 }
 
 interface RESPONSE_ADD extends RESPONSE_TOPIC_ADD {
@@ -44,7 +46,7 @@ interface RESPONSE_ADD extends RESPONSE_TOPIC_ADD {
 interface RESPONSE_MOVE extends RESPONSE_TOPIC_MOVE {
 	card_id: number;
 	card_title: string;
-	from_topic: string;
+	// from_topic: string;
 	to_topic: string;
 }
 
@@ -53,7 +55,12 @@ interface RESPONSE_REMOVE extends RESPONSE_TOPIC_REMOVE {
 	card_title: string;
 }
 
-interface RESPONSE_UPDATE extends RESPONSE_TOPIC_UPDATE {
+interface RESPONSE_UPDATE {
+	activity_id: number;
+	user_id: number;
+	create_date: number;
+	action: Action;
+	service_id: number;
 	card_id: number;
 	card_title: string;
 }
@@ -88,12 +95,14 @@ interface TOPICUPDATE {
 	action: Action.TOPICUPDATE;
 	service_id: number;
 	user_id: number;
+	to_topic: string;
 }
 
 interface TOPICMOVE {
 	action: Action.TOPICMOVE;
 	service_id: number;
 	user_id: number;
+	from_topic: string;
 }
 
 interface ADD {
@@ -138,10 +147,10 @@ interface MOVE {
 
 interface ACTIVE {
 	action: Action;
-	card_id: number;
-	card_title: string;
+	card_id?: number;
+	card_title?: string;
 	service_id: number;
-	uid: string;
+	uid?: string;
 	user_id: number;
 	to_topic?: string;
 	from_topic?: string;
