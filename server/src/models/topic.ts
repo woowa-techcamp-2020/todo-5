@@ -6,9 +6,7 @@ class Topic {
 	static async create(topic: TopicDTO.CREATE) {
 		try {
 			const topicData = await mysql.connect((con: any) =>
-				con.query(
-					`INSERT INTO topic (order_weight, service_id, topic_title, user_id) VALUES ('${topic.order_weight}', '${topic.service_id}', '${topic.topic_title}', '${topic.user_id}')`
-				)
+				con.query(`INSERT INTO topic SET ?`, topic)
 			);
 			const topic_id = topicData[0].insertId;
 			const result: TopicDTO.RESPONSE = { ...topic, topic_id };
@@ -21,9 +19,7 @@ class Topic {
 	static async updateTitle(topic: TopicDTO.UPDATE_TITLE) {
 		try {
 			const topicData = await mysql.connect((con: any) =>
-				con.query(
-					`UPDATE topic SET topic_title = '${topic.topic_title}' WHERE topic_id = '${topic.topic_id}'`
-				)
+				con.query(`UPDATE topic SET ? WHERE topic_id = '${topic.topic_id}'`, topic)
 			);
 			return { ...topic };
 		} catch (err) {

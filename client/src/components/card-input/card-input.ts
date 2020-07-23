@@ -1,3 +1,5 @@
+import store from '../../store';
+
 class CardInput extends HTMLElement {
 	private state: {};
 	private resolve!: Function;
@@ -11,13 +13,11 @@ class CardInput extends HTMLElement {
 	}
 
 	connectedCallback() {
-		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
 		this.listener();
 	}
 
 	disconnectedCallback() {
-		// DOM에서 제거되었다. 엘리먼트를 정리하는 일을 하자.
 		this.remove();
 	}
 
@@ -48,11 +48,9 @@ class CardInput extends HTMLElement {
 		});
 		btnGroup[0].addEventListener('click', (e) => {
 			this.resolve({
-				user_id: 1,
-				uid: 'loloara',
+				user_id: store.getState('user_id'),
 				content: inputBox?.value,
 				topic_id: 1,
-				card_title: 'title',
 				order_weight: 1,
 			});
 			this.reject();

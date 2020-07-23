@@ -1,4 +1,4 @@
-import { url, Options } from './utils';
+import { url, Options } from '../utils';
 import { TopicDTO } from '../../../shared/dto';
 
 class TopicApi {

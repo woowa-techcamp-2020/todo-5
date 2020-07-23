@@ -5,9 +5,12 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import { Header } from '../../components/header/header';
 import { Content } from '../../components/content/content';
 import Card from '../../components/card';
-import { url, Options, POSITION, ORDER_WEIGHT, calcMedium } from '../../utils';
-import { CardDTO } from '../../../../shared/dto';
+import { url, Options, POSITION, ORDER_WEIGHT, calcMedium, splitTitleContent } from '../../utils';
+import { CardDTO, ActivityDTO } from '../../../../shared/dto';
 import Topic from '../../components/topic';
+import { ActivityApi, CardApi } from '../../api';
+import { Action } from '../../../../shared/dto/activity-dto';
+import store from '../../store';
 
 interface DndCard {
 	mouseDownX: number;
@@ -157,16 +160,14 @@ class TodoList extends HTMLElement {
 					} else {
 						topicContent.insertBefore(this.dndCard.cloned, this.dndCard.closeCard);
 						this.dndCard.position = POSITION.UP;
-						if (!this.dndCard.cloned.previousSibling) return;
-						else if (!this.dndCard.cloned.previousSibling.querySelector('.card'))
-							this.dndCard.position = POSITION.TOP;
+						if (!this.dndCard.cloned.previousElementSibling) this.dndCard.position = POSITION.TOP;
 					}
 				}
 			}
 		}
 	}
 
-	mouseUp(event: MouseEvent) {
+	async mouseUp(event: MouseEvent) {
 		if (!this.dndCard.clicked) return;
 		this.dndCard.clicked = false;
 		this.dndCard.isDragging = false;
@@ -177,7 +178,7 @@ class TodoList extends HTMLElement {
 		if (!this.dndCard.cloned.parentNode) return;
 
 		if (this.dndCard.position === POSITION.INIT) return;
-
+		const prevTopicId = this.dndCard.cloned.getTopicId();
 		this.dndCard.cloned.setTopicId(this.dndCard.closeTopic.getTopicId());
 		if (this.dndCard.cloned.getTopicId() !== this.dndCard.closeTopic.getTopicId()) {
 			this.dndCard.closeTopic.incCount();
@@ -185,15 +186,32 @@ class TodoList extends HTMLElement {
 			[...topicElements].forEach((e: typeof Topic) => {
 				if (e.getTopicId() === this.dndCard.cloned.getTopicId()) {
 					e.decCount();
+					return;
 				}
 			});
 		}
-		const body: CardDTO.UPDATE_POSITION = {
+
+		const cardBody: CardDTO.UPDATE_POSITION = {
 			card_id: this.dndCard.cloned.getCardId(),
-			topic_id: this.dndCard.closeTopic.getTopicId(),
+			topic_id: this.dndCard.cloned.getTopicId(),
 			order_weight: this.nextOrderWeight(this.dndCard.position),
 		};
-		fetch(`${url}/api/card/update-position`, Options.PATCH(body));
+		CardApi.updatePosition(cardBody);
+		console.log(this.dndCard.position, this.dndCard.cloned.getCardTitle(), cardBody.order_weight);
+
+		const activityBody: ActivityDTO.MOVE = {
+			action: Action.MOVE,
+			card_id: this.dndCard.cloned.getCardId(),
+			card_title: this.dndCard.cloned.getCardTitle(),
+			service_id: store.getState('service_id'),
+			uid: store.getState('uid'),
+			user_id: store.getState('user_id'),
+			to_topic: this.dndCard.closeTopic.getTopicTitle(),
+			from_topic: this.content.getTopicTitleFromId(prevTopicId),
+		};
+
+		console.log(activityBody);
+		ActivityApi.create(activityBody);
 		this.dndCard.closeTopic.pushCard(this.dndCard.cloned);
 	}
 
@@ -208,20 +226,22 @@ class TodoList extends HTMLElement {
 	private nextOrderWeight(position: number): number {
 		const topicContent = this.dndCard.closeTopic?.querySelector('.topic-content') as HTMLElement;
 		const cloned: typeof Card = this.dndCard.cloned;
+
 		switch (position) {
 			case POSITION.TOP:
 				return this.dndCard.closeTopic.nextOrderWeight();
 			case POSITION.BOTTOM:
 				const lastChild: typeof Card = topicContent.lastChild;
-				if (lastChild.previousSibling.tagName === 'CARD-INPUT-ELEMENT') return ORDER_WEIGHT;
-				return lastChild ? calcMedium(lastChild.previousSibling.getOrderWeight(), 0) : ORDER_WEIGHT;
+				if (!lastChild.previousElementSibling) return ORDER_WEIGHT;
+				return lastChild
+					? calcMedium(lastChild.previousElementSibling.getOrderWeight(), 0)
+					: ORDER_WEIGHT;
 			case POSITION.UP:
 			case POSITION.DOWN:
-				if (cloned.previousSibling.tagName === 'CARD-INPUT-ELEMENT' || !cloned.previousSibling)
-					return this.dndCard.closeTopic.nextOrderWeight();
+				if (!cloned.previousElementSibling) return this.dndCard.closeTopic.nextOrderWeight();
 				return calcMedium(
 					cloned.nextSibling.getOrderWeight(),
-					cloned.previousSibling.getOrderWeight()
+					cloned.previousElementSibling.getOrderWeight()
 				);
 			default:
 				console.error('anomaly POSITION value: ', position);

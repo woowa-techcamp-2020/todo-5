@@ -1,7 +1,7 @@
 import Card, { CardInterface } from '../card';
 import CardInput from '../card-input';
 import { CardDTO, ActivityDTO } from '../../../../shared/dto';
-import { ORDER_WEIGHT, DUMMY_USER } from '../../api/utils';
+import { ORDER_WEIGHT, splitTitleContent } from '../../utils';
 import { CardApi, TopicApi, ActivityApi } from '../../api';
 import { $inputTextModal } from '../modal';
 import store from '../../store';
@@ -43,9 +43,10 @@ class Topic extends HTMLElement {
 	}
 
 	private init() {
-		const topicContent = this.querySelector('.topic-content');
-		topicContent?.appendChild(this.cardInput);
-		this.cards.forEach((card) => topicContent?.appendChild(card));
+		const topicTag = this.querySelector('.topic') as HTMLElement;
+		const topicContent = topicTag.querySelector('.topic-content') as HTMLElement;
+		topicTag.insertBefore(this.cardInput, topicContent);
+		this.cards.forEach((card) => topicContent.appendChild(card));
 	}
 
 	private listeners() {
@@ -58,7 +59,6 @@ class Topic extends HTMLElement {
 			addButton.classList.add('disabled');
 		});
 		closeButton.addEventListener('click', async (e) => {
-			e.stopPropagation();
 			if (confirm('선택하신 토픽을 삭제하시겠습니까?')) {
 				try {
 					await TopicApi.delete(this.state.topic_id);
@@ -88,7 +88,7 @@ class Topic extends HTMLElement {
 		const body = {
 			topic_id: this.state.topic_id,
 			topic_title: title,
-			user_id: DUMMY_USER,
+			user_id: store.getState('user_id'),
 		};
 		try {
 			const result = await TopicApi.update(body);
@@ -115,7 +115,6 @@ class Topic extends HTMLElement {
         </div>
 	  </div>	  
 	  <div class="topic-content">
-	  <div class="input-area"></div>
 	  </div>
 	</div>`;
 	}
@@ -126,7 +125,7 @@ class Topic extends HTMLElement {
 		if (sortedCards.length === 0) return;
 		sortedCards.sort((a: typeof Card, b: typeof Card) => b.order_weight - a.order_weight);
 		await sortedCards.forEach((card: CardInterface) => {
-			const { title, content } = this.splitTitleContent(card.content);
+			const { title, content } = splitTitleContent(card.content);
 			card.card_title = title;
 			card.content = content;
 			card.topic_title = this.state.topic_title;
@@ -137,7 +136,7 @@ class Topic extends HTMLElement {
 
 	private async addCardInput(card: CardDTO.CREATE) {
 		card.content = card.content.replace(/\n/g, '<br/>');
-		const { title, content } = this.splitTitleContent(card.content);
+		const { title, content } = splitTitleContent(card.content);
 		card.topic_id = this.state.topic_id;
 		card.order_weight = this.nextOrderWeight();
 		try {
@@ -179,22 +178,6 @@ class Topic extends HTMLElement {
 		cardInput?.classList.remove('open');
 	}
 
-	private splitTitleContent(raw: string) {
-		let title, content, tmp;
-		tmp = raw.split('<br/>');
-		if (tmp.length <= 1) {
-			title = tmp[0];
-			content = '';
-		} else {
-			title = tmp[0];
-			tmp.shift();
-			content = tmp.reduce((prev, now) => (prev += now + '<br/>'), '');
-			content = content.substring(0, content.length - 5);
-		}
-
-		return { title, content };
-	}
-
 	public nextOrderWeight(): number {
 		return this.state.count ? this.cards[0].getOrderWeight() + ORDER_WEIGHT : ORDER_WEIGHT;
 	}
@@ -205,6 +188,10 @@ class Topic extends HTMLElement {
 
 	public getTopicId(): number {
 		return this.state.topic_id;
+	}
+
+	public getTopicTitle(): string {
+		return this.state.topic_title;
 	}
 
 	public incCount(): void {

@@ -1,4 +1,4 @@
-import { url, Options } from './utils';
+import { url, Options } from '../utils';
 import { CardDTO } from '../../../shared/dto';
 
 class CardApi {
@@ -25,6 +25,16 @@ class CardApi {
 	static async update(body: CardDTO.UPDATE): Promise<any> {
 		try {
 			const result = await fetch(`${url}/api/card/update`, Options.PATCH(body));
+			const json = await result.json();
+			return json;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async updatePosition(body: CardDTO.UPDATE_POSITION): Promise<any> {
+		try {
+			const result = await fetch(`${url}/api/card/update-position`, Options.PATCH(body));
 			const json = await result.json();
 			return json;
 		} catch (error) {

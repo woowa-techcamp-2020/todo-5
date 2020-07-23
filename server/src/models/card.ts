@@ -7,10 +7,8 @@ class Card {
 		try {
 			const create_date = Math.floor(Date.now() / 1000);
 			const last_update = create_date;
-			const cardData = await mysql.connect((con: any) =>
-				con.query(`INSERT INTO card (order_weight, user_id, create_date, last_update, topic_id ,content) 
-        VALUES('${card.order_weight}', '${card.user_id}', '${create_date}', '${last_update}', '${card.topic_id}', '${card.content}')`)
-			);
+			const body = { ...card, create_date, last_update };
+			const cardData = await mysql.connect((con: any) => con.query(`INSERT INTO card SET ?`, body));
 			const card_id = cardData[0].insertId;
 			const result: CardDTO.RESPONSE = { ...card, card_id, create_date, last_update };
 			return result;
@@ -35,11 +33,10 @@ class Card {
 
 	static async update(card: CardDTO.UPDATE) {
 		try {
-			const date = Math.floor(Date.now() / 1000);
+			const last_update = Math.floor(Date.now() / 1000);
+			const body = { ...card, last_update };
 			const cardData = await mysql.connect((con: any) =>
-				con.query(
-					`UPDATE card SET last_update = '${date}', content = '${card.content}' WHERE card_id = '${card.card_id}'`
-				)
+				con.query(`UPDATE card SET ? WHERE card_id = '${card.card_id}'`, body)
 			);
 			return { card_id: card.card_id };
 		} catch (err) {
