@@ -11,7 +11,6 @@ class LoadingBar extends HTMLElement {
 	}
 
 	close() {
-		console.log('close');
 		const loading = this.querySelector('.loading-container') as HTMLElement;
 		this.classList.add('close-loading');
 	}

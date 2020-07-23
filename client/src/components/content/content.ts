@@ -98,7 +98,6 @@ class Content extends HTMLElement {
 				to_topic: body.topic_title,
 			};
 			const activityResult = await ActivityApi.topicAdd(activity);
-			console.log('success');
 			const newTopic = new Topic(res.result);
 			contentTag.appendChild(newTopic);
 			this.topics.push(newTopic);

@@ -197,7 +197,6 @@ class TodoList extends HTMLElement {
 			order_weight: this.nextOrderWeight(this.dndCard.position),
 		};
 		CardApi.updatePosition(cardBody);
-		console.log(this.dndCard.position, this.dndCard.cloned.getCardTitle(), cardBody.order_weight);
 
 		const activityBody: ActivityDTO.MOVE = {
 			action: Action.MOVE,
@@ -210,9 +209,9 @@ class TodoList extends HTMLElement {
 			from_topic: this.content.getTopicTitleFromId(prevTopicId),
 		};
 
-		console.log(activityBody);
-		ActivityApi.create(activityBody);
 		this.dndCard.closeTopic.pushCard(this.dndCard.cloned);
+		await ActivityApi.create(activityBody);
+		store.getState('newActivity')();
 	}
 
 	mouseLeave(event: MouseEvent) {
