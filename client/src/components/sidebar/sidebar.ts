@@ -79,7 +79,6 @@ class Sidebar extends HTMLElement {
 		try {
 			const data = await ActivityApi.getActivitiesByServiceId(store.getState('service_id'));
 			this.activities = data.result;
-			console.log(this.activities);
 		} catch (err) {
 			alert(`데이터를 로드할 수 없습니다.`);
 		}
@@ -87,8 +86,6 @@ class Sidebar extends HTMLElement {
 
 	private drawActivities() {
 		const ulTag = this.querySelector('ul') as HTMLElement;
-		// const a = this.activities[0];
-		// console.log(a, a.uid, a.action, a.action, a.card_title);
 		ulTag.innerHTML = this.activities.reduce(
 			(result: string, item: ActivityInterface) =>
 				(result += `<div class="activity-content"> <li><span class="etext">@${item.uid}</span> ${
