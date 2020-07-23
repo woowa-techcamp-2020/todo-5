@@ -3,6 +3,7 @@ import { CardApi, ActivityApi } from '../../api';
 import { ActivityDTO } from '../../../../shared/dto';
 import store from '../../store';
 import Topic from '../topic';
+import { splitTitleContent } from '../../utils';
 
 export interface CardInterface {
 	card_id: number;
@@ -111,29 +112,13 @@ class Card extends HTMLElement {
 				user_id: store.getState('user_id'),
 			};
 			const activityResult = await ActivityApi.update(activity);
-			const { title, content } = this.splitTitleContent(card_content);
+			const { title, content } = splitTitleContent(card_content);
 			this.state.card_title = title;
 			this.state.content = content;
 			this.render();
 			this.listener();
 			store.getState('newActivity')();
 		} catch (err) {}
-	}
-
-	private splitTitleContent(raw: string) {
-		let title, content, tmp;
-		tmp = raw.split('<br/>');
-		if (tmp.length <= 1) {
-			title = tmp[0];
-			content = '';
-		} else {
-			title = tmp[0];
-			tmp.shift();
-			content = tmp.reduce((prev, now) => (prev += now + '<br/>'), '');
-			content = content.substring(0, content.length - 5);
-		}
-
-		return { title, content };
 	}
 
 	render() {
@@ -163,6 +148,10 @@ class Card extends HTMLElement {
 
 	getTopicId(): number {
 		return this.state.topic_id;
+	}
+
+	getCardTitle(): string {
+		return this.state.card_title;
 	}
 }
 

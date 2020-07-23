@@ -1,5 +1,4 @@
 import { ActivityApi } from '../../api';
-import { ActivityDTO } from '../../../../shared/dto';
 import store from '../../store';
 
 interface ActivityInterface {
