@@ -20,4 +20,10 @@ interface UPDATE {
 	content: string;
 }
 
-export { CREATE, UPDATE, RESPONSE };
+interface UPDATE_POSITION {
+	card_id: number;
+	order_weight: number;
+	topic_id: number;
+}
+
+export { CREATE, UPDATE, RESPONSE, UPDATE_POSITION };

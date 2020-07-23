@@ -3,11 +3,12 @@ import logger from '../config/logger';
 import { Topic } from '../models';
 import httpStatus from 'http-status';
 import { JsonResponse } from '../modules/Utils';
+import { TopicDTO } from '../../../shared/dto';
 
 class TopicController {
 	constructor() {}
 	static async create(req: Request, res: Response, next: NextFunction) {
-		let response;
+		let response: TopicDTO.RESPONSE;
 		let { body } = req;
 		try {
 			response = await Topic.create(body);

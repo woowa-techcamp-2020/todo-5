@@ -47,6 +47,20 @@ class Card {
 		}
 	}
 
+	static async updatePosition(card: CardDTO.UPDATE_POSITION) {
+		try {
+			const last_update = Math.floor(Date.now() / 1000);
+			const cardData = await mysql.connect((con: any) =>
+				con.query(
+					`UPDATE card SET last_update = '${last_update}', topic_id = ${card.topic_id}, order_weight = ${card.order_weight} WHERE card_id = '${card.card_id}'`
+				)
+			);
+			return { ...card, last_update };
+		} catch (err) {
+			throw err;
+		}
+	}
+
 	static async delete(card_id: number) {
 		try {
 			const date = Math.floor(Date.now() / 1000);

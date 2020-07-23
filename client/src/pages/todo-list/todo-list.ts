@@ -4,25 +4,52 @@ import ContentElement from '../../components/content';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { Header } from '../../components/header/header';
 import { Content } from '../../components/content/content';
+import Card from '../../components/card';
+import { url, Options, POSITION, ORDER_WEIGHT, calcMedium } from '../../utils';
+import { CardDTO } from '../../../../shared/dto';
+import Topic from '../../components/topic';
 
+interface DndCard {
+	mouseDownX: number;
+	mouseDownY: number;
+	isDragging: boolean;
+	clicked: boolean;
+	moving: typeof Card;
+	cloned: typeof Card;
+	closeTopic: typeof Topic;
+	closeCard: typeof Card;
+	position: number; //가까운 카드의 위쪽이면 -1, 아래쪽이면 1
+}
 class TodoList extends HTMLElement {
 	private state: {} = {};
 	private sidebar!: Sidebar;
 	private header!: Header;
 	private content!: Content;
+	private dndCard: DndCard;
 
 	constructor() {
 		super();
 		this.sidebar = new SideBarElement(1);
 		this.header = new HeaderElement();
 		this.content = new ContentElement({ service_id: 1 });
+		this.dndCard = {
+			mouseDownX: 0,
+			mouseDownY: 0,
+			isDragging: false,
+			clicked: false,
+			moving: document.createElement('div'),
+			cloned: document.createElement('div'),
+			closeCard: document.createElement('div'),
+			closeTopic: document.createElement('div'),
+			position: POSITION.INIT,
+		};
 	}
 
-	connectedCallback() {
+	async connectedCallback() {
 		this.render();
 		this.appendChild(this.sidebar);
 		this.appendChild(this.header);
-		this.appendChild(this.content);
+		await this.appendChild(this.content);
 		this.appendListener();
 		this.mouseEvent();
 	}
@@ -33,23 +60,12 @@ class TodoList extends HTMLElement {
 	}
 
 	disconnectedCallback() {
-		// DOM에서 제거되었다. 엘리먼트를 정리하는 일을 하자.
 		this.remove();
 	}
 
 	attributeChangedCallback(attrName: any, oldVal: any, newVal: any) {
 		this.render();
 	}
-
-	private card = {
-		mouseDownX: 0,
-		mouseDownY: 0,
-		isDragging: false,
-		clicked: false,
-		selected: document.createElement('div') as HTMLElement,
-		moving: document.createElement('div'),
-		cloned: document.createElement('div'),
-	};
 
 	mouseEvent() {
 		document.addEventListener('mousedown', (event: MouseEvent) => this.mouseDown(event));
@@ -60,94 +76,163 @@ class TodoList extends HTMLElement {
 	}
 
 	initMovingCardWrapper() {
-		this.card.moving.classList.add('moving');
-		this.appendChild(this.card.moving);
+		this.dndCard.moving.classList.add('moving');
+		this.appendChild(this.dndCard.moving);
 	}
 
 	mouseDown(event: MouseEvent) {
-		this.card.mouseDownX = event.pageX;
-		this.card.mouseDownY = event.pageY;
-		this.card.clicked = true;
+		this.dndCard.mouseDownX = event.pageX;
+		this.dndCard.mouseDownY = event.pageY;
+		this.dndCard.clicked = true;
+		this.dndCard.position = POSITION.INIT;
 	}
 
 	mouseMove(event: MouseEvent) {
-		if (!this.card.clicked) return;
+		event.preventDefault();
+
+		if (!this.dndCard.clicked) return;
 		if (
-			(this.card.mouseDownX - event.pageX !== 0 || this.card.mouseDownY - event.pageY !== 0) &&
-			!this.card.isDragging
+			(this.dndCard.mouseDownX - event.pageX !== 0 ||
+				this.dndCard.mouseDownY - event.pageY !== 0) &&
+			!this.dndCard.isDragging
 		) {
-			const card = (event.target as HTMLElement).closest('card-element') as HTMLElement;
-			if (!card) return;
-			this.card.isDragging = true;
-			// @TODO
-			// @ts-ignore
-			const moving = card.clone();
-			// @ts-ignore
-			this.card.cloned = card;
-			this.card.cloned.classList.add('cloned');
-			this.card.moving.appendChild(moving);
+			const targetCard = (event.target as HTMLElement).closest('card-element') as typeof Card;
+			if (!targetCard) return;
+			this.dndCard.isDragging = true;
+			const moving = targetCard.clone();
+			this.dndCard.cloned = targetCard;
+			this.dndCard.cloned.classList.add('cloned');
+			this.dndCard.moving.appendChild(moving);
 		}
-		if (this.card.isDragging) {
-			this.card.moving.style.left = event.pageX - this.card.moving.offsetWidth / 2 + 'px';
-			this.card.moving.style.top = event.pageY - this.card.moving.offsetHeight / 2 + 'px';
+		if (this.dndCard.isDragging) {
+			this.dndCard.moving.style.left = event.pageX - this.dndCard.moving.offsetWidth / 2 + 'px';
+			this.dndCard.moving.style.top = event.pageY - this.dndCard.moving.offsetHeight / 2 + 'px';
 
-			this.card.moving.hidden = true;
-			const topic = document
+			this.dndCard.moving.hidden = true;
+			const cte = document
 				.elementFromPoint(event.pageX, event.pageY)
-				?.closest('topic-element')
-				?.querySelector('.topic-content') as HTMLElement;
-			const card = document
+				?.closest('topic-element') as typeof Topic;
+			if (!cte) return;
+			this.dndCard.closeTopic = cte;
+			const topicContent = this.dndCard.closeTopic.querySelector('.topic-content') as HTMLElement;
+			const cce = document
 				.elementFromPoint(event.pageX, event.pageY)
-				?.closest('card-element') as HTMLElement;
-			this.card.moving.hidden = false;
+				?.closest('card-element') as typeof Card;
+			this.dndCard.moving.hidden = false;
+			this.dndCard.closeCard = cce;
 
-			if (!topic || card?.classList.contains('cloned')) return;
-			if (!card) {
-				if (!topic.querySelector('.cloned')) {
-					const top = topic.getBoundingClientRect().top;
-					if (event.pageY < top && topic.querySelector('card-element')) {
-						topic.insertBefore(this.card.cloned, topic.childNodes[1]);
+			if (!this.dndCard.closeTopic || this.dndCard.closeCard?.classList.contains('cloned')) return;
+			if (!this.dndCard.closeCard) {
+				if (!topicContent.querySelector('.cloned')) {
+					const top = topicContent.getBoundingClientRect().top;
+					if (event.pageY < top && topicContent.querySelector('card-element')) {
+						topicContent.insertBefore(this.dndCard.cloned, topicContent.childNodes[1]);
+						this.dndCard.position = POSITION.TOP;
 					} else {
-						topic.appendChild(this.card.cloned);
+						topicContent.appendChild(this.dndCard.cloned);
+						this.dndCard.position = POSITION.BOTTOM;
 					}
 				}
 			} else {
-				const rect = card.getBoundingClientRect().top;
-				const top = parseInt(this.card.moving.style.top.split('px')[0]);
+				const rect = this.dndCard.closeCard.getBoundingClientRect().top;
+				const top = parseInt(this.dndCard.moving.style.top.split('px')[0]);
 				if (top > rect) {
-					if (!card.nextSibling) {
-						card.parentNode?.appendChild(this.card.cloned);
-					} else if ((card.nextSibling as HTMLElement).classList.contains('cloned')) {
+					if (!this.dndCard.closeCard.nextSibling) {
+						topicContent.appendChild(this.dndCard.cloned);
+						this.dndCard.position = POSITION.BOTTOM;
+					} else if (
+						(this.dndCard.closeCard.nextSibling as HTMLElement).classList.contains('cloned')
+					) {
 						return;
 					} else {
-						card.parentNode?.insertBefore(this.card.cloned, card.nextSibling);
+						if ((this.dndCard.closeCard.nextSibling as HTMLElement).classList.contains('cloned')) {
+							this.dndCard.closeCard = this.dndCard.closeCard.nextSibling;
+						}
+						topicContent.insertBefore(this.dndCard.cloned, this.dndCard.closeCard);
+						this.dndCard.position = POSITION.DOWN;
 					}
 				} else {
-					if (this.card.cloned.nextSibling === card) return;
-					card.parentNode?.insertBefore(this.card.cloned, card);
+					if (this.dndCard.cloned.nextSibling === this.dndCard.closeCard) {
+						return;
+					} else {
+						topicContent.insertBefore(this.dndCard.cloned, this.dndCard.closeCard);
+						this.dndCard.position = POSITION.UP;
+						if (!this.dndCard.cloned.previousSibling) return;
+						else if (!this.dndCard.cloned.previousSibling.querySelector('.card'))
+							this.dndCard.position = POSITION.TOP;
+					}
 				}
 			}
 		}
 	}
 
 	mouseUp(event: MouseEvent) {
-		this.card.clicked = false;
-		this.card.isDragging = false;
-		if (this.card.moving.hasChildNodes()) {
-			this.card.moving.removeChild(this.card.moving.firstChild as ChildNode);
+		if (!this.dndCard.clicked) return;
+		this.dndCard.clicked = false;
+		this.dndCard.isDragging = false;
+		if (this.dndCard.moving.hasChildNodes()) {
+			this.dndCard.moving.removeChild(this.dndCard.moving.firstChild as ChildNode);
 		}
-		this.card.cloned.classList.remove('cloned');
-		this.card.selected.remove();
+		this.dndCard.cloned.classList.remove('cloned');
+		console.log('position: ', this.dndCard.position);
+		if (!this.dndCard.cloned.parentNode) return;
+
+		if (this.dndCard.position === POSITION.INIT) return;
+
+		this.dndCard.cloned.setTopicId(this.dndCard.closeTopic.getTopicId());
+		if (this.dndCard.cloned.getTopicId() !== this.dndCard.closeTopic.getTopicId()) {
+			this.dndCard.closeTopic.incCount();
+			const topicElements = document.querySelectorAll('topic-element');
+			[...topicElements].forEach((e: typeof Topic) => {
+				if (e.getTopicId() === this.dndCard.cloned.getTopicId()) {
+					e.decCount();
+				}
+			});
+		}
+		const body: CardDTO.UPDATE_POSITION = {
+			card_id: this.dndCard.cloned.getCardId(),
+			topic_id: this.dndCard.closeTopic.getTopicId(),
+			order_weight: this.nextOrderWeight(this.dndCard.position),
+		};
+		console.log('body', body);
+		fetch(`${url}/api/card/update-position`, Options.PATCH(body));
+		this.dndCard.closeTopic.pushCard(this.dndCard.cloned);
 	}
 
 	mouseLeave(event: MouseEvent) {
-		this.card.clicked = false;
-		this.card.isDragging = false;
 		this.mouseUp(event);
 	}
 
 	render() {
 		this.innerHTML = ``;
+	}
+
+	private nextOrderWeight(position: number): number {
+		console.log(this.dndCard.cloned);
+		const topicContent = this.dndCard.closeTopic?.querySelector('.topic-content') as HTMLElement;
+		const cloned: typeof Card = this.dndCard.cloned;
+		console.log('closeTopic: ', this.dndCard.closeTopic);
+		console.log(this.dndCard.cloned.parentNode);
+		switch (position) {
+			case POSITION.TOP:
+				return this.dndCard.closeTopic.nextOrderWeight();
+			case POSITION.BOTTOM:
+				const lastChild: typeof Card = topicContent.lastChild;
+				if (lastChild.previousSibling.tagName === 'CARD-INPUT-ELEMENT') return ORDER_WEIGHT;
+				return lastChild ? calcMedium(lastChild.previousSibling.getOrderWeight(), 0) : ORDER_WEIGHT;
+			case POSITION.UP:
+			case POSITION.DOWN:
+				console.log('cloned previous: ', cloned.previousSibling);
+				if (cloned.previousSibling.tagName === 'CARD-INPUT-ELEMENT' || !cloned.previousSibling)
+					return this.dndCard.closeTopic.nextOrderWeight();
+				return calcMedium(
+					cloned.nextSibling.getOrderWeight(),
+					cloned.previousSibling.getOrderWeight()
+				);
+			default:
+				console.error('anomaly POSITION value: ', position);
+				return 0;
+		}
 	}
 }
 

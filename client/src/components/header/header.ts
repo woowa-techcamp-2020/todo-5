@@ -34,7 +34,7 @@ class Header extends HTMLElement {
 		const toggle = this.querySelector('#toggle') as HTMLInputElement;
 		const label = this.querySelector('.service-menu') as HTMLElement;
 		const sidebar = document.querySelector('.slide-menu') as HTMLElement;
-		const content = document.querySelector('.content') as HTMLElement;
+		const content = document.querySelector('content-element') as HTMLElement;
 
 		toggle.addEventListener('change', (e: Event) => {
 			if (toggle.checked === true) {
