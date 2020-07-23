@@ -2,6 +2,7 @@ interface CREATE {
 	order_weight: number;
 	service_id: number;
 	topic_title: string;
+	user_id: number;
 }
 
 interface RESPONSE {
@@ -9,11 +10,13 @@ interface RESPONSE {
 	order_weight: number;
 	service_id: number;
 	topic_title: string;
+	user_id: number;
 }
 
 interface UPDATE_TITLE {
 	topic_id: number;
 	topic_title: string;
+	user_id: number;
 }
 
 interface GET {

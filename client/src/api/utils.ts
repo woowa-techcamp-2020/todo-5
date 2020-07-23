@@ -41,3 +41,4 @@ export class Options {
 // @ts-ignore
 export const url = `${process.env.URL || 'http://localhost'}:${process.env.PORT || '3000'}`;
 export const ORDER_WEIGHT = 100000;
+export const DUMMY_USER = 1;

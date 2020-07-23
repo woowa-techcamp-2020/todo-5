@@ -1,5 +1,5 @@
 import Topic from '../topic';
-import { ORDER_WEIGHT } from '../../api/utils';
+import { ORDER_WEIGHT, DUMMY_USER } from '../../api/utils';
 import { $inputTextModal } from '../modal';
 import { TopicApi } from '../../api';
 
@@ -67,6 +67,7 @@ class Content extends HTMLElement {
 			service_id: this.state.service_id,
 			topic_title: topic_title,
 			order_weight: nextOrderWeight,
+			user_id: DUMMY_USER,
 		};
 
 		try {

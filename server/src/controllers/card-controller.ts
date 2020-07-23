@@ -47,6 +47,20 @@ class CardController {
 		}
 	}
 
+	static async updatePosition(req: Request, res: Response, next: NextFunction) {
+		let response;
+		let { body } = req;
+		try {
+			response = await Card.updatePosition(body);
+			res
+				.status(httpStatus.OK)
+				.json(JsonResponse(httpStatus.OK, 'card position updated well', response));
+		} catch (err) {
+			logger.error('card updated fail', err);
+			next(err);
+		}
+	}
+
 	static async delete(req: Request, res: Response, next: NextFunction) {
 		let response;
 		const card_id = parseInt(req.params.card_id);
