@@ -34,7 +34,20 @@ class ActivityApi {
 		return result;
 	}
 
-	// static async
+	static async topicAdd(body: ActivityDTO.TOPICADD) {
+		const result = await ActivityApi.create(body);
+		return result;
+	}
+
+	static async topicDelete(body: ActivityDTO.TOPICREMOVE) {
+		const result = await ActivityApi.create(body);
+		return result;
+	}
+
+	static async topicUpdate(body: ActivityDTO.TOPICUPDATE) {
+		const result = await ActivityApi.create(body);
+		return result;
+	}
 
 	static async getActivitiesByServiceId(serviceId: string) {
 		try {

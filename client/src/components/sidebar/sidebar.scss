@@ -5,14 +5,16 @@
 	position: absolute;
 	width: 360px;
 	right: 0px;
-	height: 100%;
 	transition: all 0.4s;
 	z-index: 100;
+	height: 100%;
 	section {
+		height: 100%;
 		.menu-title {
-			padding: 18px 10px 16px 16px;
+			padding: 0 10px 0 20px;
 			display: flex;
 			color: white;
+			height: 65px;
 			justify-content: space-between;
 			.title-wrapper {
 				display: flex;
@@ -22,10 +24,17 @@
 				top: 8px;
 				margin-right: 8px;
 				cursor: pointer;
+				line-height: 60px;
 			}
 			div {
-				line-height: 28px;
+				line-height: 65px;
 				font-size: 16px;
+			}
+			.close-icon {
+				transition: transform 0.2s;
+				&:hover {
+					transform: rotate(90deg);
+				}
 			}
 		}
 		.update-activity {
@@ -44,6 +53,12 @@
 		.open-update {
 			display: block;
 		}
+		.activity-list {
+			height: calc(100% - 65px);
+			overflow: auto;
+			background: #272d32;
+		}
+
 		.activity-content {
 			padding: 16px 10px;
 			border-bottom: 1px solid #ddd;
@@ -61,6 +76,10 @@
 	li {
 		color: #ccc;
 		padding-left: 10px;
+		.topic-name {
+			color: #ddd;
+			font-weight: 600;
+		}
 	}
 	.etext {
 		font-weight: 600;
