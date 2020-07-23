@@ -144,6 +144,7 @@ class Topic extends HTMLElement {
 			result.result.content = content;
 			result.result.card_title = title;
 			result.result.topic_title = this.state.topic_title;
+			result.result.uid = store.getState('uid');
 			this.cards.unshift(new Card(result.result));
 			const topicContent = this.querySelector('.topic-content');
 			if (this.state.count === 0) {

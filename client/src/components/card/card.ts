@@ -15,6 +15,7 @@ export interface CardInterface {
 	user_id: number;
 	topic_id: number;
 	topic_title: string;
+	uid: string;
 }
 
 class Card extends HTMLElement {
@@ -129,7 +130,7 @@ class Card extends HTMLElement {
         <i class="material-icons icon delete">close</i>
       </div>
 			<div class="card-content">${this.state.content}</div>
-			<div class="card-user">by <span>${this.state.order_weight}</span></div>
+			<div class="card-user">by <span>${this.state.uid}</span></div>
 		</div>
     </div>`;
 	}
