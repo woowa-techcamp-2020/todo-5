@@ -7,7 +7,7 @@ class Topic {
 		try {
 			const topicData = await mysql.connect((con: any) =>
 				con.query(
-					`INSERT INTO topic (order_weight, service_id, topic_title) VALUES ('${topic.order_weight}', '${topic.service_id}', '${topic.topic_title}')`
+					`INSERT INTO topic (order_weight, service_id, topic_title, user_id) VALUES ('${topic.order_weight}', '${topic.service_id}', '${topic.topic_title}', '${topic.user_id}')`
 				)
 			);
 			const topic_id = topicData[0].insertId;
@@ -25,7 +25,7 @@ class Topic {
 					`UPDATE topic SET topic_title = '${topic.topic_title}' WHERE topic_id = '${topic.topic_id}'`
 				)
 			);
-			return { topic_id: topic.topic_id };
+			return { ...topic };
 		} catch (err) {
 			throw err;
 		}

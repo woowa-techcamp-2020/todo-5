@@ -1,5 +1,5 @@
 import Topic from '../topic';
-import { ORDER_WEIGHT } from '../../api/utils';
+import { ORDER_WEIGHT, DUMMY_USER } from '../../api/utils';
 import { $inputTextModal } from '../modal';
 import { TopicApi, ActivityApi } from '../../api';
 
@@ -18,17 +18,13 @@ class Content extends HTMLElement {
 	}
 
 	async connectedCallback() {
-		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
-		// this.render();
 		await this.getTopics();
 		this.render();
 		const contentTag = this.querySelector('.content') as HTMLElement;
 		this.topics.forEach((topic: typeof Topic) => contentTag.appendChild(topic));
-		// this.listeners();
 	}
 
 	disconnectedCallback() {
-		// DOM에서 제거되었다. 엘리먼트를 정리하는 일을 하자.
 		this.remove();
 	}
 
@@ -40,8 +36,7 @@ class Content extends HTMLElement {
 		this.innerHTML = `<div class="content"></div>
 		<div class="new-topic">
 			<div class="new-topic-button">
-				<i class="material-icons">add</i>
-				<div class="add">Add</div>
+				Add Column
 			</div>
 		</div>`;
 		this.listener();
@@ -72,6 +67,7 @@ class Content extends HTMLElement {
 			service_id: parseInt(this.state.service_id),
 			topic_title: topic_title,
 			order_weight: nextOrderWeight,
+			user_id: DUMMY_USER,
 		};
 
 		try {

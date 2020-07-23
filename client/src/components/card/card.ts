@@ -123,7 +123,6 @@ class Card extends HTMLElement {
 			tmp.shift();
 			content = tmp.reduce((prev, now) => (prev += now + '<br/>'), '');
 			content = content.substring(0, content.length - 5);
-			console.log(content);
 		}
 
 		return { title, content };
@@ -137,13 +136,25 @@ class Card extends HTMLElement {
         <i class="material-icons icon delete">close</i>
       </div>
 			<div class="card-content">${this.state.content}</div>
-			<div class="card-user">by <span>${this.state.uid}</span></div>
+			<div class="card-user">by <span>${this.state.order_weight}</span></div>
 		</div>
     </div>`;
 	}
 
-	getOrderWeight() {
+	getCardId(): number {
+		return this.state.card_id;
+	}
+
+	getOrderWeight(): number {
 		return this.state.order_weight;
+	}
+
+	setTopicId(topic_id: number): void {
+		this.state.topic_id = topic_id;
+	}
+
+	getTopicId(): number {
+		return this.state.topic_id;
 	}
 }
 

@@ -55,3 +55,5 @@ export const fail = function (err: {}) {
 // @ts-ignore
 export const url = `${process.env.URL || 'http://localhost'}:${process.env.PORT || '3000'}`;
 export const ORDER_WEIGHT = 100000;
+export const POSITION = { UP: -1, DOWN: 1, TOP: -2, BOTTOM: 2, INIT: 0 };
+export const calcMedium = (a: number, b: number): number => (a + b) / 2;

@@ -16,44 +16,27 @@ content-element {
 
 	.content {
 		display: flex;
-		// transform: translate3d(0, 0, 0);
 		transition: all 0.4s;
 	}
 	.new-topic {
 		min-width: 345px;
 		max-width: 345px;
-		padding: 16px 0;
 		padding-right: 32px;
+		padding-left: 16px;
+		margin-top: 30px;
+
 		.new-topic-button {
-			height: 32px;
-			padding: 10px 26px 10px 22px;
-			// margin-top: 20px;
-			// width: 345px;
-			// display: inline-block;
-			font-size: 20px;
-			display: flex;
-			color: #999;
-			// background-color: rgba(0, 0, 0, 0);
-			// border: 2px;
-			// border-color: #ccc;
-			// border-style: dotted;
-			// border-radius: 6px;
+			background: white;
+			color: #aaa;
+			padding: 8px;
+			text-align: center;
+			border: 1.5px dashed #dedede;
+			border-radius: 4px;
 			cursor: pointer;
-			// box-sizing: border-box;
 			transition: all 0.2s;
 			&:hover {
 				color: #3fa9ff;
 				border-color: #3fa9ff;
-			}
-			i {
-				font-size: 22px;
-				line-height: 20px;
-			}
-			.add {
-				margin-left: 4px;
-				line-height: 24px;
-				font-size: 18px;
-				font-weight: 600;
 			}
 		}
 	}

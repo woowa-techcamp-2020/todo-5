@@ -1,7 +1,7 @@
 import Card, { CardInterface } from '../card';
 import CardInput from '../card-input';
 import { CardDTO, ActivityDTO } from '../../../../shared/dto';
-import { Options, url, ORDER_WEIGHT } from '../../api/utils';
+import { ORDER_WEIGHT, DUMMY_USER } from '../../api/utils';
 import { CardApi, TopicApi, ActivityApi } from '../../api';
 import { $inputTextModal } from '../modal';
 import store from '../../store';
@@ -38,6 +38,7 @@ class Topic extends HTMLElement {
 	}
 
 	attributeChangedCallback(attrName: any, oldVal: any, newVal: any) {
+		this.state.count = this.cards.length;
 		this.render();
 	}
 
@@ -87,6 +88,7 @@ class Topic extends HTMLElement {
 		const body = {
 			topic_id: this.state.topic_id,
 			topic_title: title,
+			user_id: DUMMY_USER,
 		};
 		try {
 			const result = await TopicApi.update(body);
@@ -185,12 +187,34 @@ class Topic extends HTMLElement {
 		return { title, content };
 	}
 
-	private nextOrderWeight() {
+	public nextOrderWeight(): number {
 		return this.state.count ? this.cards[0].getOrderWeight() + ORDER_WEIGHT : ORDER_WEIGHT;
 	}
 
-	public getOrderWeight() {
+	public getOrderWeight(): number {
 		return this.state.order_weight;
+	}
+
+	public getTopicId(): number {
+		return this.state.topic_id;
+	}
+
+	public incCount(): void {
+		this.state.count++;
+		this.drawCount();
+	}
+
+	public decCount(): void {
+		this.state.count--;
+		this.drawCount();
+	}
+
+	private drawCount(): void {
+		(this.querySelector('.card-count') as HTMLElement).innerHTML = `${this.state.count}`;
+	}
+
+	public pushCard(card: typeof Card): void {
+		this.cards.push(card);
 	}
 }
 
