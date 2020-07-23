@@ -1,12 +1,50 @@
 import { url, Options } from './utils';
+import { ActivityDTO } from '../../../shared/dto';
 
 class ActivityApi {
-	create() {
-		return new Promise((resolve, reject) => {
-			// fetch().then()
-		});
+	static async create(body: ActivityDTO.ACTIVE): Promise<any> {
+		try {
+			console.log(body);
+			const result = await fetch(`${url}/api/activity`, Options.POST(body));
+			const json = await result.json();
+			return json;
+		} catch (error) {
+			console.log('err', error);
+			throw error;
+		}
 	}
-	getActivitiesByServiceId() {}
+
+	static async add(body: ActivityDTO.ADD) {
+		const result = await ActivityApi.create(body);
+		return result;
+	}
+
+	static async update(body: ActivityDTO.UPDATE) {
+		const result = await ActivityApi.create(body);
+		return result;
+	}
+
+	static async move(body: ActivityDTO.MOVE) {
+		const result = await ActivityApi.create(body);
+		return result;
+	}
+
+	static async delete(body: ActivityDTO.REMOVE) {
+		const result = await ActivityApi.create(body);
+		return result;
+	}
+
+	// static async
+
+	static async getActivitiesByServiceId(serviceId: string) {
+		try {
+			const result = await fetch(`${url}/api/activity/${serviceId}`, Options.GET());
+			const json = await result.json();
+			return json;
+		} catch (error) {
+			throw error;
+		}
+	}
 }
 
 export default ActivityApi;

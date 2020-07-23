@@ -1,7 +1,7 @@
 import Topic from '../topic';
 import { ORDER_WEIGHT, DUMMY_USER } from '../../api/utils';
 import { $inputTextModal } from '../modal';
-import { TopicApi } from '../../api';
+import { TopicApi, ActivityApi } from '../../api';
 
 interface ContentInterface {
 	service_id: string;
@@ -64,7 +64,7 @@ class Content extends HTMLElement {
 			? lastItem.getOrderWeight() + ORDER_WEIGHT
 			: ORDER_WEIGHT;
 		const body = {
-			service_id: this.state.service_id,
+			service_id: parseInt(this.state.service_id),
 			topic_title: topic_title,
 			order_weight: nextOrderWeight,
 			user_id: DUMMY_USER,
@@ -72,6 +72,8 @@ class Content extends HTMLElement {
 
 		try {
 			const res = await TopicApi.create(body);
+			const activity = {};
+			// const activityResult = ActivityApi.create();
 			const newTopic = new Topic(res.result);
 			contentTag.appendChild(newTopic);
 			this.topics.push(newTopic);

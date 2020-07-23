@@ -6,6 +6,7 @@ class Activity {
 	static async create(activity: ActivityDTO.ActionType) {
 		try {
 			const create_date = Math.floor(Date.now() / 1000);
+			console.log(activity.action);
 			const activityData = await mysql.connect((con: any) => {
 				switch (activity.action) {
 					case ActivityDTO.Action.ADD:
@@ -20,6 +21,22 @@ class Activity {
 					case ActivityDTO.Action.MOVE:
 						return con.query(`INSERT INTO activity (action, card_id, service_id, user_id, from_topic, to_topic, create_date) 
             VALUES('${activity.action}', '${activity.card_id}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${activity.to_topic}', '${create_date}')`);
+					//
+					case ActivityDTO.Action.TOPICADD:
+						return con.query(`INSERT INTO activity (action, service_id, user_id, to_topic, create_date)
+					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.to_topic}', '${create_date}')`);
+
+					case ActivityDTO.Action.TOPICREMOVE:
+						return con.query(`INSERT INTO activity (action, service_id, user_id, from_topic, create_date)
+					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${create_date}')`);
+
+					case ActivityDTO.Action.TOPICUPDATE:
+						return con.query(`INSERT INTO activity (action, service_id, user_id, create_date)
+					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${create_date}')`);
+
+					case ActivityDTO.Action.TOPICMOVE:
+						return con.query(`INSERT INTO activity (action, service_id, user_id, create_date)
+					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${create_date}')`);
 				}
 			});
 			const activity_id = activityData[0].insertId;
@@ -48,6 +65,35 @@ class Activity {
 						create_date,
 					};
 					return response_update;
+
+				case ActivityDTO.Action.TOPICADD:
+					const response_topic_add: ActivityDTO.RESPONSE_TOPIC_ADD = {
+						...activity,
+						activity_id,
+						create_date,
+					};
+					return response_topic_add;
+				case ActivityDTO.Action.TOPICMOVE:
+					const response_topic_move: ActivityDTO.RESPONSE_TOPIC_MOVE = {
+						...activity,
+						activity_id,
+						create_date,
+					};
+					return response_topic_move;
+				case ActivityDTO.Action.TOPICREMOVE:
+					const response_topic_remove: ActivityDTO.RESPONSE_TOPIC_REMOVE = {
+						...activity,
+						activity_id,
+						create_date,
+					};
+					return response_topic_remove;
+				case ActivityDTO.Action.TOPICUPDATE:
+					const response_topic_update: ActivityDTO.RESPONSE_TOPIC_UPDATE = {
+						...activity,
+						activity_id,
+						create_date,
+					};
+					return response_topic_update;
 			}
 		} catch (err) {
 			throw err;
@@ -57,10 +103,12 @@ class Activity {
 	static async getActivitiesByServiceId(serviceId: string) {
 		let activityData;
 		try {
-			activityData = await mysql.connect((con: any) =>
-				con.query(
-					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.card_id, c.content, a.service_id, from_topic, to_topic from activity a inner join user u on a.user_id = u.user_id inner join card c on a.card_id = c.card_id where a.service_id = ${serviceId} order by a.create_date DESC;`
-				)
+			activityData = await mysql.connect(
+				(con: any) =>
+					con.query(
+						`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.card_id, c.content, a.service_id, c.content from_topic, to_topic from activity a inner join user u on a.user_id = u.user_id inner join card c on a.card_id = c.card_id where a.service_id = ${serviceId} order by a.create_date DESC;`
+					)
+				// SELECT * FROM activity A JOIN user U ON A.user_id = U.user_id;
 			);
 			return [...activityData][0];
 		} catch (err) {

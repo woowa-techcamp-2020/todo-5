@@ -1,9 +1,10 @@
 import Card, { CardInterface } from '../card';
 import CardInput from '../card-input';
-import { CREATE } from '../../../../shared/dto/card-dto';
+import { CardDTO, ActivityDTO } from '../../../../shared/dto';
 import { ORDER_WEIGHT, DUMMY_USER } from '../../api/utils';
-import { CardApi, TopicApi } from '../../api';
+import { CardApi, TopicApi, ActivityApi } from '../../api';
 import { $inputTextModal } from '../modal';
+import store from '../../store';
 
 export interface TopicInterface {
 	topic_id: number;
@@ -62,6 +63,7 @@ class Topic extends HTMLElement {
 				try {
 					await TopicApi.delete(this.state.topic_id);
 					await CardApi.deleteAll(this.state.topic_id);
+					store.getState('newActivity')();
 					this.remove();
 				} catch (err) {
 					throw err;
@@ -127,26 +129,38 @@ class Topic extends HTMLElement {
 			const { title, content } = this.splitTitleContent(card.content);
 			card.card_title = title;
 			card.content = content;
-			this.cards.push(new Card(card));
+			this.cards.push(new Card(Object.assign(card, { topic_title: this.state.topic_title })));
 		});
 		this.state.count = this.cards.length;
 	}
 
-	private async addCardInput(card: CREATE) {
+	private async addCardInput(card: CardDTO.CREATE) {
 		card.content = card.content.replace(/\n/g, '<br/>');
 		const { title, content } = this.splitTitleContent(card.content);
 		card.topic_id = this.state.topic_id;
 		card.order_weight = this.nextOrderWeight();
 		try {
 			const result = await CardApi.create(card);
+			const body: ActivityDTO.ADD = {
+				action: ActivityDTO.Action.ADD,
+				card_id: result.result.card_id,
+				card_title: title,
+				service_id: store.getState('service_id'),
+				uid: store.getState('uid'),
+				user_id: store.getState('user_id'),
+				to_topic: this.state.topic_title,
+			};
+			const activityResult = await ActivityApi.add(body);
 			result.result.content = content;
 			result.result.card_title = title;
 			this.cards.unshift(new Card(result.result));
 			const topicContent = this.querySelector('.topic-content');
 			topicContent?.insertBefore(this.cards[0], this.cards[1]);
 			this.state.count++;
+			store.getState('newActivity')();
 		} catch (err) {
 			alert('카드 생성에 실패하였습니다.');
+			console.log(err);
 		}
 	}
 

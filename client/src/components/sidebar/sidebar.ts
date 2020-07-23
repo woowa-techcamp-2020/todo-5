@@ -1,3 +1,7 @@
+import { ActivityApi } from '../../api';
+import { ActivityDTO } from '../../../../shared/dto';
+import store from '../../store';
+
 interface ActivityInterface {
 	activity_id: number;
 	service_id: number;
@@ -5,11 +9,13 @@ interface ActivityInterface {
 	user_id: number;
 	uid: string;
 	action: string;
-	card_title: string;
-	from: string;
-	to: string;
+	content: string;
+	from_topic: string;
+	to_topic: string;
 	create_date: number;
 }
+
+const action = ['add', 'remove', 'update', 'move'];
 
 class Sidebar extends HTMLElement {
 	private state: { service_id: number };
@@ -19,12 +25,12 @@ class Sidebar extends HTMLElement {
 		super();
 		this.state = { service_id: service_id };
 		this.activities = [];
-		this.getActivities();
 	}
 
-	connectedCallback() {
+	async connectedCallback() {
 		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
+		await this.getActivities();
 		this.drawActivities();
 	}
 
@@ -46,6 +52,10 @@ class Sidebar extends HTMLElement {
 			toggle.checked = false;
 			toggle.dispatchEvent(new Event('change'));
 		});
+		store.setState('newActivity', async () => {
+			await this.getActivities();
+			this.drawActivities();
+		});
 	}
 
 	render() {
@@ -59,65 +69,41 @@ class Sidebar extends HTMLElement {
 							</div>
 							<i class="material-icons close-icon">close</i>
 						</div>
+						<div class="update-activity"> View new activity</div>
             <ul class=activity-list></ul>
           </section>
 			</aside>`;
 	}
 
 	private async getActivities() {
-		// const options = {
-		// 	method: 'GET',
-		// 	headers: {
-		// 		'Content-Type': 'application/json',
-		// 	},
-		// };
-		//const response = fetch(`${url}/api/activity/:serviceId`, options);
-		const data: Array<ActivityInterface> = [
-			{
-				activity_id: 1,
-				service_id: 1,
-				card_id: 1,
-				user_id: 1,
-				uid: 'loloara',
-				action: 'moved',
-				card_title: 'card title 01 of todo',
-				from: 'todo',
-				to: 'doing',
-				create_date: Date.now() - 500,
-			},
-			{
-				activity_id: 2,
-				service_id: 1,
-				card_id: 1,
-				user_id: 1,
-				uid: 'addy2316',
-				action: 'updated',
-				card_title: 'card title 01 of todo',
-				from: '',
-				to: '',
-				create_date: Date.now() - 3000,
-			},
-		];
-		this.activities = data;
+		try {
+			const data = await ActivityApi.getActivitiesByServiceId(store.getState('service_id'));
+			this.activities = data.result;
+			console.log(this.activities);
+		} catch (err) {
+			alert(`데이터를 로드할 수 없습니다.`);
+		}
 	}
 
 	private drawActivities() {
 		const ulTag = this.querySelector('ul') as HTMLElement;
+		// const a = this.activities[0];
+		// console.log(a, a.uid, a.action, a.action, a.card_title);
 		ulTag.innerHTML = this.activities.reduce(
 			(result: string, item: ActivityInterface) =>
 				(result += `<div class="activity-content"> <li><span class="etext">@${item.uid}</span> ${
 					item.action
-				} <span class="etext">${item.card_title}</span> ${
-					item.action === 'moved' || item.action === 'archived' ? ' from ' + item.from : ''
+				} <span class="etext">${item.content.split(`<br/>`)[0]}</span> ${
+					item.action === 'moved' || item.action === 'archived' ? ' from ' + item.from_topic : ''
 				}${
-					item.action === 'moved' || item.action === 'added' ? ' to ' + item.to : ''
+					item.action === 'moved' || item.action === 'added' ? ' to ' + item.to_topic : ''
 				}</li><span class="time-label">${this.calDifTime(item.create_date)} 전 작성</span></div>`),
 			''
 		);
 	}
 
 	private calDifTime(time: number) {
-		const currentTime = Date.now();
+		const currentTime = Math.floor(Date.now() / 1000);
 		let result: number | string = currentTime - time;
 		let timeForm = '';
 		if (result <= 10) {

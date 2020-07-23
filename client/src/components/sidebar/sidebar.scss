@@ -28,6 +28,22 @@
 				font-size: 16px;
 			}
 		}
+		.update-activity {
+			color: #ffe082;
+			text-align: center;
+			font-size: 16px;
+			padding: 8px 16px;
+			display: none;
+			cursor: pointer;
+			transition: all 0.2s;
+			&:hover {
+				background: rgba(255, 255, 255, 0.3);
+				text-decoration: underline;
+			}
+		}
+		.open-update {
+			display: block;
+		}
 		.activity-content {
 			padding: 16px 10px;
 			border-bottom: 1px solid #ddd;
