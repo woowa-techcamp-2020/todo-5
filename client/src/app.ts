@@ -14,11 +14,9 @@ class App {
 		this.container = container;
 
 		if (page === 'todoList') {
-			// login
 			store.setState('user_id', 1);
 			store.setState('service_id', 1);
 			store.setState('uid', 'loloara');
-			//
 			const todoList = new TodoList();
 			this.container.appendChild(todoList);
 		}

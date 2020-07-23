@@ -174,7 +174,6 @@ class TodoList extends HTMLElement {
 			this.dndCard.moving.removeChild(this.dndCard.moving.firstChild as ChildNode);
 		}
 		this.dndCard.cloned.classList.remove('cloned');
-		console.log('position: ', this.dndCard.position);
 		if (!this.dndCard.cloned.parentNode) return;
 
 		if (this.dndCard.position === POSITION.INIT) return;
@@ -194,7 +193,6 @@ class TodoList extends HTMLElement {
 			topic_id: this.dndCard.closeTopic.getTopicId(),
 			order_weight: this.nextOrderWeight(this.dndCard.position),
 		};
-		console.log('body', body);
 		fetch(`${url}/api/card/update-position`, Options.PATCH(body));
 		this.dndCard.closeTopic.pushCard(this.dndCard.cloned);
 	}
@@ -208,11 +206,8 @@ class TodoList extends HTMLElement {
 	}
 
 	private nextOrderWeight(position: number): number {
-		console.log(this.dndCard.cloned);
 		const topicContent = this.dndCard.closeTopic?.querySelector('.topic-content') as HTMLElement;
 		const cloned: typeof Card = this.dndCard.cloned;
-		console.log('closeTopic: ', this.dndCard.closeTopic);
-		console.log(this.dndCard.cloned.parentNode);
 		switch (position) {
 			case POSITION.TOP:
 				return this.dndCard.closeTopic.nextOrderWeight();
@@ -222,7 +217,6 @@ class TodoList extends HTMLElement {
 				return lastChild ? calcMedium(lastChild.previousSibling.getOrderWeight(), 0) : ORDER_WEIGHT;
 			case POSITION.UP:
 			case POSITION.DOWN:
-				console.log('cloned previous: ', cloned.previousSibling);
 				if (cloned.previousSibling.tagName === 'CARD-INPUT-ELEMENT' || !cloned.previousSibling)
 					return this.dndCard.closeTopic.nextOrderWeight();
 				return calcMedium(

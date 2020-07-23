@@ -4,12 +4,11 @@ import { ActivityDTO } from '../../../shared/dto';
 class ActivityApi {
 	static async create(body: ActivityDTO.ACTIVE): Promise<any> {
 		try {
-			console.log(body);
 			const result = await fetch(`${url}/api/activity`, Options.POST(body));
 			const json = await result.json();
 			return json;
 		} catch (error) {
-			console.log('err', error);
+			console.error('err', error);
 			throw error;
 		}
 	}
@@ -34,7 +33,20 @@ class ActivityApi {
 		return result;
 	}
 
-	// static async
+	static async topicAdd(body: ActivityDTO.TOPICADD) {
+		const result = await ActivityApi.create(body);
+		return result;
+	}
+
+	static async topicDelete(body: ActivityDTO.TOPICREMOVE) {
+		const result = await ActivityApi.create(body);
+		return result;
+	}
+
+	static async topicUpdate(body: ActivityDTO.TOPICUPDATE) {
+		const result = await ActivityApi.create(body);
+		return result;
+	}
 
 	static async getActivitiesByServiceId(serviceId: string) {
 		try {

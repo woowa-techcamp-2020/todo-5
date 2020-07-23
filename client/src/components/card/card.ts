@@ -2,18 +2,18 @@ import { $textAreaModal } from '../modal';
 import { CardApi, ActivityApi } from '../../api';
 import { ActivityDTO } from '../../../../shared/dto';
 import store from '../../store';
+import Topic from '../topic';
 
 export interface CardInterface {
 	card_id: number;
 	order_weight: number;
 	card_title: string;
-	uid: string;
 	content: string;
 	last_update: number;
 	create_date: number;
 	user_id: number;
 	topic_id: number;
-	topic_title?: string;
+	topic_title: string;
 }
 
 class Card extends HTMLElement {
@@ -52,7 +52,7 @@ class Card extends HTMLElement {
 			e.stopPropagation();
 			if (confirm('선택하신 카드를 삭제하시겠습니까?')) {
 				try {
-					const result = await CardApi.delete(this.state.card_id);
+					const rst = await CardApi.delete(this.state.card_id);
 					if (!this.state.topic_title) return;
 					const body: ActivityDTO.REMOVE = {
 						action: ActivityDTO.Action.REMOVE,
@@ -63,11 +63,19 @@ class Card extends HTMLElement {
 						user_id: store.getState('user_id'),
 						from_topic: this.state.topic_title,
 					};
-					const activityResult = await ActivityApi.delete(body);
-					this.remove();
+					await ActivityApi.delete(body);
 					store.getState('newActivity')();
+
+					const topicElements = document.querySelectorAll('topic-element');
+					[...topicElements].forEach((e: typeof Topic) => {
+						if (e.getTopicId() === this.getTopicId()) {
+							e.decCount();
+						}
+					});
+
+					this.remove();
 				} catch (err) {
-					alert('카드 삭제에 실패하였습니다');
+					alert(`카드 삭제에 실패하였습니다: ${err}`);
 				}
 			}
 		});
