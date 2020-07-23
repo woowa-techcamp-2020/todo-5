@@ -180,11 +180,11 @@ class TodoList extends HTMLElement {
 		if (this.dndCard.position === POSITION.INIT) return;
 		const prevTopicId = this.dndCard.cloned.getTopicId();
 		this.dndCard.cloned.setTopicId(this.dndCard.closeTopic.getTopicId());
-		if (this.dndCard.cloned.getTopicId() !== this.dndCard.closeTopic.getTopicId()) {
+		if (prevTopicId !== this.dndCard.closeTopic.getTopicId()) {
 			this.dndCard.closeTopic.incCount();
 			const topicElements = document.querySelectorAll('topic-element');
 			[...topicElements].forEach((e: typeof Topic) => {
-				if (e.getTopicId() === this.dndCard.cloned.getTopicId()) {
+				if (e.getTopicId() === prevTopicId) {
 					e.decCount();
 					return;
 				}
