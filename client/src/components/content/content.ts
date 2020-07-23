@@ -1,7 +1,7 @@
 import Topic from '../topic';
-import { Options, url, ORDER_WEIGHT } from '../../api/utils';
+import { ORDER_WEIGHT } from '../../api/utils';
 import { $inputTextModal } from '../modal';
-import { TopicApi } from '../../api';
+import { TopicApi, ActivityApi } from '../../api';
 
 interface ContentInterface {
 	service_id: string;
@@ -76,6 +76,8 @@ class Content extends HTMLElement {
 
 		try {
 			const res = await TopicApi.create(body);
+			const activity = {};
+			// const activityResult = ActivityApi.create();
 			const newTopic = new Topic(res.result);
 			contentTag.appendChild(newTopic);
 			this.topics.push(newTopic);

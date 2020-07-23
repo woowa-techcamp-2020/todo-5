@@ -21,6 +21,22 @@ class Activity {
 					case ActivityDTO.Action.MOVE:
 						return con.query(`INSERT INTO activity (action, card_id, service_id, user_id, from_topic, to_topic, create_date) 
             VALUES('${activity.action}', '${activity.card_id}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${activity.to_topic}', '${create_date}')`);
+					//
+					case ActivityDTO.Action.TOPICADD:
+						return con.query(`INSERT INTO activity (action, service_id, user_id, to_topic, create_date)
+					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.to_topic}', '${create_date}')`);
+
+					case ActivityDTO.Action.TOPICREMOVE:
+						return con.query(`INSERT INTO activity (action, service_id, user_id, from_topic, create_date)
+					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${create_date}')`);
+
+					case ActivityDTO.Action.TOPICUPDATE:
+						return con.query(`INSERT INTO activity (action, service_id, user_id, create_date)
+					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${create_date}')`);
+
+					case ActivityDTO.Action.TOPICMOVE:
+						return con.query(`INSERT INTO activity (action, service_id, user_id, create_date)
+					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${create_date}')`);
 				}
 			});
 			const activity_id = activityData[0].insertId;
@@ -49,6 +65,35 @@ class Activity {
 						create_date,
 					};
 					return response_update;
+
+				case ActivityDTO.Action.TOPICADD:
+					const response_topic_add: ActivityDTO.RESPONSE_TOPIC_ADD = {
+						...activity,
+						activity_id,
+						create_date,
+					};
+					return response_topic_add;
+				case ActivityDTO.Action.TOPICMOVE:
+					const response_topic_move: ActivityDTO.RESPONSE_TOPIC_MOVE = {
+						...activity,
+						activity_id,
+						create_date,
+					};
+					return response_topic_move;
+				case ActivityDTO.Action.TOPICREMOVE:
+					const response_topic_remove: ActivityDTO.RESPONSE_TOPIC_REMOVE = {
+						...activity,
+						activity_id,
+						create_date,
+					};
+					return response_topic_remove;
+				case ActivityDTO.Action.TOPICUPDATE:
+					const response_topic_update: ActivityDTO.RESPONSE_TOPIC_UPDATE = {
+						...activity,
+						activity_id,
+						create_date,
+					};
+					return response_topic_update;
 			}
 		} catch (err) {
 			throw err;

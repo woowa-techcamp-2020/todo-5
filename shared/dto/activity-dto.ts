@@ -1,49 +1,61 @@
-interface RESPONSE_ADD {
+interface RESPONSE_TOPIC_ADD {
 	activity_id: number;
 	user_id: number;
 	create_date: number;
 	action: Action;
-	card_id: number;
-	card_title: string;
 	service_id: number;
-	uid: string;
+	// uid: string;
 	to_topic: string;
 }
 
-interface RESPONSE_MOVE {
+interface RESPONSE_TOPIC_MOVE {
 	activity_id: number;
 	user_id: number;
 	create_date: number;
 	action: Action;
+	service_id: number;
+	// uid: string;
+}
+
+interface RESPONSE_TOPIC_REMOVE {
+	activity_id: number;
+	user_id: number;
+	create_date: number;
+	action: Action;
+	service_id: number;
+	// uid: string;
+	from_topic: string;
+}
+
+interface RESPONSE_TOPIC_UPDATE {
+	activity_id: number;
+	user_id: number;
+	create_date: number;
+	action: Action;
+	service_id: number;
+	// uid: string;
+}
+
+interface RESPONSE_ADD extends RESPONSE_TOPIC_ADD {
 	card_id: number;
 	card_title: string;
-	service_id: number;
-	uid: string;
+}
+
+interface RESPONSE_MOVE extends RESPONSE_TOPIC_MOVE {
+	card_id: number;
+	card_title: string;
 	from_topic: string;
 	to_topic: string;
 }
 
-interface RESPONSE_REMOVE {
-	activity_id: number;
-	user_id: number;
-	create_date: number;
-	action: Action;
+interface RESPONSE_REMOVE extends RESPONSE_TOPIC_REMOVE {
 	card_id: number;
 	card_title: string;
-	service_id: number;
-	uid: string;
-	from_topic: string;
 }
 
-interface RESPONSE_UPDATE {
-	activity_id: number;
-	user_id: number;
-	create_date: number;
-	action: Action;
+interface RESPONSE_UPDATE extends RESPONSE_TOPIC_UPDATE {
 	card_id: number;
 	card_title: string;
-	service_id: number;
-	uid: string;
 }
 
 enum Action {
@@ -51,14 +63,45 @@ enum Action {
 	REMOVE = 'removed', // from
 	UPDATE = 'updated', // x
 	MOVE = 'moved', // to, from
+	TOPICADD = 'added column', // to
+	TOPICREMOVE = 'removed column', // from
+	TOPICUPDATE = 'updated column', // x
+	TOPICMOVE = 'moved column',
+}
+
+interface TOPICADD {
+	action: Action.TOPICADD;
+	service_id: number;
+	uid: string;
+	user_id: number;
+	to_topic: string;
+}
+
+interface TOPICREMOVE {
+	action: Action.TOPICREMOVE;
+	service_id: number;
+	user_id: number;
+	from_topic: string;
+}
+
+interface TOPICUPDATE {
+	action: Action.TOPICUPDATE;
+	service_id: number;
+	user_id: number;
+}
+
+interface TOPICMOVE {
+	action: Action.TOPICMOVE;
+	service_id: number;
+	user_id: number;
 }
 
 interface ADD {
 	action: Action.ADD;
 	card_id: number;
+	uid: string;
 	card_title: string;
 	service_id: number;
-	uid: string;
 	user_id: number;
 	to_topic: string;
 }
@@ -104,7 +147,7 @@ interface ACTIVE {
 	from_topic?: string;
 }
 
-type ActionType = ADD | REMOVE | UPDATE | MOVE;
+type ActionType = ADD | REMOVE | UPDATE | MOVE | TOPICADD | TOPICREMOVE | TOPICUPDATE | TOPICMOVE;
 
 export {
 	ACTIVE,
@@ -118,4 +161,12 @@ export {
 	RESPONSE_UPDATE,
 	RESPONSE_MOVE,
 	RESPONSE_REMOVE,
+	RESPONSE_TOPIC_ADD,
+	RESPONSE_TOPIC_UPDATE,
+	RESPONSE_TOPIC_MOVE,
+	RESPONSE_TOPIC_REMOVE,
+	TOPICADD,
+	TOPICMOVE,
+	TOPICREMOVE,
+	TOPICUPDATE,
 };
