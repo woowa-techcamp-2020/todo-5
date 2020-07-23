@@ -4,7 +4,6 @@ interface RESPONSE_TOPIC_ADD {
 	create_date: number;
 	action: Action;
 	service_id: number;
-	// uid: string;
 	to_topic: string;
 }
 
@@ -15,7 +14,6 @@ interface RESPONSE_TOPIC_MOVE {
 	action: Action;
 	service_id: number;
 	from_topic: string;
-	// uid: string;
 }
 
 interface RESPONSE_TOPIC_REMOVE {
@@ -24,7 +22,6 @@ interface RESPONSE_TOPIC_REMOVE {
 	create_date: number;
 	action: Action;
 	service_id: number;
-	// uid: string;
 	from_topic: string;
 }
 
@@ -34,7 +31,6 @@ interface RESPONSE_TOPIC_UPDATE {
 	create_date: number;
 	action: Action;
 	service_id: number;
-	// uid: string;
 	to_topic: string;
 }
 
@@ -46,7 +42,6 @@ interface RESPONSE_ADD extends RESPONSE_TOPIC_ADD {
 interface RESPONSE_MOVE extends RESPONSE_TOPIC_MOVE {
 	card_id: number;
 	card_title: string;
-	// from_topic: string;
 	to_topic: string;
 }
 
@@ -79,7 +74,6 @@ enum Action {
 interface TOPICADD {
 	action: Action.TOPICADD;
 	service_id: number;
-	uid: string;
 	user_id: number;
 	to_topic: string;
 }
@@ -108,52 +102,47 @@ interface TOPICMOVE {
 interface ADD {
 	action: Action.ADD;
 	card_id: number;
-	uid: string;
-	card_title: string;
 	service_id: number;
 	user_id: number;
 	to_topic: string;
+	card_title: string;
 }
 
 interface REMOVE {
 	action: Action.REMOVE;
 	card_id: number;
-	card_title: string;
 	service_id: number;
-	uid: string;
 	user_id: number;
 	from_topic: string;
+	card_title: string;
 }
 
 interface UPDATE {
 	action: Action.UPDATE;
 	card_id: number;
-	card_title: string;
 	service_id: number;
-	uid: string;
 	user_id: number;
+	card_title: string;
 }
 
 interface MOVE {
 	action: Action.MOVE;
 	card_id: number;
-	card_title: string;
 	service_id: number;
-	uid: string;
 	user_id: number;
 	to_topic: string;
 	from_topic: string;
+	card_title: string;
 }
 
 interface ACTIVE {
 	action: Action;
 	card_id?: number;
-	card_title?: string;
 	service_id: number;
-	uid?: string;
 	user_id: number;
 	to_topic?: string;
 	from_topic?: string;
+	card_title?: string;
 }
 
 type ActionType = ADD | REMOVE | UPDATE | MOVE | TOPICADD | TOPICREMOVE | TOPICUPDATE | TOPICMOVE;

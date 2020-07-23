@@ -201,12 +201,11 @@ class TodoList extends HTMLElement {
 		const activityBody: ActivityDTO.MOVE = {
 			action: Action.MOVE,
 			card_id: this.dndCard.cloned.getCardId(),
-			card_title: this.dndCard.cloned.getCardTitle(),
 			service_id: store.getState('service_id'),
-			uid: store.getState('uid'),
 			user_id: store.getState('user_id'),
 			to_topic: this.dndCard.closeTopic.getTopicTitle(),
 			from_topic: this.content.getTopicTitleFromId(prevTopicId),
+			card_title: this.dndCard.cloned.getCardTitle(),
 		};
 
 		this.dndCard.closeTopic.pushCard(this.dndCard.cloned);

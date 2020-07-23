@@ -6,38 +6,12 @@ class Activity {
 	static async create(activity: ActivityDTO.ActionType) {
 		try {
 			const create_date = Math.floor(Date.now() / 1000);
-			const activityData = await mysql.connect((con: any) => {
-				switch (activity.action) {
-					case ActivityDTO.Action.ADD:
-						return con.query(`INSERT INTO activity (action, card_id, service_id, user_id, to_topic, create_date) 
-            VALUES('${activity.action}', '${activity.card_id}', '${activity.service_id}', '${activity.user_id}', '${activity.to_topic}', '${create_date}')`);
-					case ActivityDTO.Action.REMOVE:
-						return con.query(`INSERT INTO activity (action, card_id, service_id, user_id, from_topic, create_date) 
-            VALUES('${activity.action}', '${activity.card_id}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${create_date}')`);
-					case ActivityDTO.Action.UPDATE:
-						return con.query(`INSERT INTO activity (action, card_id, service_id, user_id, create_date) 
-            VALUES('${activity.action}', '${activity.card_id}', '${activity.service_id}', '${activity.user_id}', '${create_date}')`);
-					case ActivityDTO.Action.MOVE:
-						return con.query(`INSERT INTO activity (action, card_id, service_id, user_id, from_topic, to_topic, create_date) 
-            VALUES('${activity.action}', '${activity.card_id}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${activity.to_topic}', '${create_date}')`);
-					//
-					case ActivityDTO.Action.TOPICADD:
-						return con.query(`INSERT INTO activity (action, service_id, user_id, to_topic, create_date)
-					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.to_topic}', '${create_date}')`);
+			const data: any = { ...activity, create_date };
+			delete data.card_title;
 
-					case ActivityDTO.Action.TOPICREMOVE:
-						return con.query(`INSERT INTO activity (action, service_id, user_id, from_topic, create_date)
-					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${create_date}')`);
-
-					case ActivityDTO.Action.TOPICUPDATE:
-						return con.query(`INSERT INTO activity (action, service_id, user_id, to_topic, create_date)
-					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.to_topic}', ${create_date}')`);
-
-					case ActivityDTO.Action.TOPICMOVE:
-						return con.query(`INSERT INTO activity (action, service_id, user_id, from_topic, create_date)
-					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${create_date}')`);
-				}
-			});
+			const activityData = await mysql.connect((con: any) =>
+				con.query(`INSERT INTO activity SET ?`, data)
+			);
 			const activity_id = activityData[0].insertId;
 			switch (activity.action) {
 				case ActivityDTO.Action.ADD:
