@@ -1,7 +1,8 @@
 import { url, Options } from './utils';
+import { TopicDTO } from '../../../shared/dto';
 
 class TopicApi {
-	static async create(body: {}): Promise<any> {
+	static async create(body: TopicDTO.CREATE): Promise<any> {
 		try {
 			const result = await fetch(`${url}/api/topic`, Options.POST(body));
 			const json = await result.json();
@@ -21,7 +22,7 @@ class TopicApi {
 		}
 	}
 
-	static async update(body: {}): Promise<any> {
+	static async update(body: TopicDTO.UPDATE_TITLE): Promise<any> {
 		try {
 			const result = await fetch(`${url}/api/topic/update`, Options.PATCH(body));
 			const json = await result.json();

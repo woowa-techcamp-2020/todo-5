@@ -1,5 +1,7 @@
 import { $textAreaModal } from '../modal';
-import { CardApi } from '../../api';
+import { CardApi, ActivityApi } from '../../api';
+import { ActivityDTO } from '../../../../shared/dto';
+import store from '../../store';
 
 export interface CardInterface {
 	card_id: number;
@@ -11,6 +13,7 @@ export interface CardInterface {
 	create_date: number;
 	user_id: number;
 	topic_id: number;
+	topic_title?: string;
 }
 
 class Card extends HTMLElement {
@@ -50,7 +53,19 @@ class Card extends HTMLElement {
 			if (confirm('선택하신 카드를 삭제하시겠습니까?')) {
 				try {
 					const result = await CardApi.delete(this.state.card_id);
+					if (!this.state.topic_title) return;
+					const body: ActivityDTO.REMOVE = {
+						action: ActivityDTO.Action.REMOVE,
+						card_id: this.state.card_id,
+						card_title: this.state.card_title,
+						service_id: store.getState('service_id'),
+						uid: store.getState('uid'),
+						user_id: store.getState('user_id'),
+						from_topic: this.state.topic_title,
+					};
+					const activityResult = await ActivityApi.delete(body);
 					this.remove();
+					store.getState('newActivity')();
 				} catch (err) {
 					alert('카드 삭제에 실패하였습니다');
 				}
@@ -79,11 +94,21 @@ class Card extends HTMLElement {
 
 		try {
 			const result = await CardApi.update(body);
+			const activity: ActivityDTO.UPDATE = {
+				action: ActivityDTO.Action.UPDATE,
+				card_id: this.state.card_id,
+				card_title: this.state.card_title,
+				service_id: store.getState('service_id'),
+				uid: store.getState('uid'),
+				user_id: store.getState('user_id'),
+			};
+			const activityResult = await ActivityApi.update(activity);
 			const { title, content } = this.splitTitleContent(card_content);
 			this.state.card_title = title;
 			this.state.content = content;
 			this.render();
-       this.listener();
+			this.listener();
+			store.getState('newActivity')();
 		} catch (err) {}
 	}
 

@@ -1,6 +1,7 @@
 import './styles/common.scss';
 import TodoList from './pages/todo-list';
 import $modal from './components/modal';
+import store from './store';
 
 // test
 type pageType = 'todoList' | 'login';
@@ -11,7 +12,13 @@ class App {
 
 	constructor(container: HTMLElement) {
 		this.container = container;
+
 		if (page === 'todoList') {
+			// login
+			store.setState('user_id', 1);
+			store.setState('service_id', 1);
+			store.setState('uid', 'loloara');
+			//
 			const todoList = new TodoList();
 			this.container.appendChild(todoList);
 		}

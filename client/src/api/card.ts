@@ -1,7 +1,8 @@
 import { url, Options } from './utils';
+import { CardDTO } from '../../../shared/dto';
 
 class CardApi {
-	static async create(body: {}): Promise<any> {
+	static async create(body: CardDTO.CREATE): Promise<any> {
 		try {
 			const result = await fetch(`${url}/api/card`, Options.POST(body));
 			const json = await result.json();
@@ -21,7 +22,7 @@ class CardApi {
 		}
 	}
 
-	static async update(body: {}): Promise<any> {
+	static async update(body: CardDTO.UPDATE): Promise<any> {
 		try {
 			const result = await fetch(`${url}/api/card/update`, Options.PATCH(body));
 			const json = await result.json();

@@ -6,6 +6,7 @@ class Activity {
 	static async create(activity: ActivityDTO.ActionType) {
 		try {
 			const create_date = Math.floor(Date.now() / 1000);
+			console.log(activity.action);
 			const activityData = await mysql.connect((con: any) => {
 				switch (activity.action) {
 					case ActivityDTO.Action.ADD:
@@ -57,10 +58,12 @@ class Activity {
 	static async getActivitiesByServiceId(serviceId: string) {
 		let activityData;
 		try {
-			activityData = await mysql.connect((con: any) =>
-				con.query(
-					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.card_id, c.content, a.service_id, from_topic, to_topic from activity a inner join user u on a.user_id = u.user_id inner join card c on a.card_id = c.card_id where a.service_id = ${serviceId} order by a.create_date DESC;`
-				)
+			activityData = await mysql.connect(
+				(con: any) =>
+					con.query(
+						`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.card_id, c.content, a.service_id, c.content from_topic, to_topic from activity a inner join user u on a.user_id = u.user_id inner join card c on a.card_id = c.card_id where a.service_id = ${serviceId} order by a.create_date DESC;`
+					)
+				// SELECT * FROM activity A JOIN user U ON A.user_id = U.user_id;
 			);
 			return [...activityData][0];
 		} catch (err) {

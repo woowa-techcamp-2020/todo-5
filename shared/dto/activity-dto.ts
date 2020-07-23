@@ -7,7 +7,7 @@ interface RESPONSE_ADD {
 	card_title: string;
 	service_id: number;
 	uid: string;
-	to_topic: number;
+	to_topic: string;
 }
 
 interface RESPONSE_MOVE {
@@ -19,8 +19,8 @@ interface RESPONSE_MOVE {
 	card_title: string;
 	service_id: number;
 	uid: string;
-	from_topic: number;
-	to_topic: number;
+	from_topic: string;
+	to_topic: string;
 }
 
 interface RESPONSE_REMOVE {
@@ -32,7 +32,7 @@ interface RESPONSE_REMOVE {
 	card_title: string;
 	service_id: number;
 	uid: string;
-	from_topic: number;
+	from_topic: string;
 }
 
 interface RESPONSE_UPDATE {
@@ -47,10 +47,10 @@ interface RESPONSE_UPDATE {
 }
 
 enum Action {
-	ADD = 0, // to
-	REMOVE = 1, // from
-	UPDATE = 2, // x
-	MOVE = 3, // to, from
+	ADD = 'added', // to
+	REMOVE = 'removed', // from
+	UPDATE = 'updated', // x
+	MOVE = 'moved', // to, from
 }
 
 interface ADD {
@@ -60,7 +60,7 @@ interface ADD {
 	service_id: number;
 	uid: string;
 	user_id: number;
-	to_topic: number;
+	to_topic: string;
 }
 
 interface REMOVE {
@@ -70,7 +70,7 @@ interface REMOVE {
 	service_id: number;
 	uid: string;
 	user_id: number;
-	from_topic: number;
+	from_topic: string;
 }
 
 interface UPDATE {
@@ -89,13 +89,25 @@ interface MOVE {
 	service_id: number;
 	uid: string;
 	user_id: number;
-	to_topic: number;
-	from_topic: number;
+	to_topic: string;
+	from_topic: string;
+}
+
+interface ACTIVE {
+	action: Action;
+	card_id: number;
+	card_title: string;
+	service_id: number;
+	uid: string;
+	user_id: number;
+	to_topic?: string;
+	from_topic?: string;
 }
 
 type ActionType = ADD | REMOVE | UPDATE | MOVE;
 
 export {
+	ACTIVE,
 	Action,
 	ADD,
 	UPDATE,

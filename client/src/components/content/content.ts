@@ -69,7 +69,7 @@ class Content extends HTMLElement {
 			? lastItem.getOrderWeight() + ORDER_WEIGHT
 			: ORDER_WEIGHT;
 		const body = {
-			service_id: this.state.service_id,
+			service_id: parseInt(this.state.service_id),
 			topic_title: topic_title,
 			order_weight: nextOrderWeight,
 		};
