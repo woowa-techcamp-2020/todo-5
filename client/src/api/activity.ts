@@ -1,4 +1,4 @@
-import { url, Options } from '../utils';
+import { url, Options } from './utils';
 import { ActivityDTO } from '../../../shared/dto';
 
 class ActivityApi {
