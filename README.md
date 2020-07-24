@@ -5,6 +5,10 @@
 
 Todo List와 함께 체계적으로 작업을 관리하세요!
 
+![MAIN]()
+
+- [서비스 페이지 링크](http://13.209.83.0:3000/)
+
 ## 데이터 모델링
 
 ![ERD](https://github.com/woowa-techcamp-2020/todo-5/blob/dev/img-for-wiki/ERD.png?raw=true)
@@ -25,8 +29,6 @@ cd ../server
 npm install  // to install all the dependencies.
 npm start  // to run server
 ```
-
-- [http://localhost:3000/](http://localhost:3000/)
 
 ## 기술
 

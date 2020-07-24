@@ -9,7 +9,7 @@ class InputTextModal {
 		this.$modal = $modal;
 	}
 
-	open(option: ModalInterface, callback: Function) {
+	public open(option: ModalInterface, callback: Function) {
 		this.option = option;
 		this.callback = callback;
 		this.$modal.setChildElement('<input class="text-input">');

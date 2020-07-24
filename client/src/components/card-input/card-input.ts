@@ -1,13 +1,11 @@
 import store from '../../store';
 
 class CardInput extends HTMLElement {
-	private state: {};
 	private resolve!: Function;
 	private reject!: Function;
 
 	constructor(resolve: Function, reject: Function) {
 		super();
-		this.state = {};
 		this.resolve = resolve;
 		this.reject = reject;
 	}
@@ -23,9 +21,10 @@ class CardInput extends HTMLElement {
 
 	attributeChangedCallback(attrName: any, oldVal: any, newVal: any) {
 		this.render();
+		this.listener();
 	}
 
-	render() {
+	private render() {
 		this.innerHTML = `<div class="card-input">
             <textarea placeholder="Enter a card"></textarea>
             <div class="btn-group">
@@ -35,48 +34,51 @@ class CardInput extends HTMLElement {
         </div>`;
 	}
 
-	listener() {
+	private listener() {
 		const inputBox = this.querySelector('textarea') as HTMLTextAreaElement;
-		const btnGroup = this.querySelectorAll('.button');
-		inputBox.addEventListener('input', (e) => {
-			if (inputBox.value === '') {
-				//add 버튼 활성화
-				btnGroup[0].classList.remove('enable-btn');
-			} else {
-				btnGroup[0].classList.add('enable-btn');
-			}
-		});
-		btnGroup[0].addEventListener('click', (e) => {
-			this.resolve({
-				user_id: store.getState('user_id'),
-				content: inputBox?.value,
-				topic_id: 1,
-				order_weight: 1,
-			});
-			this.reject();
-			this.resetInput(inputBox, btnGroup);
-			if (inputBox.textLength > 200) {
-				//글자 수 제한
-				inputBox.value = inputBox.value.substring(0, 200);
-			}
-		});
-		btnGroup[1].addEventListener('click', (e) => {
-			this.reject();
-			this.resetInput(inputBox, btnGroup);
-			if (inputBox.textLength > 200) {
-				//글자 수 제한
-				inputBox.value = inputBox.value.substring(0, 200);
-			}
-		});
+		const addBtn = this.querySelector('.card-add') as HTMLButtonElement;
+		const closeBtn = this.querySelector('.card-close') as HTMLButtonElement;
+
+		inputBox.addEventListener('input', (e: Event) => this.enableAddButton(e, addBtn));
+		addBtn.addEventListener('click', (e: Event) => this.addCardEvent(e, inputBox));
+		closeBtn.addEventListener('click', () => this.closeCardEvent(inputBox, addBtn));
 	}
 
-	resetInput(inputBox: HTMLTextAreaElement, btnGroup: NodeListOf<Element>) {
-		inputBox.value = '';
-		if (btnGroup[0].classList.contains('enable-btn')) {
-			btnGroup[0].classList.remove('enable-btn');
+	private enableAddButton(e: Event, addButton: HTMLButtonElement) {
+		if ((e.target as HTMLTextAreaElement).value === '') {
+			addButton.classList.remove('enable-btn');
+		} else {
+			addButton.classList.add('enable-btn');
 		}
 	}
-	changeCardInput() {
+
+	private addCardEvent(e: Event, inputBox: HTMLTextAreaElement) {
+		this.resolve({
+			user_id: store.getState('user_id'),
+			content: inputBox?.value,
+			topic_id: 1,
+			order_weight: 1,
+		});
+		this.reject();
+		this.resetInput(inputBox, e.target as HTMLButtonElement);
+		if (inputBox.textLength > 200) {
+			inputBox.value = inputBox.value.substring(0, 200);
+		}
+	}
+
+	private closeCardEvent(inputBox: HTMLTextAreaElement, addBtn: HTMLButtonElement) {
+		this.reject();
+		this.resetInput(inputBox, addBtn);
+	}
+
+	private resetInput(inputBox: HTMLTextAreaElement, addBtn: HTMLButtonElement) {
+		inputBox.value = '';
+		if (addBtn.classList.contains('enable-btn')) {
+			addBtn.classList.remove('enable-btn');
+		}
+	}
+
+	public changeCardInput() {
 		const cardInput = this.querySelector('.card-input') as HTMLElement;
 		if (cardInput.classList.contains('open')) {
 			cardInput.classList.remove('open');

@@ -25,7 +25,7 @@ class Sidebar extends HTMLElement {
 
 	constructor(service_id: number) {
 		super();
-		this.state = { service_id: service_id };
+		this.state = { service_id };
 		this.activities = [];
 	}
 
@@ -43,7 +43,11 @@ class Sidebar extends HTMLElement {
 		this.render();
 	}
 
-	appendListener() {
+	/** 부모(page)가 listener를 등록합니ㅣ다.
+	 * todo
+	 * 구조 개선
+	 */
+	public appendListener() {
 		const close = this.querySelector('.close-icon') as HTMLElement;
 		const toggle = document.querySelector('#toggle') as HTMLInputElement;
 		const list = this.querySelector('.activity-list') as HTMLElement;
@@ -116,7 +120,7 @@ class Sidebar extends HTMLElement {
 		);
 	}
 
-	createActivityLog(item: ActivityInterface) {
+	private createActivityLog(item: ActivityInterface) {
 		return `<div class="activity-content">
 			<li>
 				<span class="etext">@${item.uid}</span>
@@ -133,7 +137,7 @@ class Sidebar extends HTMLElement {
 		</div>`;
 	}
 
-	checkFromTopic(action: string, from_topic: string) {
+	private checkFromTopic(action: string, from_topic: string) {
 		if (action === ActivityDTO.Action.MOVE || action === ActivityDTO.Action.REMOVE) {
 			return `from <span class="topic-name">${from_topic}</span>`;
 		}
@@ -143,7 +147,7 @@ class Sidebar extends HTMLElement {
 		return '';
 	}
 
-	checkToTopic(action: string, to_topic: string) {
+	private checkToTopic(action: string, to_topic: string) {
 		if (action === ActivityDTO.Action.MOVE || action === ActivityDTO.Action.ADD) {
 			return `to <span class="topic-name">${to_topic}</span>`;
 		}

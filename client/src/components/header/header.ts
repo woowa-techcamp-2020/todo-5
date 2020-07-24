@@ -7,13 +7,10 @@ class Header extends HTMLElement {
 	}
 
 	connectedCallback() {
-		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
-		// this.listener();
 	}
 
 	disconnectedCallback() {
-		// DOM에서 제거되었다. 엘리먼트를 정리하는 일을 하자.
 		this.remove();
 	}
 
@@ -21,7 +18,7 @@ class Header extends HTMLElement {
 		this.render();
 	}
 
-	render() {
+	private render() {
 		this.innerHTML = `<header>
         <label class="service-title">${this.state.title}</label>
         <input id="toggle" type="checkbox">
@@ -30,6 +27,10 @@ class Header extends HTMLElement {
     </header>`;
 	}
 
+	/** 부모(page)가 listener를 등록합니ㅣ다.
+	 * todo
+	 * 구조 개선
+	 */
 	appendListener() {
 		const toggle = this.querySelector('#toggle') as HTMLInputElement;
 		const label = this.querySelector('.service-menu') as HTMLElement;
@@ -52,5 +53,3 @@ class Header extends HTMLElement {
 window.customElements.define('header-element', Header);
 
 export default customElements.get('header-element');
-
-export { Header };

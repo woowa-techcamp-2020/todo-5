@@ -27,13 +27,11 @@ class Card extends HTMLElement {
 	}
 
 	connectedCallback() {
-		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
 		this.listener();
 	}
 
 	disconnectedCallback() {
-		// DOM에서 제거되었다. 엘리먼트를 정리하는 일을 하자.
 		this.remove();
 	}
 
@@ -42,87 +40,7 @@ class Card extends HTMLElement {
 		this.listener();
 	}
 
-	clone(): HTMLElement {
-		const c = new (customElements.get('card-element'))();
-		c.state = this.state;
-		return c;
-	}
-
-	listener() {
-		const del = this.querySelector('.delete') as HTMLElement;
-		del.addEventListener('click', async (e) => {
-			e.stopPropagation();
-			if (confirm('선택하신 카드를 삭제하시겠습니까?')) {
-				try {
-					const rst = await CardApi.delete(this.state.card_id);
-					if (!this.state.topic_title) return;
-					const body: ActivityDTO.REMOVE = {
-						action: ActivityDTO.Action.REMOVE,
-						card_id: this.state.card_id,
-						service_id: store.getState('service_id'),
-						user_id: store.getState('user_id'),
-						from_topic: this.state.topic_title,
-						card_title: this.state.card_title,
-						uid: store.getState('uid'),
-					};
-					const activityResult = await ActivityApi.delete(body);
-					store.getState('newActivity')(activityResult.result);
-
-					const topicElements = document.querySelectorAll('topic-element');
-					[...topicElements].forEach((e: typeof Topic) => {
-						if (e.getTopicId() === this.getTopicId()) {
-							e.decCount();
-						}
-					});
-
-					this.remove();
-				} catch (err) {
-					alert(`카드 삭제에 실패하였습니다: ${err}`);
-				}
-			}
-		});
-		this.querySelector('.card')?.addEventListener('dblclick', (e) => {
-			e.stopPropagation();
-			$textAreaModal.open(
-				{
-					title: 'Edit',
-					content: this.state.card_title + '\n' + this.state.content.replace(/<br\/>/g, '\n'),
-					resolve: 'Save',
-					reject: 'Cancel',
-				},
-				(c: string) => this.editContentOfCard(c)
-			);
-		});
-	}
-
-	private async editContentOfCard(card_content: string) {
-		card_content = card_content.replace(/\n/g, '<br/>');
-		const body = {
-			card_id: this.state.card_id,
-			content: card_content,
-		};
-
-		try {
-			const result = await CardApi.update(body);
-			const activity: ActivityDTO.UPDATE = {
-				action: ActivityDTO.Action.UPDATE,
-				card_id: this.state.card_id,
-				service_id: store.getState('service_id'),
-				user_id: store.getState('user_id'),
-				card_title: this.state.card_title,
-				uid: store.getState('uid'),
-			};
-			const activityResult = await ActivityApi.update(activity);
-			const { title, content } = splitTitleContent(card_content);
-			this.state.card_title = title;
-			this.state.content = content;
-			this.render();
-			this.listener();
-			store.getState('newActivity')(activityResult.result);
-		} catch (err) {}
-	}
-
-	render() {
+	private render() {
 		this.innerHTML = `<div class="card">
 		<div class="content-wrapper">
       <div class="card-title">
@@ -135,23 +53,116 @@ class Card extends HTMLElement {
     </div>`;
 	}
 
-	getCardId(): number {
+	private listener() {
+		const del = this.querySelector('.delete') as HTMLElement;
+		const thisCard = this.querySelector('.card') as HTMLElement;
+
+		del.addEventListener('click', this.deleteCardEvent.bind(this));
+		thisCard.addEventListener('dblclick', (e) => this.openEditModal(e));
+	}
+
+	private async deleteCardEvent() {
+		if (confirm('선택하신 카드를 삭제하시겠습니까?')) {
+			try {
+				const rst = await CardApi.delete(this.state.card_id);
+				if (!this.state.topic_title) return;
+				const body: ActivityDTO.REMOVE = {
+					action: ActivityDTO.Action.REMOVE,
+					card_id: this.state.card_id,
+					service_id: store.getState('service_id'),
+					user_id: store.getState('user_id'),
+					from_topic: this.state.topic_title,
+					card_title: this.state.card_title,
+          uid: store.getState('uid'),
+				};
+
+				const topicElements = document.querySelectorAll('topic-element');
+				[...topicElements].forEach((e: typeof Topic) => {
+					if (e.getTopicId() === this.getTopicId()) {
+						e.decCount();
+						return;
+					}
+				});
+				this.remove();
+
+				await ActivityApi.delete(body);
+				store.getState('newActivity')(activityResult.result);
+			} catch (err) {
+				alert(`카드 삭제에 실패하였습니다: ${err}`);
+			}
+		}
+	}
+
+	private openEditModal(e: Event) {
+		e.stopPropagation();
+		$textAreaModal.open(
+			{
+				title: 'Edit',
+				content: this.state.card_title + '\n' + this.state.content.replace(/<br\/>/g, '\n'),
+				resolve: 'Save',
+				reject: 'Cancel',
+			},
+			(c: string) => this.editContentOfCard(c)
+		);
+	}
+
+	private async editContentOfCard(card_content: string) {
+		card_content = card_content.replace(/\n/g, '<br/>');
+		const body = {
+			card_id: this.state.card_id,
+			content: card_content,
+		};
+
+		try {
+			await CardApi.update(body);
+			const { title, content } = splitTitleContent(card_content);
+			this.state.card_title = title;
+			this.state.content = content;
+			this.reload();
+
+			const activity: ActivityDTO.UPDATE = {
+				action: ActivityDTO.Action.UPDATE,
+				card_id: this.state.card_id,
+				service_id: store.getState('service_id'),
+				user_id: store.getState('user_id'),
+				card_title: this.state.card_title,
+				uid: store.getState('uid'),
+			};
+		  const activityResult = await ActivityApi.update(activity);
+    	store.getState('newActivity')(activityResult.result);
+		} catch (err) {
+			console.error(err);
+		}
+	}
+
+	private reload() {
+		this.render();
+		this.listener();
+	}
+
+	public clone(): HTMLElement {
+		const c = new (customElements.get('card-element'))();
+		c.state = this.state;
+		return c;
+	}
+
+	public getCardId(): number {
 		return this.state.card_id;
 	}
 
-	getOrderWeight(): number {
+	public getOrderWeight(): number {
 		return this.state.order_weight;
 	}
 
-	setTopicId(topic_id: number): void {
+	public setTopicId(topic_id: number): void {
 		this.state.topic_id = topic_id;
 	}
 
-	getTopicId(): number {
+	public getTopicId(): number {
 		return this.state.topic_id;
 	}
 
-	getCardTitle(): string {
+	public getCardTitle(): string {
 		return this.state.card_title;
 	}
 }

@@ -1,9 +1,6 @@
-import HeaderElement from '../../components/header';
-import SideBarElement from '../../components/sidebar';
-import ContentElement from '../../components/content';
-import { Sidebar } from '../../components/sidebar/sidebar';
-import { Header } from '../../components/header/header';
-import { Content } from '../../components/content/content';
+import Header from '../../components/header';
+import SideBar from '../../components/sidebar';
+import Content from '../../components/content';
 import Card from '../../components/card';
 import { POSITION, ORDER_WEIGHT, calcMedium } from '../../utils';
 import { CardDTO, ActivityDTO } from '../../../../shared/dto';
@@ -24,17 +21,16 @@ interface DndCard {
 	position: number; //가까운 카드의 위쪽이면 -1, 아래쪽이면 1
 }
 class TodoList extends HTMLElement {
-	private state: {} = {};
-	private sidebar!: Sidebar;
-	private header!: Header;
-	private content!: Content;
+	private sidebar: typeof SideBar;
+	private header: typeof Header;
+	private content: typeof Content;
 	private dndCard: DndCard;
 
 	constructor() {
 		super();
-		this.sidebar = new SideBarElement(1);
-		this.header = new HeaderElement();
-		this.content = new ContentElement({ service_id: 1 });
+		this.sidebar = new SideBar(store.getState('service_id'));
+		this.header = new Header();
+		this.content = new Content(store.getState('service_id'));
 		this.dndCard = {
 			mouseDownX: 0,
 			mouseDownY: 0,
@@ -52,14 +48,8 @@ class TodoList extends HTMLElement {
 		this.render();
 		this.appendChild(this.sidebar);
 		this.appendChild(this.header);
-		await this.appendChild(this.content);
+		this.appendChild(this.content);
 		this.appendListener();
-		this.mouseEvent();
-	}
-
-	appendListener() {
-		this.header.appendListener();
-		this.sidebar.appendListener();
 	}
 
 	disconnectedCallback() {
@@ -70,7 +60,17 @@ class TodoList extends HTMLElement {
 		this.render();
 	}
 
-	mouseEvent() {
+	render() {
+		this.innerHTML = ``;
+	}
+
+	private appendListener() {
+		this.header.appendListener();
+		this.sidebar.appendListener();
+		this.mouseEvent();
+	}
+
+	private mouseEvent() {
 		document.addEventListener('mousedown', (event: MouseEvent) => this.mouseDown(event));
 		document.addEventListener('mousemove', (event: MouseEvent) => this.mouseMove(event));
 		document.addEventListener('mouseup', (event: MouseEvent) => this.mouseUp(event));
@@ -78,19 +78,19 @@ class TodoList extends HTMLElement {
 		this.initMovingCardWrapper();
 	}
 
-	initMovingCardWrapper() {
+	private initMovingCardWrapper() {
 		this.dndCard.moving.classList.add('moving');
 		this.appendChild(this.dndCard.moving);
 	}
 
-	mouseDown(event: MouseEvent) {
+	private mouseDown(event: MouseEvent) {
 		this.dndCard.mouseDownX = event.pageX;
 		this.dndCard.mouseDownY = event.pageY;
 		this.dndCard.clicked = true;
 		this.dndCard.position = POSITION.INIT;
 	}
 
-	mouseMove(event: MouseEvent) {
+	private mouseMove(event: MouseEvent) {
 		event.preventDefault();
 
 		if (!this.dndCard.clicked) return;
@@ -167,7 +167,7 @@ class TodoList extends HTMLElement {
 		}
 	}
 
-	async mouseUp(event: MouseEvent) {
+	private async mouseUp(event: MouseEvent) {
 		if (!this.dndCard.clicked) return;
 		this.dndCard.clicked = false;
 		this.dndCard.isDragging = false;
@@ -191,6 +191,8 @@ class TodoList extends HTMLElement {
 			});
 		}
 
+		this.dndCard.closeTopic.pushCard(this.dndCard.cloned);
+
 		const cardBody: CardDTO.UPDATE_POSITION = {
 			card_id: this.dndCard.cloned.getCardId(),
 			topic_id: this.dndCard.cloned.getTopicId(),
@@ -208,18 +210,13 @@ class TodoList extends HTMLElement {
 			card_title: this.dndCard.cloned.getCardTitle(),
 			uid: store.getState('uid'),
 		};
-
-		this.dndCard.closeTopic.pushCard(this.dndCard.cloned);
+    
 		const activity = await ActivityApi.create(activityBody);
 		store.getState('newActivity')(activity.result);
 	}
 
-	mouseLeave(event: MouseEvent) {
+	private mouseLeave(event: MouseEvent) {
 		this.mouseUp(event);
-	}
-
-	render() {
-		this.innerHTML = ``;
 	}
 
 	private nextOrderWeight(position: number): number {
