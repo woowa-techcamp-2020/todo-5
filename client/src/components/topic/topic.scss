@@ -50,9 +50,8 @@ topic-element {
 				line-height: 30px;
 				color: #555;
 				transition: transform 0.4s;
-				&.add.disabled {
-					pointer-events: none;
-					color: #ccc;
+				&.add.changed {
+					color: #3fa9ff;
 					transform: rotate(90deg);
 				}
 				&.close {

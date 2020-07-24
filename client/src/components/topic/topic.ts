@@ -55,8 +55,12 @@ class Topic extends HTMLElement {
 		const topicTitle = this.querySelector('.topic-title') as HTMLElement;
 		addButton.addEventListener('click', (e) => {
 			e.stopPropagation();
-			this.cardInput.openCardInput();
-			addButton.classList.add('disabled');
+			this.cardInput.changeCardInput();
+			if (addButton.classList.contains('changed')) {
+				addButton.classList.remove('changed');
+			} else {
+				addButton.classList.add('changed');
+			}
 		});
 		closeButton.addEventListener('click', async (e) => {
 			if (confirm('선택하신 토픽을 삭제하시겠습니까?')) {
@@ -189,10 +193,10 @@ class Topic extends HTMLElement {
 	}
 
 	private cancelCardInput() {
-		const addBtn = this.querySelector('.add');
-		const cardInput = this.querySelector('.card-input');
-		addBtn?.classList.remove('disabled');
-		cardInput?.classList.remove('open');
+		const addBtn = this.querySelector('.add') as HTMLElement;
+		const cardInput = this.querySelector('.card-input') as HTMLElement;
+		addBtn.classList.remove('changed');
+		cardInput.classList.remove('open');
 	}
 
 	public nextOrderWeight(): number {
