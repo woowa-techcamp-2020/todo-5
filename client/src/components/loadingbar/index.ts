@@ -1,4 +1,4 @@
 import './loadingbar.scss';
-import * as Loading from './loadingbar';
+import Loading from './loadingbar';
 
 export default Loading;

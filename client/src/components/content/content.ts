@@ -1,42 +1,29 @@
 import Topic from '../topic';
+import LoadingBar from '../loadingbar';
 import { ORDER_WEIGHT } from '../../utils';
 import { $inputTextModal } from '../modal';
 import { TopicApi, ActivityApi } from '../../api';
-import Loading from '../loadingbar';
 import store from '../../store';
 import { ActivityDTO } from '../../../../shared/dto';
 
-interface ContentInterface {
-	service_id: string;
-}
-
 class Content extends HTMLElement {
-	private state: ContentInterface;
+	private state: { service_id: number };
 	private topics!: Array<typeof Topic>;
 	private topicsMap: Map<number, string>;
-	private loadingBar!: Loading.LoadingBar;
+	private loadingBar: typeof LoadingBar;
 
-	constructor(data: ContentInterface) {
+	constructor(service_id: number) {
 		super();
-		this.state = data;
+		this.state = { service_id };
 		this.topics = [];
 		this.topicsMap = new Map();
-		this.loadingBar = new Loading.modal();
+		this.loadingBar = new LoadingBar();
 	}
 
 	async connectedCallback() {
 		this.render();
-		this.querySelector('.content-container')?.appendChild(this.loadingBar);
-		this.loadingBar.open();
-		await this.getTopics();
-		const contentTag = this.querySelector('.content') as HTMLElement;
-		this.topics.forEach((topic: typeof Topic) => {
-			contentTag.appendChild(topic);
-			this.topicsMap.set(topic.getTopicId(), topic.getTopicTitle());
-		});
-		setTimeout(() => {
-			this.loadingBar.close();
-		}, 1000);
+		this.listener();
+		this.init();
 	}
 
 	disconnectedCallback() {
@@ -45,9 +32,10 @@ class Content extends HTMLElement {
 
 	attributeChangedCallback(attrName: any, oldVal: any, newVal: any) {
 		this.render();
+		this.listener();
 	}
 
-	render() {
+	private render() {
 		this.innerHTML = `
 		<div class="content-container">
 			<div class="content"></div>
@@ -57,22 +45,42 @@ class Content extends HTMLElement {
 				</div>
 			</div>
 		</div>`;
-		this.listener();
 	}
 
-	listener() {
+	private listener() {
 		const newTopicButton = this.querySelector('.new-topic-button') as HTMLElement;
-		newTopicButton.addEventListener('click', (e) => {
-			$inputTextModal.open(
-				{
-					title: 'Add Column',
-					content: '',
-					resolve: 'Add',
-					reject: 'Cancel',
-				},
-				async (c: string) => this.addNewTopic(c)
-			);
+		newTopicButton.addEventListener('click', (e) => this.openColumnAddModal(e));
+	}
+
+	private async init() {
+		const contentContainer = this.querySelector('.content-container') as HTMLElement;
+
+		contentContainer.appendChild(this.loadingBar);
+		this.loadingBar.open();
+
+		await this.getTopics();
+
+		const contentTag = this.querySelector('.content') as HTMLElement;
+		this.topics.forEach((topic: typeof Topic) => {
+			contentTag.appendChild(topic);
+			this.topicsMap.set(topic.getTopicId(), topic.getTopicTitle());
 		});
+
+		setTimeout(() => {
+			this.loadingBar.close();
+		}, 1000);
+	}
+
+	private openColumnAddModal(e: Event) {
+		$inputTextModal.open(
+			{
+				title: 'Add Column',
+				content: '',
+				resolve: 'Add',
+				reject: 'Cancel',
+			},
+			(c: string) => this.addNewTopic(c)
+		);
 	}
 
 	private async addNewTopic(topic_title: string) {
@@ -82,7 +90,7 @@ class Content extends HTMLElement {
 			? lastItem.getOrderWeight() + ORDER_WEIGHT
 			: ORDER_WEIGHT;
 		const body = {
-			service_id: parseInt(this.state.service_id),
+			service_id: this.state.service_id,
 			topic_title: topic_title,
 			order_weight: nextOrderWeight,
 			user_id: store.getState('user_id'),
@@ -96,13 +104,16 @@ class Content extends HTMLElement {
 				user_id: store.getState('user_id'),
 				to_topic: body.topic_title,
 			};
-			const activityResult = await ActivityApi.topicAdd(activity);
-			store.getState('newActivity')();
+
 			const newTopic = new Topic(res.result);
 			contentTag.appendChild(newTopic);
 			this.topics.push(newTopic);
 			this.topicsMap.set(newTopic.getTopicId(), newTopic.getTopicTitle());
+
+			await ActivityApi.topicAdd(activity);
+			store.getState('newActivity')();
 		} catch (e) {
+			console.error(e);
 			alert('추가에 실패하였습니다.');
 		}
 	}
@@ -128,5 +139,3 @@ class Content extends HTMLElement {
 window.customElements.define('content-element', Content);
 
 export default customElements.get('content-element');
-
-export { ContentInterface, Content };
