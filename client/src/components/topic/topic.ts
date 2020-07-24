@@ -103,9 +103,10 @@ class Topic extends HTMLElement {
 					service_id: store.getState('service_id'),
 					user_id: store.getState('user_id'),
 					from_topic: this.state.topic_title,
+					uid: store.getState('uid'),
 				};
-				await ActivityApi.topicDelete(activity);
-				store.getState('newActivity')();
+				  const activityResult = await ActivityApi.topicDelete(activity);
+				  store.getState('newActivity')(activityResult.result);
 			} catch (err) {
 				throw err;
 			}
@@ -140,10 +141,14 @@ class Topic extends HTMLElement {
 				service_id: store.getState('service_id'),
 				user_id: store.getState('user_id'),
 				to_topic: this.state.topic_title,
+				uid: store.getState('uid'),
 			};
-			await ActivityApi.topicUpdate(activity);
-			store.getState('newActivity')();
-		} catch (err) {}
+
+			const activityResult = await ActivityApi.topicUpdate(activity);
+			store.getState('newActivity')(activityResult.result);
+		} catch (err) {
+      console.error(err);
+    }
 	}
 
 	private async getCards(): Promise<void> {
@@ -188,11 +193,12 @@ class Topic extends HTMLElement {
 				user_id: store.getState('user_id'),
 				to_topic: this.state.topic_title,
 				card_title: title,
+				uid: store.getState('uid'),
 			};
-			await ActivityApi.add(body);
-			store.getState('newActivity')();
+
+			const activityResult = await ActivityApi.add(body);
+			store.getState('newActivity')(activityResult.result);
 		} catch (err) {
-			alert('카드 생성에 실패하였습니다.');
 			console.error(err);
 		}
 	}

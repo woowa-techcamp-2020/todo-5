@@ -103,6 +103,7 @@ class Content extends HTMLElement {
 				service_id: store.getState('service_id'),
 				user_id: store.getState('user_id'),
 				to_topic: body.topic_title,
+				uid: store.getState('uid'),
 			};
 
 			const newTopic = new Topic(res.result);
@@ -110,8 +111,8 @@ class Content extends HTMLElement {
 			this.topics.push(newTopic);
 			this.topicsMap.set(newTopic.getTopicId(), newTopic.getTopicTitle());
 
-			await ActivityApi.topicAdd(activity);
-			store.getState('newActivity')();
+      const activityResult = await ActivityApi.topicAdd(activity);
+			store.getState('newActivity')(activityResult.result);
 		} catch (e) {
 			console.error(e);
 			alert('추가에 실패하였습니다.');

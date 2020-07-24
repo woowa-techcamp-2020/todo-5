@@ -12,6 +12,7 @@ class App {
 
 	constructor(container: HTMLElement) {
 		this.container = container;
+		store.init(this.container);
 
 		if (page === 'todoList') {
 			store.setState('user_id', 1);

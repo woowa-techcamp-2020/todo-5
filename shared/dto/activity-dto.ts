@@ -5,6 +5,7 @@ interface RESPONSE_TOPIC_ADD {
 	action: Action;
 	service_id: number;
 	to_topic: string;
+	uid: string;
 }
 
 interface RESPONSE_TOPIC_MOVE {
@@ -14,6 +15,7 @@ interface RESPONSE_TOPIC_MOVE {
 	action: Action;
 	service_id: number;
 	from_topic: string;
+	uid: string;
 }
 
 interface RESPONSE_TOPIC_REMOVE {
@@ -23,6 +25,7 @@ interface RESPONSE_TOPIC_REMOVE {
 	action: Action;
 	service_id: number;
 	from_topic: string;
+	uid: string;
 }
 
 interface RESPONSE_TOPIC_UPDATE {
@@ -32,6 +35,7 @@ interface RESPONSE_TOPIC_UPDATE {
 	action: Action;
 	service_id: number;
 	to_topic: string;
+	uid: string;
 }
 
 interface RESPONSE_ADD extends RESPONSE_TOPIC_ADD {
@@ -58,6 +62,7 @@ interface RESPONSE_UPDATE {
 	service_id: number;
 	card_id: number;
 	card_title: string;
+	uid: string;
 }
 
 enum Action {
@@ -76,6 +81,7 @@ interface TOPICADD {
 	service_id: number;
 	user_id: number;
 	to_topic: string;
+	uid: string;
 }
 
 interface TOPICREMOVE {
@@ -83,6 +89,7 @@ interface TOPICREMOVE {
 	service_id: number;
 	user_id: number;
 	from_topic: string;
+	uid: string;
 }
 
 interface TOPICUPDATE {
@@ -90,6 +97,7 @@ interface TOPICUPDATE {
 	service_id: number;
 	user_id: number;
 	to_topic: string;
+	uid: string;
 }
 
 interface TOPICMOVE {
@@ -97,6 +105,7 @@ interface TOPICMOVE {
 	service_id: number;
 	user_id: number;
 	from_topic: string;
+	uid: string;
 }
 
 interface ADD {
@@ -106,6 +115,7 @@ interface ADD {
 	user_id: number;
 	to_topic: string;
 	card_title: string;
+	uid: string;
 }
 
 interface REMOVE {
@@ -115,6 +125,7 @@ interface REMOVE {
 	user_id: number;
 	from_topic: string;
 	card_title: string;
+	uid: string;
 }
 
 interface UPDATE {
@@ -123,6 +134,7 @@ interface UPDATE {
 	service_id: number;
 	user_id: number;
 	card_title: string;
+	uid: string;
 }
 
 interface MOVE {
@@ -133,6 +145,7 @@ interface MOVE {
 	to_topic: string;
 	from_topic: string;
 	card_title: string;
+	uid: string;
 }
 
 interface ACTIVE {

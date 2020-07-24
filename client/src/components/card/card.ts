@@ -73,6 +73,7 @@ class Card extends HTMLElement {
 					user_id: store.getState('user_id'),
 					from_topic: this.state.topic_title,
 					card_title: this.state.card_title,
+          uid: store.getState('uid'),
 				};
 
 				const topicElements = document.querySelectorAll('topic-element');
@@ -85,7 +86,7 @@ class Card extends HTMLElement {
 				this.remove();
 
 				await ActivityApi.delete(body);
-				store.getState('newActivity')();
+				store.getState('newActivity')(activityResult.result);
 			} catch (err) {
 				alert(`카드 삭제에 실패하였습니다: ${err}`);
 			}
@@ -125,8 +126,10 @@ class Card extends HTMLElement {
 				service_id: store.getState('service_id'),
 				user_id: store.getState('user_id'),
 				card_title: this.state.card_title,
+				uid: store.getState('uid'),
 			};
-			await ActivityApi.update(activity);
+		  const activityResult = await ActivityApi.update(activity);
+    	store.getState('newActivity')(activityResult.result);
 		} catch (err) {
 			console.error(err);
 		}
@@ -135,7 +138,6 @@ class Card extends HTMLElement {
 	private reload() {
 		this.render();
 		this.listener();
-		store.getState('newActivity')();
 	}
 
 	public clone(): HTMLElement {
