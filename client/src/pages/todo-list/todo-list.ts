@@ -5,7 +5,7 @@ import { Sidebar } from '../../components/sidebar/sidebar';
 import { Header } from '../../components/header/header';
 import { Content } from '../../components/content/content';
 import Card from '../../components/card';
-import { url, Options, POSITION, ORDER_WEIGHT, calcMedium, splitTitleContent } from '../../utils';
+import { POSITION, ORDER_WEIGHT, calcMedium } from '../../utils';
 import { CardDTO, ActivityDTO } from '../../../../shared/dto';
 import Topic from '../../components/topic';
 import { ActivityApi, CardApi } from '../../api';
@@ -115,13 +115,13 @@ class TodoList extends HTMLElement {
 			const cte = document
 				.elementFromPoint(event.pageX, event.pageY)
 				?.closest('topic-element') as typeof Topic;
-			if (!cte) return;
-			this.dndCard.closeTopic = cte;
-			const topicContent = this.dndCard.closeTopic.querySelector('.topic-content') as HTMLElement;
 			const cce = document
 				.elementFromPoint(event.pageX, event.pageY)
 				?.closest('card-element') as typeof Card;
 			this.dndCard.moving.hidden = false;
+
+			if (cte) this.dndCard.closeTopic = cte;
+			const topicContent = this.dndCard.closeTopic.querySelector('.topic-content') as HTMLElement;
 			this.dndCard.closeCard = cce;
 
 			if (!this.dndCard.closeTopic || this.dndCard.closeCard?.classList.contains('cloned')) return;
