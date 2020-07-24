@@ -82,13 +82,13 @@ class Topic extends HTMLElement {
 	}
 
 	private openInputAndDisabled(e: Event): void {
-    const addButton = (e.target as HTMLElement);
+		const addButton = e.target as HTMLElement;
 		this.cardInput.changeCardInput();
-    if (addButton.classList.contains('changed')) {
-				addButton.classList.remove('changed');
-			} else {
-				addButton.classList.add('changed');
-			}
+		if (addButton.classList.contains('changed')) {
+			addButton.classList.remove('changed');
+		} else {
+			addButton.classList.add('changed');
+		}
 	}
 
 	private async openCloseModal(): Promise<void> {
@@ -173,11 +173,11 @@ class Topic extends HTMLElement {
 			result.result.topic_title = this.state.topic_title;
 			result.result.uid = store.getState('uid');
 			this.cards.unshift(new Card(result.result));
-			const topicContent = this.querySelector('.topic-content');
+			const topicContent = this.querySelector('.topic-content') as HTMLElement;
 			if (this.state.count === 0) {
-				topicContent?.appendChild(this.cards[0]);
+				topicContent.appendChild(this.cards[0]);
 			} else {
-				topicContent?.insertBefore(this.cards[0], this.cards[1]);
+				topicContent.insertBefore(this.cards[0], topicContent.firstElementChild);
 			}
 			this.incCount();
 
