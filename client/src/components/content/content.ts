@@ -65,7 +65,7 @@ class Content extends HTMLElement {
 		newTopicButton.addEventListener('click', (e) => {
 			$inputTextModal.open(
 				{
-					title: 'Edit',
+					title: 'Add Column',
 					content: '',
 					resolve: 'Add',
 					reject: 'Cancel',
@@ -94,11 +94,10 @@ class Content extends HTMLElement {
 				action: ActivityDTO.Action.TOPICADD,
 				service_id: store.getState('service_id'),
 				user_id: store.getState('user_id'),
-				uid: store.getState('uid'),
 				to_topic: body.topic_title,
 			};
 			const activityResult = await ActivityApi.topicAdd(activity);
-			console.log('success');
+			store.getState('newActivity')();
 			const newTopic = new Topic(res.result);
 			contentTag.appendChild(newTopic);
 			this.topics.push(newTopic);

@@ -63,6 +63,13 @@ class Topic extends HTMLElement {
 				try {
 					await TopicApi.delete(this.state.topic_id);
 					await CardApi.deleteAll(this.state.topic_id);
+					const activity: ActivityDTO.TOPICREMOVE = {
+						action: ActivityDTO.Action.TOPICREMOVE,
+						service_id: store.getState('service_id'),
+						user_id: store.getState('user_id'),
+						from_topic: this.state.topic_title,
+					};
+					const activityResult = await ActivityApi.topicDelete(activity);
 					store.getState('newActivity')();
 					this.remove();
 				} catch (err) {
@@ -93,6 +100,14 @@ class Topic extends HTMLElement {
 		try {
 			const result = await TopicApi.update(body);
 			this.state.topic_title = title;
+			const activity: ActivityDTO.TOPICUPDATE = {
+				action: ActivityDTO.Action.TOPICUPDATE,
+				service_id: store.getState('service_id'),
+				user_id: store.getState('user_id'),
+				to_topic: this.state.topic_title,
+			};
+			const activityResult = await ActivityApi.topicUpdate(activity);
+			store.getState('newActivity')();
 			this.render();
 			this.init();
 			this.listeners();
@@ -146,6 +161,7 @@ class Topic extends HTMLElement {
 			result.result.content = content;
 			result.result.card_title = title;
 			result.result.topic_title = this.state.topic_title;
+			result.result.uid = store.getState('uid');
 			this.cards.unshift(new Card(result.result));
 			const topicContent = this.querySelector('.topic-content');
 			if (this.state.count === 0) {
@@ -159,11 +175,10 @@ class Topic extends HTMLElement {
 			const body: ActivityDTO.ADD = {
 				action: ActivityDTO.Action.ADD,
 				card_id: result.result.card_id,
-				card_title: title,
 				service_id: store.getState('service_id'),
-				uid: store.getState('uid'),
 				user_id: store.getState('user_id'),
 				to_topic: this.state.topic_title,
+				card_title: title,
 			};
 			const activityResult = await ActivityApi.add(body);
 			store.getState('newActivity')();

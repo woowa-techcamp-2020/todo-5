@@ -17,7 +17,7 @@ class Card {
 		}
 	}
 
-	static async getCardsBytopicId(topicId: string) {
+	static async getCardsByTopicId(topicId: string) {
 		let cardData;
 		try {
 			cardData = await mysql.connect((con: any) =>

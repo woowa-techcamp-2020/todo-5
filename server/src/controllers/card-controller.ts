@@ -24,7 +24,7 @@ class CardController {
 		let response;
 		const topicId = req.params.topic_id;
 		try {
-			response = await Card.getCardsBytopicId(topicId);
+			response = await Card.getCardsByTopicId(topicId);
 			if (response.result === null) {
 				new Error('no card exists');
 			}

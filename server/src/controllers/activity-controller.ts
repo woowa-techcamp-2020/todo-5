@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import logger from '../config/logger';
 import { Activity } from '../models';
 import httpStatus from 'http-status';
 import { JsonResponse } from '../modules/Utils';
@@ -15,7 +14,6 @@ class ActivityController {
 				.status(httpStatus.CREATED)
 				.json(JsonResponse(httpStatus.CREATED, 'activity created well', response));
 		} catch (err) {
-			logger.error('activity create fail', err);
 			next(err);
 		}
 	}
@@ -30,7 +28,6 @@ class ActivityController {
 			}
 			res.status(httpStatus.OK).json(JsonResponse(httpStatus.OK, 'activities get well', response));
 		} catch (err) {
-			logger.error('activities get fail', err);
 			next(err);
 		}
 	}

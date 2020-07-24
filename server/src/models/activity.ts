@@ -6,38 +6,12 @@ class Activity {
 	static async create(activity: ActivityDTO.ActionType) {
 		try {
 			const create_date = Math.floor(Date.now() / 1000);
-			const activityData = await mysql.connect((con: any) => {
-				switch (activity.action) {
-					case ActivityDTO.Action.ADD:
-						return con.query(`INSERT INTO activity (action, card_id, service_id, user_id, to_topic, create_date) 
-            VALUES('${activity.action}', '${activity.card_id}', '${activity.service_id}', '${activity.user_id}', '${activity.to_topic}', '${create_date}')`);
-					case ActivityDTO.Action.REMOVE:
-						return con.query(`INSERT INTO activity (action, card_id, service_id, user_id, from_topic, create_date) 
-            VALUES('${activity.action}', '${activity.card_id}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${create_date}')`);
-					case ActivityDTO.Action.UPDATE:
-						return con.query(`INSERT INTO activity (action, card_id, service_id, user_id, create_date) 
-            VALUES('${activity.action}', '${activity.card_id}', '${activity.service_id}', '${activity.user_id}', '${create_date}')`);
-					case ActivityDTO.Action.MOVE:
-						return con.query(`INSERT INTO activity (action, card_id, service_id, user_id, from_topic, to_topic, create_date) 
-            VALUES('${activity.action}', '${activity.card_id}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${activity.to_topic}', '${create_date}')`);
-					//
-					case ActivityDTO.Action.TOPICADD:
-						return con.query(`INSERT INTO activity (action, service_id, user_id, to_topic, create_date)
-					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.to_topic}', '${create_date}')`);
+			const data: any = { ...activity, create_date };
+			delete data.card_title;
 
-					case ActivityDTO.Action.TOPICREMOVE:
-						return con.query(`INSERT INTO activity (action, service_id, user_id, from_topic, create_date)
-					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${create_date}')`);
-
-					case ActivityDTO.Action.TOPICUPDATE:
-						return con.query(`INSERT INTO activity (action, service_id, user_id, to_topic, create_date)
-					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.to_topic}', ${create_date}')`);
-
-					case ActivityDTO.Action.TOPICMOVE:
-						return con.query(`INSERT INTO activity (action, service_id, user_id, from_topic, create_date)
-					  VALUES('${activity.action}', '${activity.service_id}', '${activity.user_id}', '${activity.from_topic}', '${create_date}')`);
-				}
-			});
+			const activityData = await mysql.connect((con: any) =>
+				con.query(`INSERT INTO activity SET ?`, data)
+			);
 			const activity_id = activityData[0].insertId;
 			switch (activity.action) {
 				case ActivityDTO.Action.ADD:
@@ -71,7 +45,6 @@ class Activity {
 						activity_id,
 						create_date,
 					};
-					console.log('qwer', response_topic_add);
 					return response_topic_add;
 				case ActivityDTO.Action.TOPICMOVE:
 					const response_topic_move: ActivityDTO.RESPONSE_TOPIC_MOVE = {
@@ -105,10 +78,10 @@ class Activity {
 		try {
 			activityData = await mysql.connect(async (con: any) => {
 				const rs1 = await con.query(
-					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.card_id, c.content, a.service_id from_topic, to_topic from activity a inner join user u on a.user_id = u.user_id inner join card c on a.card_id = c.card_id where a.service_id = ${serviceId} order by a.create_date DESC;`
+					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.card_id, c.content, a.service_id, from_topic, to_topic from activity a inner join user u on a.user_id = u.user_id inner join card c on a.card_id = c.card_id where a.service_id = ${serviceId} order by a.create_date DESC;`
 				);
 				const rs2 = await con.query(
-					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.service_id from_topic, to_topic from activity a inner join user u on a.user_id = u.user_id where a.service_id = ${serviceId} and a.card_id is null order by a.create_date DESC`
+					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.service_id, from_topic, to_topic from activity a inner join user u on a.user_id = u.user_id where a.service_id = ${serviceId} and a.card_id is null order by a.create_date DESC`
 				);
 				const data = [...rs1[0], ...rs2[0]].sort((a, b) => b.create_date - a.create_date);
 				return data;

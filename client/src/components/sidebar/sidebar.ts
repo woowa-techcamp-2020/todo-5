@@ -1,4 +1,5 @@
 import { ActivityApi } from '../../api';
+import { ActivityDTO } from '../../../../shared/dto';
 import store from '../../store';
 
 interface ActivityInterface {
@@ -79,8 +80,7 @@ class Sidebar extends HTMLElement {
 			const data = await ActivityApi.getActivitiesByServiceId(store.getState('service_id'));
 			this.activities = data.result;
 		} catch (err) {
-			// alert(`데이터를 로드할 수 없습니다.`);
-			console.log(err);
+			console.error(err);
 		}
 	}
 

@@ -15,6 +15,7 @@ export interface CardInterface {
 	user_id: number;
 	topic_id: number;
 	topic_title: string;
+	uid: string;
 }
 
 class Card extends HTMLElement {
@@ -58,11 +59,10 @@ class Card extends HTMLElement {
 					const body: ActivityDTO.REMOVE = {
 						action: ActivityDTO.Action.REMOVE,
 						card_id: this.state.card_id,
-						card_title: this.state.card_title,
 						service_id: store.getState('service_id'),
-						uid: store.getState('uid'),
 						user_id: store.getState('user_id'),
 						from_topic: this.state.topic_title,
+						card_title: this.state.card_title,
 					};
 					await ActivityApi.delete(body);
 					store.getState('newActivity')();
@@ -106,10 +106,9 @@ class Card extends HTMLElement {
 			const activity: ActivityDTO.UPDATE = {
 				action: ActivityDTO.Action.UPDATE,
 				card_id: this.state.card_id,
-				card_title: this.state.card_title,
 				service_id: store.getState('service_id'),
-				uid: store.getState('uid'),
 				user_id: store.getState('user_id'),
+				card_title: this.state.card_title,
 			};
 			const activityResult = await ActivityApi.update(activity);
 			const { title, content } = splitTitleContent(card_content);
@@ -129,7 +128,7 @@ class Card extends HTMLElement {
         <i class="material-icons icon delete">close</i>
       </div>
 			<div class="card-content">${this.state.content}</div>
-			<div class="card-user">by <span>${this.state.order_weight}</span></div>
+			<div class="card-user">by <span>${this.state.uid}</span></div>
 		</div>
     </div>`;
 	}
