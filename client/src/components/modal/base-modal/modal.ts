@@ -59,12 +59,7 @@ class Modal extends HTMLElement {
 
 		reject.addEventListener('click', (e: MouseEvent) => this.checkReject(e));
 		resolve.addEventListener('click', async (e: MouseEvent) => this.checkResolve(e, resolve));
-
-		/**
-		 * todo
-		 * childElement undefined 이슈 해결해야 합니다.
-		 */
-		//textarea.addEventListener('keyup', this.checkInputContent);
+		textarea.addEventListener('keyup', this.checkInputContent.bind(this));
 	}
 
 	private close() {
