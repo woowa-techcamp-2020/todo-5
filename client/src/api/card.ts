@@ -1,4 +1,4 @@
-import { url, Options } from '../utils';
+import { url, Options } from './utils';
 import { CardDTO } from '../../../shared/dto';
 
 class CardApi {
