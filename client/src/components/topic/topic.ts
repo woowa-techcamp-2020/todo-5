@@ -43,7 +43,7 @@ class Topic extends HTMLElement {
 	}
 
 	private init() {
-		const topicTag = this.querySelector('.topic') as HTMLElement;
+		const topicTag = this.querySelector('.topic-wrapper') as HTMLElement;
 		const topicContent = topicTag.querySelector('.topic-content') as HTMLElement;
 		topicTag.insertBefore(this.cardInput, topicContent);
 		this.cards.forEach((card) => topicContent.appendChild(card));
@@ -114,7 +114,9 @@ class Topic extends HTMLElement {
           <i class="material-icons close">close</i>
         </div>
 	  </div>	  
-	  <div class="topic-content">
+		<div class="topic-wrapper">
+			<div class="topic-content">
+		</div>
 	  </div>
 	</div>`;
 	}

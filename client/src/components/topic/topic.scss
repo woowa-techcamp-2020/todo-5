@@ -65,7 +65,8 @@ topic-element {
 			}
 		}
 	}
-	.topic-content {
+
+	.topic-wrapper {
 		margin-right: -4px;
 		height: calc(100% - 70px);
 		border-right: 1.5px solid #eee;
@@ -73,6 +74,14 @@ topic-element {
 		overflow-y: scroll;
 		scroll-padding: 0px 0px 0px 0px;
 	}
+	// .topic-content {
+	// 	margin-right: -4px;
+	// 	height: calc(100% - 70px);
+	// 	border-right: 1.5px solid #eee;
+	// 	padding: 0 16px;
+	// 	overflow-y: scroll;
+	// 	scroll-padding: 0px 0px 0px 0px;
+	// }
 }
 
 .topic-title {
