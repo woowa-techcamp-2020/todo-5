@@ -82,8 +82,13 @@ class Topic extends HTMLElement {
 	}
 
 	private openInputAndDisabled(e: Event): void {
-		this.cardInput.openCardInput();
-		(e.target as HTMLElement).classList.add('disabled');
+    const addButton = (e.target as HTMLElement);
+		this.cardInput.changeCardInput();
+    if (addButton.classList.contains('changed')) {
+				addButton.classList.remove('changed');
+			} else {
+				addButton.classList.add('changed');
+			}
 	}
 
 	private async openCloseModal(): Promise<void> {
@@ -192,11 +197,11 @@ class Topic extends HTMLElement {
 		}
 	}
 
-	private cancelCardInput(): void {
-		const addBtn = this.querySelector('.add');
-		const cardInput = this.querySelector('.card-input');
-		addBtn?.classList.remove('disabled');
-		cardInput?.classList.remove('open');
+	private cancelCardInput() {
+		const addBtn = this.querySelector('.add') as HTMLElement;
+		const cardInput = this.querySelector('.card-input') as HTMLElement;
+		addBtn.classList.remove('changed');
+		cardInput.classList.remove('open');
 	}
 
 	private drawCount(): void {

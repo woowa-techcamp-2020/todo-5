@@ -78,9 +78,13 @@ class CardInput extends HTMLElement {
 		}
 	}
 
-	public openCardInput() {
-		const cardInput = this.querySelector('.card-input');
-		cardInput?.classList.add('open');
+	public changeCardInput() {
+		const cardInput = this.querySelector('.card-input') as HTMLElement;
+		if (cardInput.classList.contains('open')) {
+			cardInput.classList.remove('open');
+		} else {
+			cardInput.classList.add('open');
+		}
 	}
 }
 
