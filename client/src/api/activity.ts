@@ -1,6 +1,8 @@
 import { url, Options } from './utils';
 import { ActivityDTO } from '../../../shared/dto';
 
+const limit = 20;
+
 class ActivityApi {
 	static async create(body: ActivityDTO.ACTIVE): Promise<any> {
 		try {
@@ -51,6 +53,33 @@ class ActivityApi {
 	static async getActivitiesByServiceId(serviceId: string) {
 		try {
 			const result = await fetch(`${url}/api/activity/${serviceId}`, Options.GET());
+			const json = await result.json();
+			return json;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async getActivitiesByPagination(
+		serviceId: string,
+		max: number,
+		page: number
+	): Promise<any> {
+		try {
+			const result = await fetch(
+				`${url}/api/activity/${serviceId}/${max - (page + 1) * limit}/${max - page * limit}`,
+				Options.GET()
+			);
+			const json = await result.json();
+			return json;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async getMaxpageNumber(serviceId: string) {
+		try {
+			const result = await fetch(`${url}/api/activity/page/${serviceId}`, Options.GET());
 			const json = await result.json();
 			return json;
 		} catch (error) {

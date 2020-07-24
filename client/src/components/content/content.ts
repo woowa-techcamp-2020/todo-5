@@ -95,9 +95,10 @@ class Content extends HTMLElement {
 				service_id: store.getState('service_id'),
 				user_id: store.getState('user_id'),
 				to_topic: body.topic_title,
+				uid: store.getState('uid'),
 			};
 			const activityResult = await ActivityApi.topicAdd(activity);
-			store.getState('newActivity')();
+			store.getState('newActivity')(activityResult.result);
 			const newTopic = new Topic(res.result);
 			contentTag.appendChild(newTopic);
 			this.topics.push(newTopic);

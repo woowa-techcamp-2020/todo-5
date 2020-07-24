@@ -11,7 +11,7 @@
 	section {
 		height: 100%;
 		.menu-title {
-			padding: 0 10px 0 20px;
+			padding: 0 18px 0 20px;
 			display: flex;
 			color: white;
 			height: 65px;
@@ -31,6 +31,7 @@
 				font-size: 16px;
 			}
 			.close-icon {
+				margin-right: 16px;
 				transition: transform 0.2s;
 				&:hover {
 					transform: rotate(90deg);
@@ -54,13 +55,14 @@
 			display: block;
 		}
 		.activity-list {
+			scroll-behavior: smooth;
 			height: calc(100% - 65px);
 			overflow: auto;
 			background: #272d32;
 		}
 
 		.activity-content {
-			padding: 16px 10px;
+			padding: 16px 12px;
 			border-bottom: 1px solid #ddd;
 			word-wrap: break-word;
 			font-size: 16px;
@@ -68,6 +70,7 @@
 	}
 	ul {
 		list-style: none;
+		padding: 0 4px;
 	}
 	label {
 		display: flex;
@@ -76,6 +79,7 @@
 	li {
 		color: #ccc;
 		padding-left: 10px;
+		font-size: 15px;
 		.topic-name {
 			color: #ddd;
 			font-weight: 600;

@@ -63,9 +63,10 @@ class Card extends HTMLElement {
 						user_id: store.getState('user_id'),
 						from_topic: this.state.topic_title,
 						card_title: this.state.card_title,
+						uid: store.getState('uid'),
 					};
-					await ActivityApi.delete(body);
-					store.getState('newActivity')();
+					const activityResult = await ActivityApi.delete(body);
+					store.getState('newActivity')(activityResult.result);
 
 					const topicElements = document.querySelectorAll('topic-element');
 					[...topicElements].forEach((e: typeof Topic) => {
@@ -109,6 +110,7 @@ class Card extends HTMLElement {
 				service_id: store.getState('service_id'),
 				user_id: store.getState('user_id'),
 				card_title: this.state.card_title,
+				uid: store.getState('uid'),
 			};
 			const activityResult = await ActivityApi.update(activity);
 			const { title, content } = splitTitleContent(card_content);
@@ -116,7 +118,7 @@ class Card extends HTMLElement {
 			this.state.content = content;
 			this.render();
 			this.listener();
-			store.getState('newActivity')();
+			store.getState('newActivity')(activityResult.result);
 		} catch (err) {}
 	}
 

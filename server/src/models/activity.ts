@@ -78,15 +78,49 @@ class Activity {
 		try {
 			activityData = await mysql.connect(async (con: any) => {
 				const rs1 = await con.query(
-					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.card_id, c.content, a.service_id, from_topic, to_topic from activity a inner join user u on a.user_id = u.user_id inner join card c on a.card_id = c.card_id where a.service_id = ${serviceId} order by a.create_date DESC;`
+					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.card_id, c.content, a.service_id, from_topic, to_topic, u.uid from activity a inner join user u on a.user_id = u.user_id inner join card c on a.card_id = c.card_id where a.service_id = ${serviceId} order by a.create_date DESC;`
 				);
 				const rs2 = await con.query(
-					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.service_id, from_topic, to_topic from activity a inner join user u on a.user_id = u.user_id where a.service_id = ${serviceId} and a.card_id is null order by a.create_date DESC`
+					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.service_id, from_topic, to_topic, u.uid from activity a inner join user u on a.user_id = u.user_id where a.service_id = ${serviceId} and a.card_id is null order by a.create_date DESC`
 				);
 				const data = [...rs1[0], ...rs2[0]].sort((a, b) => b.create_date - a.create_date);
 				return data;
 			});
 			return activityData;
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	static async getActivitiesByPagination(serviceId: string, min: number, max: number) {
+		let activityData;
+		try {
+			activityData = await mysql.connect(async (con: any) => {
+				const rs1 = await con.query(
+					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.card_id, c.content, a.service_id, from_topic, to_topic, u.uid from activity a inner join user u on a.user_id = u.user_id inner join card c on a.card_id = c.card_id where a.service_id = ${serviceId} and activity_id > ${min} and activity_id <= ${max} order by a.create_date DESC;`
+				);
+				const rs2 = await con.query(
+					`SELECT activity_id, a.user_id, u.uid, a.create_date, action, a.service_id, from_topic, to_topic, u.uid from activity a inner join user u on a.user_id = u.user_id where a.service_id = ${serviceId} and a.card_id is null and activity_id > ${min} and activity_id <= ${max} order by a.create_date DESC`
+				);
+				const data = [...rs1[0], ...rs2[0]].sort((a, b) => b.create_date - a.create_date);
+				return data;
+			});
+			return activityData;
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	static async getMaximumNumber(serviceId: string) {
+		let pageData;
+		try {
+			pageData = await mysql.connect(
+				async (con: any) =>
+					await con.query(
+						`SELECT activity_id from activity where service_id=${serviceId} and activity_id=(SELECT MAX(activity_id) FROM activity);`
+					)
+			);
+			return pageData[0];
 		} catch (err) {
 			throw err;
 		}

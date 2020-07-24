@@ -13,13 +13,15 @@ interface ActivityInterface {
 	from_topic: string;
 	to_topic: string;
 	create_date: number;
+	card_title?: string;
 }
-
-const action = ['add', 'remove', 'update', 'move'];
 
 class Sidebar extends HTMLElement {
 	private state: { service_id: number };
-	private activities: Array<ActivityInterface>;
+	private activities: Array<ActivityInterface> = [];
+	private page = 0;
+	private max = 0;
+	private getLoading = false;
 
 	constructor(service_id: number) {
 		super();
@@ -28,14 +30,12 @@ class Sidebar extends HTMLElement {
 	}
 
 	async connectedCallback() {
-		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
 		await this.getActivities();
 		this.drawActivities();
 	}
 
 	disconnectedCallback() {
-		// DOM에서 제거되었다. 엘리먼트를 정리하는 일을 하자.
 		this.remove();
 	}
 
@@ -46,15 +46,27 @@ class Sidebar extends HTMLElement {
 	appendListener() {
 		const close = this.querySelector('.close-icon') as HTMLElement;
 		const toggle = document.querySelector('#toggle') as HTMLInputElement;
+		const list = this.querySelector('.activity-list') as HTMLElement;
 
 		close.addEventListener('click', (event) => {
 			event.stopPropagation();
 			toggle.checked = false;
 			toggle.dispatchEvent(new Event('change'));
 		});
-		store.setState('newActivity', async () => {
-			await this.getActivities();
+		store.setState('newActivity', async (activity: ActivityInterface) => {
+			this.activities.unshift(activity);
 			this.drawActivities();
+			list.scrollTop = 0;
+		});
+
+		list.addEventListener('scroll', async () => {
+			if (list.clientHeight + list.scrollTop > list.scrollHeight - 100) {
+				if (!this.getLoading) {
+					this.getLoading = true;
+					await this.getActivitiesByPagination();
+					this.getLoading = false;
+				}
+			}
 		});
 	}
 
@@ -77,11 +89,23 @@ class Sidebar extends HTMLElement {
 
 	private async getActivities() {
 		try {
-			const data = await ActivityApi.getActivitiesByServiceId(store.getState('service_id'));
-			this.activities = data.result;
+			const numResult = await ActivityApi.getMaxpageNumber(store.getState('service_id'));
+			this.max = numResult.result[0].activity_id;
+			await this.getActivitiesByPagination();
 		} catch (err) {
 			console.error(err);
 		}
+	}
+
+	private async getActivitiesByPagination() {
+		const result = await ActivityApi.getActivitiesByPagination(
+			store.getState('service_id'),
+			this.max,
+			this.page
+		);
+		this.activities = this.activities.concat(result.result);
+		this.drawActivities();
+		this.page += 1;
 	}
 
 	private drawActivities() {
@@ -97,7 +121,9 @@ class Sidebar extends HTMLElement {
 			<li>
 				<span class="etext">@${item.uid}</span>
 				${item.action}
-				<span class="etext">${item.content ? item.content.split(`<br/>`)[0] : ''}</span>
+				<span class="etext">${
+					item.card_title ? item.card_title : item.content ? item.content.split(`<br/>`)[0] : ''
+				}</span>
 				${this.checkFromTopic(item.action, item.from_topic)} ${this.checkToTopic(
 			item.action,
 			item.to_topic

@@ -206,11 +206,12 @@ class TodoList extends HTMLElement {
 			to_topic: this.dndCard.closeTopic.getTopicTitle(),
 			from_topic: this.content.getTopicTitleFromId(prevTopicId),
 			card_title: this.dndCard.cloned.getCardTitle(),
+			uid: store.getState('uid'),
 		};
 
 		this.dndCard.closeTopic.pushCard(this.dndCard.cloned);
-		await ActivityApi.create(activityBody);
-		store.getState('newActivity')();
+		const activity = await ActivityApi.create(activityBody);
+		store.getState('newActivity')(activity.result);
 	}
 
 	mouseLeave(event: MouseEvent) {
