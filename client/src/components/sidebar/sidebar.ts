@@ -15,27 +15,23 @@ interface ActivityInterface {
 	create_date: number;
 }
 
-const action = ['add', 'remove', 'update', 'move'];
-
 class Sidebar extends HTMLElement {
 	private state: { service_id: number };
 	private activities: Array<ActivityInterface>;
 
 	constructor(service_id: number) {
 		super();
-		this.state = { service_id: service_id };
+		this.state = { service_id };
 		this.activities = [];
 	}
 
 	async connectedCallback() {
-		// DOM에 추가되었다. 렌더링 등의 처리를 하자.
 		this.render();
 		await this.getActivities();
 		this.drawActivities();
 	}
 
 	disconnectedCallback() {
-		// DOM에서 제거되었다. 엘리먼트를 정리하는 일을 하자.
 		this.remove();
 	}
 
@@ -43,7 +39,11 @@ class Sidebar extends HTMLElement {
 		this.render();
 	}
 
-	appendListener() {
+	/** 부모(page)가 listener를 등록합니ㅣ다.
+	 * todo
+	 * 구조 개선
+	 */
+	public appendListener() {
 		const close = this.querySelector('.close-icon') as HTMLElement;
 		const toggle = document.querySelector('#toggle') as HTMLInputElement;
 
@@ -77,7 +77,7 @@ class Sidebar extends HTMLElement {
 
 	private async getActivities() {
 		try {
-			const data = await ActivityApi.getActivitiesByServiceId(store.getState('service_id'));
+			const data = await ActivityApi.getActivitiesByServiceId(this.state.service_id);
 			this.activities = data.result;
 		} catch (err) {
 			console.error(err);
@@ -92,7 +92,7 @@ class Sidebar extends HTMLElement {
 		);
 	}
 
-	createActivityLog(item: ActivityInterface) {
+	private createActivityLog(item: ActivityInterface) {
 		return `<div class="activity-content">
 			<li>
 				<span class="etext">@${item.uid}</span>
@@ -107,7 +107,7 @@ class Sidebar extends HTMLElement {
 		</div>`;
 	}
 
-	checkFromTopic(action: string, from_topic: string) {
+	private checkFromTopic(action: string, from_topic: string) {
 		if (action === ActivityDTO.Action.MOVE || action === ActivityDTO.Action.REMOVE) {
 			return `from <span class="topic-name">${from_topic}</span>`;
 		}
@@ -117,7 +117,7 @@ class Sidebar extends HTMLElement {
 		return '';
 	}
 
-	checkToTopic(action: string, to_topic: string) {
+	private checkToTopic(action: string, to_topic: string) {
 		if (action === ActivityDTO.Action.MOVE || action === ActivityDTO.Action.ADD) {
 			return `to <span class="topic-name">${to_topic}</span>`;
 		}

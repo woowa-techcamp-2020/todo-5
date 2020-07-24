@@ -32,7 +32,7 @@ class TopicApi {
 		}
 	}
 
-	static async getAll(serviceId: string): Promise<any> {
+	static async getAll(serviceId: number): Promise<any> {
 		try {
 			const result = await fetch(`${url}/api/topic/${serviceId}`, Options.GET());
 			const json = await result.json();

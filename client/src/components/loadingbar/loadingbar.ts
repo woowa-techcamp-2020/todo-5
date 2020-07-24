@@ -1,18 +1,6 @@
 class LoadingBar extends HTMLElement {
-	private state = {};
-
 	constructor() {
 		super();
-	}
-
-	open() {
-		// const loading = this.querySelector('.loading-container') as HTMLElement;
-		this.classList.remove('close-loading');
-	}
-
-	close() {
-		const loading = this.querySelector('.loading-container') as HTMLElement;
-		this.classList.add('close-loading');
 	}
 
 	connectedCallback() {
@@ -33,8 +21,16 @@ class LoadingBar extends HTMLElement {
       <div class="loader"></div>
     </div>`;
 	}
+
+	public open() {
+		this.classList.remove('close-loading');
+	}
+
+	public close() {
+		const loading = this.querySelector('.loading-container') as HTMLElement;
+		this.classList.add('close-loading');
+	}
 }
 
 customElements.define('loading-modal', LoadingBar);
-const modal = customElements.get('loading-modal');
-export { modal, LoadingBar };
+export default customElements.get('loading-modal');

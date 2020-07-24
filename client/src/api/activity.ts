@@ -48,7 +48,7 @@ class ActivityApi {
 		return result;
 	}
 
-	static async getActivitiesByServiceId(serviceId: string) {
+	static async getActivitiesByServiceId(serviceId: number) {
 		try {
 			const result = await fetch(`${url}/api/activity/${serviceId}`, Options.GET());
 			const json = await result.json();
