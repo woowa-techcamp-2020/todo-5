@@ -19,7 +19,7 @@ git clone https://github.com/woowa-techcamp-2020/todo-5.git
 
 ### 클라이언트
 ```
-cd todo-5/client
+cd client
 npm install -g typescript
 npm install
 npm run build
@@ -30,10 +30,7 @@ npm run build
 **/shared/config.env 파일에서 서버 및 데이터베이스 host 설정 필요!**
 
 ```
-npm install -g typescript
-npm install
-npm run build
-cd ../server
+cd server
 npm install  // to install all the dependencies.
 npm start  // to run server
 ```
