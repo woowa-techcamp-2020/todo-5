@@ -2,7 +2,7 @@ import { ActivityApi } from '../../api';
 import { ActivityDTO } from '../../../../shared/dto';
 import store from '../../store';
 
-interface ActivityInterface {
+export interface ActivityInterface {
 	activity_id: number;
 	service_id: number;
 	card_id: number;
@@ -29,10 +29,9 @@ class Sidebar extends HTMLElement {
 		this.activities = [];
 	}
 
-	async connectedCallback() {
+	connectedCallback() {
 		this.render();
-		await this.getActivities();
-		this.drawActivities();
+		this.init();
 	}
 
 	disconnectedCallback() {
@@ -52,26 +51,10 @@ class Sidebar extends HTMLElement {
 		const toggle = document.querySelector('#toggle') as HTMLInputElement;
 		const list = this.querySelector('.activity-list') as HTMLElement;
 
-		close.addEventListener('click', (event) => {
-			event.stopPropagation();
-			toggle.checked = false;
-			toggle.dispatchEvent(new Event('change'));
-		});
-		store.setState('newActivity', async (activity: ActivityInterface) => {
-			this.activities.unshift(activity);
-			this.drawActivities();
-			list.scrollTop = 0;
-		});
-
-		list.addEventListener('scroll', async () => {
-			if (list.clientHeight + list.scrollTop > list.scrollHeight - 100) {
-				if (!this.getLoading) {
-					this.getLoading = true;
-					await this.getActivitiesByPagination();
-					this.getLoading = false;
-				}
-			}
-		});
+		close.addEventListener('click', () => this.closeClickEventHandler(toggle));
+		list.addEventListener('scroll', async () =>
+			(await this.listScrollEventHandler(list)).bind(this)
+		);
 	}
 
 	render() {
@@ -89,6 +72,33 @@ class Sidebar extends HTMLElement {
             <ul class=activity-list></ul>
           </section>
 			</aside>`;
+	}
+
+	private async init() {
+		await this.getActivities();
+		this.drawActivities();
+
+		const list = this.querySelector('.activity-list') as HTMLElement;
+		store.setState('newActivity', (activity: ActivityInterface) => {
+			this.activities.unshift(activity);
+			this.drawActivities();
+			list.scrollTop = 0;
+		});
+	}
+
+	private closeClickEventHandler(toggle: HTMLInputElement): void {
+		toggle.checked = false;
+		toggle.dispatchEvent(new Event('change'));
+	}
+
+	private async listScrollEventHandler(list: HTMLElement): Promise<any> {
+		if (list.clientHeight + list.scrollTop > list.scrollHeight - 100) {
+			if (!this.getLoading) {
+				this.getLoading = true;
+				await this.getActivitiesByPagination();
+				this.getLoading = false;
+			}
+		}
 	}
 
 	private async getActivities() {
@@ -126,7 +136,7 @@ class Sidebar extends HTMLElement {
 				<span class="etext">@${item.uid}</span>
 				${item.action}
 				<span class="etext">${
-					item.card_title ? item.card_title : item.content ? item.content.split(`<br/>`)[0] : ''
+					item.card_title ? item.card_title : item.content ? item.content.split('\n')[0] : ''
 				}</span>
 				${this.checkFromTopic(item.action, item.from_topic)} ${this.checkToTopic(
 			item.action,
@@ -185,5 +195,3 @@ class Sidebar extends HTMLElement {
 window.customElements.define('sidebar-element', Sidebar);
 
 export default customElements.get('sidebar-element');
-
-export { ActivityInterface, Sidebar };

@@ -5,19 +5,22 @@
 
 Todo List와 함께 체계적으로 작업을 관리하세요!
 
-![MAIN]()
+## 스크린샷
 
-- [서비스 페이지 링크](http://13.209.83.0:3000/)
+<img src="./img-for-wiki/main.png" alt="서비스 페이지">
+<img src="./img-for-wiki/logs.png" alt="로그 사이드바">
+<img src="./img-for-wiki/dnd.png" width="50%" alt="드래그 앤 드랍">
 
 ## 데이터 모델링
 
-![ERD](https://github.com/woowa-techcamp-2020/todo-5/blob/dev/img-for-wiki/ERD.png?raw=true)
+<img src="./img-for-wiki/erd.png" alt="데이터베이스 ERD">
 
 ## 설치 및 실행 방법
 
 ### 서버 설치
 
-mysql 설치 생략 port 3306
+** mysql 설치 생략 port 3306
+** /shared/config.env 파일에서 서버 및 데이터베이스 host 설정 필요!
 
 ```
 git clone https://github.com/woowa-techcamp-2020/todo-5.git

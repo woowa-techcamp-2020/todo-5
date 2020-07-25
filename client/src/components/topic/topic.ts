@@ -105,8 +105,8 @@ class Topic extends HTMLElement {
 					from_topic: this.state.topic_title,
 					uid: store.getState('uid'),
 				};
-				  const activityResult = await ActivityApi.topicDelete(activity);
-				  store.getState('newActivity')(activityResult.result);
+				const activityResult = await ActivityApi.topicDelete(activity);
+				store.getState('newActivity')(activityResult.result);
 			} catch (err) {
 				throw err;
 			}
@@ -147,8 +147,8 @@ class Topic extends HTMLElement {
 			const activityResult = await ActivityApi.topicUpdate(activity);
 			store.getState('newActivity')(activityResult.result);
 		} catch (err) {
-      console.error(err);
-    }
+			console.error(err);
+		}
 	}
 
 	private async getCards(): Promise<void> {
@@ -167,7 +167,7 @@ class Topic extends HTMLElement {
 	}
 
 	private async addCardInput(card: CardDTO.CREATE): Promise<void> {
-		card.content = card.content.replace(/\n/g, '<br/>');
+		card.content = card.content.trim();
 		const { title, content } = splitTitleContent(card.content);
 		card.topic_id = this.state.topic_id;
 		card.order_weight = this.nextOrderWeight();
