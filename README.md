@@ -7,13 +7,13 @@ Todo List와 함께 체계적으로 작업을 관리하세요!
 
 ## 스크린샷
 
-<center>![서비스 페이지](http://github.com/woowa-techcamp-2020/todo-5/blob/refactoring/img-for-wiki/main.png?raw=true)(: width="300" height="200")</center>
-<center>![로그 사이드바](http://github.com/woowa-techcamp-2020/todo-5/blob/refactoring/img-for-wiki/logs.png?raw=true)(: width="300" height="200")</center>
-<center>![드래그 앤 드랍](http://github.com/woowa-techcamp-2020/todo-5/blob/refactoring/img-for-wiki/dnd.png?raw=true)(: width="150" height="100")</center>
+<center>![서비스 페이지](./img-for-wiki/main.png =300x200)</center>
+<center>![로그 사이드바]((./img-for-wiki/logs.png =300x200))</center>
+<center>![드래그 앤 드랍]((./img-for-wiki/dnd.png =150x100))</center>
 
 ## 데이터 모델링
 
-<center>![데이터베이스 ERD](http://github.com/woowa-techcamp-2020/todo-5/blob/refactoring/img-for-wiki/erd.png?raw=true)(: width="300" height="200")</center>
+<center>![데이터베이스 ERD]((./img-for-wiki/erd.png =300x200))</center>
 
 ## 설치 및 실행 방법
 
