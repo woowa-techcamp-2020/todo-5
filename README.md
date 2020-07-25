@@ -1,19 +1,15 @@
 # 우아한 Todo List
 
-- 생성된 Card는 Drag and Drop 기능으로 Topic을 변경할 수 있습니다.
-- Topic을 생성, 삭제하여 원하는 목표를 설정할 수 있습니다.
+- Column을 생성하고 삭제할 수 있습니다.
+- 생성된 Card는 Drag and Drop 기능으로 Column을 변경할 수 있습니다.
+- Card와 Column을 수정하며 원하는 목표를 설정할 수 있습니다.
 
-Todo List와 함께 체계적으로 작업을 관리하세요!
-
-## 스크린샷
-
-<img src="./img-for-wiki/main.png" alt="서비스 페이지">
-<img src="./img-for-wiki/logs.png" alt="로그 사이드바">
-<img src="./img-for-wiki/dnd.png" width="50%" alt="드래그 앤 드랍">
+**Todo List와 함께 체계적으로 작업을 관리하세요!**
+<img src="./assets/erd.png" alt="데이터베이스 ERD">
 
 ## 데이터 모델링
 
-<img src="./img-for-wiki/erd.png" alt="데이터베이스 ERD">
+<img src="./assets/erd.png" alt="데이터베이스 ERD">
 
 ## 설치 및 실행 방법
 
