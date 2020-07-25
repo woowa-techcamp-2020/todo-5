@@ -111,7 +111,7 @@ class Content extends HTMLElement {
 			this.topics.push(newTopic);
 			this.topicsMap.set(newTopic.getTopicId(), newTopic.getTopicTitle());
 
-      const activityResult = await ActivityApi.topicAdd(activity);
+			const activityResult = await ActivityApi.topicAdd(activity);
 			store.getState('newActivity')(activityResult.result);
 		} catch (e) {
 			console.error(e);

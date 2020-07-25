@@ -44,13 +44,17 @@ class Card extends HTMLElement {
 		this.innerHTML = `<div class="card">
 		<div class="content-wrapper">
       <div class="card-title">
-        <p>${this.state.card_title}</p>
+        <p class="p-card-title">${this.state.card_title}</p>
         <i class="material-icons icon delete">close</i>
       </div>
 			<div class="card-content">${this.state.content}</div>
 			<div class="card-user">by <span>${this.state.uid}</span></div>
 		</div>
-    </div>`;
+	</div>`;
+		const cardContent = this.querySelector('.card-content') as HTMLElement;
+		const cardTitle = this.querySelector('.p-card-title') as HTMLElement;
+		cardTitle.innerText = this.state.card_title;
+		cardContent.innerText = this.state.content;
 	}
 
 	private listener() {
@@ -98,7 +102,7 @@ class Card extends HTMLElement {
 		$textAreaModal.open(
 			{
 				title: 'Edit',
-				content: this.state.card_title + '\n' + this.state.content.replace(/<br\/>/g, '\n'),
+				content: this.state.card_title + '\n' + this.state.content,
 				resolve: 'Save',
 				reject: 'Cancel',
 			},
@@ -107,7 +111,7 @@ class Card extends HTMLElement {
 	}
 
 	private async editContentOfCard(card_content: string) {
-		card_content = card_content.replace(/\n/g, '<br/>');
+		card_content = card_content.trim();
 		const body = {
 			card_id: this.state.card_id,
 			content: card_content,
