@@ -1,11 +1,13 @@
 # 우아한 Todo List
 
+![TodoList](https://raw.githubusercontent.com/woowa-techcamp-2020/todo-5/dev/assets/todotodo2.webp)
+
 - Column을 생성하고 삭제할 수 있습니다.
 - 생성된 Card는 Drag and Drop 기능으로 Column을 변경할 수 있습니다.
 - Card와 Column을 수정하며 원하는 목표를 설정할 수 있습니다.
 
 **Todo List와 함께 체계적으로 작업을 관리하세요!**
-<img src="./assets/erd.png" alt="데이터베이스 ERD">
+
 
 ## 데이터 모델링
 
