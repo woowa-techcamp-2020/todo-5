@@ -7,13 +7,13 @@ Todo List와 함께 체계적으로 작업을 관리하세요!
 
 ## 스크린샷
 
-<center>![서비스 페이지](./img-for-wiki/main.png =300x200)</center>
-<center>![로그 사이드바]((./img-for-wiki/logs.png =300x200))</center>
-<center>![드래그 앤 드랍]((./img-for-wiki/dnd.png =150x100))</center>
+![서비스 페이지](./img-for-wiki/main.png =300x200)
+![로그 사이드바](./img-for-wiki/logs.png =300x200)
+![드래그 앤 드랍](./img-for-wiki/dnd.png =150x100)
 
 ## 데이터 모델링
 
-<center>![데이터베이스 ERD]((./img-for-wiki/erd.png =300x200))</center>
+![데이터베이스 ERD](./img-for-wiki/erd.png =300x200)
 
 ## 설치 및 실행 방법
 
