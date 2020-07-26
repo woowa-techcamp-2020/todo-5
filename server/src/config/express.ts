@@ -1,0 +1,44 @@
+import express from 'express';
+import ejs from 'ejs';
+import bodyParser from 'body-parser';
+import methodOverride from 'method-override';
+import morgan from 'morgan';
+import compression from 'compression';
+import helmet from 'helmet';
+import cors from 'cors';
+import path from 'path';
+import LoggerStream from './logger-stream';
+import { logs } from './vars';
+import {
+	routes,
+	userRouter,
+	cardRouter,
+	serviceRouter,
+	topicRouter,
+	ActivityRouter,
+} from '../routes';
+import notFoundException from '../middlewares/exception/not-found-exception';
+import errorHandler from '../middlewares/exception/error-handler';
+
+const app = express();
+app.use(morgan(logs, { stream: new LoggerStream() }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride());
+app.use(cors());
+app.use(helmet());
+app.use(compression());
+app.use(express.static(path.join(__dirname, '../public')));
+app.set('views', path.join(__dirname, '../views'));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.use('/', routes);
+app.use('/api/users', userRouter);
+app.use('/api/card', cardRouter);
+app.use('/api/service', serviceRouter);
+app.use('/api/topic', topicRouter);
+app.use('/api/activity', ActivityRouter);
+app.use(notFoundException);
+app.use(errorHandler);
+
+export default app;

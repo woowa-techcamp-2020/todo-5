@@ -1,0 +1,58 @@
+import { mysql } from '../modules/database/mysql';
+import { TopicDTO } from '../../../shared/dto';
+
+class Topic {
+	constructor() {}
+	static async create(topic: TopicDTO.CREATE) {
+		try {
+			const topicData = await mysql.connect((con: any) =>
+				con.query(`INSERT INTO topic SET ?`, topic)
+			);
+			const topic_id = topicData[0].insertId;
+			const result: TopicDTO.RESPONSE = { ...topic, topic_id };
+			return result;
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	static async updateTitle(topic: TopicDTO.UPDATE_TITLE) {
+		try {
+			const topicData = await mysql.connect((con: any) =>
+				con.query(`UPDATE topic SET ? WHERE topic_id = '${topic.topic_id}'`, topic)
+			);
+			return { ...topic };
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	static async delete(topic_id: number) {
+		try {
+			const topicData = await mysql.connect((con: any) =>
+				con.query(`UPDATE topic SET removed = '${1}' WHERE topic_id = '${topic_id}'`)
+			);
+			return { topic_id };
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	static async getTopicsByServiceId(topic: TopicDTO.GET) {
+		let topicData;
+		try {
+			topicData = await mysql.connect((con: any) =>
+				con.query(
+					`SELECT topic_id, topic_title, order_weight, service_id FROM topic WHERE service_id = '${
+						topic.service_id
+					}' AND removed = '${0}'`
+				)
+			);
+			return [...topicData][0];
+		} catch (err) {
+			throw err;
+		}
+	}
+}
+
+export default Topic;

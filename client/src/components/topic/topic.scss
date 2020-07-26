@@ -1,0 +1,90 @@
+topic-element {
+	display: inline-block;
+}
+
+.topic {
+	width: 345px;
+	padding: 16px 0;
+	border-radius: 4px;
+	height: 100%;
+	margin: 8px 4px;
+	.topic-header {
+		display: flex;
+		padding: 4px 16px;
+		justify-content: space-between;
+		height: 32px;
+		.topic-header-child {
+			.topic-title {
+				padding: 6px 10px 6px 0;
+				font-size: 18px;
+				// line-height: 35px;
+				// background-color: #c7e6fc;
+				// border-radius: 8px;
+				color: #333;
+				font-weight: 600;
+				// color: #555;
+				display: flex;
+				.bar {
+					width: 4px;
+					height: 100%;
+					background: #3fa9ff;
+					margin-right: 8px;
+					border-radius: 2px;
+				}
+				span {
+					line-height: 24px;
+				}
+			}
+			display: flex;
+			.card-count {
+				padding: 8px 0;
+				font-weight: 600;
+				text-align: center;
+				color: #777;
+			}
+			i {
+				cursor: pointer;
+				margin-left: 4px;
+				transition: color 0.15s;
+				font-size: 22px;
+				line-height: 30px;
+				color: #555;
+				transition: transform 0.4s;
+				&.add.changed {
+					color: #3fa9ff;
+					transform: rotate(90deg);
+				}
+				&.close {
+					font-size: 20px;
+					line-height: 32px;
+				}
+				&:hover {
+					color: #3fa9ff;
+				}
+			}
+		}
+	}
+
+	.topic-wrapper {
+		margin-right: -4px;
+		height: calc(100% - 70px);
+		border-right: 1.5px solid #eee;
+		padding: 0 16px;
+		overflow-y: scroll;
+		scroll-padding: 0px 0px 0px 0px;
+	}
+	// .topic-content {
+	// 	margin-right: -4px;
+	// 	height: calc(100% - 70px);
+	// 	border-right: 1.5px solid #eee;
+	// 	padding: 0 16px;
+	// 	overflow-y: scroll;
+	// 	scroll-padding: 0px 0px 0px 0px;
+	// }
+}
+
+.topic-title {
+	cursor: pointer;
+}
+
+//1e88e5
