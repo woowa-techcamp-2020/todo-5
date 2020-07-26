@@ -3,8 +3,9 @@
 ![TodoList](https://raw.githubusercontent.com/woowa-techcamp-2020/todo-5/dev/assets/todotodo2.webp)
 
 ### Todo List와 함께 체계적으로 작업을 관리하세요!
+- Vanilla JS 로 작성된 SPA 프로젝트 입니다. 
+- 생성된 Card는 API없이 직접 구현한 Drag and Drop 기능으로 Column을 변경할 수 있습니다.
 - Column을 생성하고 삭제할 수 있습니다.
-- 생성된 Card는 Drag and Drop 기능으로 Column을 변경할 수 있습니다.
 - Card와 Column을 수정하며 원하는 목표를 설정할 수 있습니다.
 
 
