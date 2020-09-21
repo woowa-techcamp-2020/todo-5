@@ -7,3 +7,4 @@ logs
 *.out
 .vscode
 package-lock.json
+.env
