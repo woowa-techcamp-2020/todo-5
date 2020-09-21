@@ -14,7 +14,7 @@ module.exports = {
 	},
 	plugins: [
 		new Dotenv({
-			path: path.join(__dirname, '../shared/config.env'),
+			path: path.join(__dirname, '../shared/.env'),
 			systemvars: true,
 		}),
 	],
