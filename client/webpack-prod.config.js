@@ -8,7 +8,6 @@ module.exports = {
 		path: path.resolve(__dirname, '../server/src/public/dist'),
 		filename: '[name].js',
 	},
-	devtool: 'cheap-eval-source-map',
 	resolve: {
 		extensions: ['.ts', '.js', '.json'],
 	},
