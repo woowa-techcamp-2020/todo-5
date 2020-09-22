@@ -5,8 +5,9 @@
 	"main": "src/server.ts",
 	"scripts": {
 		"test": "jest",
-		"start": "nodemon --exec ts-node ./src/main.ts --config nodemon.json",
-		"start:ops": "ts-node ./src/main.ts"
+		"dev": "nodemon --exec ts-node ./src/main.ts --config nodemon.json",
+		"pm2:start": "NODE_ENV=production pm2 startOrRestart ecosystem.config.js",
+		"pm2:start-dev": "NODE_ENV=development pm2 startOrRestart ecosystem.config.js"
 	},
 	"repository": {
 		"type": "git",
