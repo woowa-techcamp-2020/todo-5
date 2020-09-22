@@ -31,6 +31,8 @@ git clone https://github.com/woowa-techcamp-2020/todo-5.git
 
 ### 클라이언트
 
+**/shared/sample.env 파일을 참고하여 .env 파일 설정 필요!**
+
 ```
 cd client
 npm install -g typescript
@@ -40,13 +42,13 @@ npm run build
 
 ### 서버
 
-**mysql 설치 생략 port 3306**
-**/shared/sample.env 파일을 참고하여 .env 파일 설정 필요!**
+**mysql 스키마 설정 생략**
 
 ```
 cd server
-npm install  // to install all the dependencies.
-npm start  // to run server
+npm install -g nodemon
+npm install
+npm run dev
 ```
 
 ## 기술
