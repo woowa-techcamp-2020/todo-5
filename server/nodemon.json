@@ -1,5 +1,5 @@
 {
-  "verbose": true,
-  "ignore": [".git", "node_modules", "*.json", "views/*"],
-  "watch": ["**/*"]
+	"verbose": true,
+	"ignore": [".git", "node_modules", "*.json", "views/*", "public/*", ".log", "logs/*"],
+	"watch": ["./src/*"]
 }
